@@ -1,0 +1,11 @@
+EmpID,LastName,FirstName,SSN,DOB,Title
+1,Jones,Tom,020345678,1/1/1990,Branch Manager
+2,Smith,Harry,254567891,1/1/1992,Teller
+3,White,Ted,254567896,1/1/1994,Teller
+4,Gray,George,254567901,1/1/1996,Teller
+5,Taylor,Mary,254567906,1/1/1998,Assistant Branch Manager
+6,Evans,Bob,254567911,1/1/1980,Vice President
+7,Doe,John,254567916,1/1/1981,Marketing Specialist
+8,Doe,Jane,254567921,1/1/1982,Portfolio Manager
+9,Hardy,Helen,254567926,1/1/1983,Branch Manager
+10,Johnson,Leo,254567931,1/1/1984,Branch Manager

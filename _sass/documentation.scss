@@ -1,0 +1,444 @@
+@import "variables";
+@import "icomoon";
+
+
+html,
+body {
+  font-family: "Open Sans", Arial, sans-serif;
+  color: $base-font-color;
+  background-color: #edf0f0;
+}
+
+#documentation {
+
+  .logo {
+    padding: 10px 10px 10px;
+    width: 200px;
+  }
+
+  h1 {
+    font-size: 38px;
+    font-weight: normal;
+    //Using padding in headers instead of margin will improve the match between the TOC and the content
+    padding: 1em 0 .5em 0;
+    margin: 0;
+    color: $primary-color;
+    line-height: 1.2em;
+  }
+
+  h2 {
+    color: #444;
+    font-weight: normal;
+    font-size: 30px;
+    padding: 1em 0 .5em 0;
+    margin: 0;
+  }
+
+  h3 {
+    font-size: 22px;
+    padding: 1em 0 .5em 0;
+    margin: 0;
+    font-weight: normal;
+    color: $primary-color;
+  }
+
+  h4 {
+    font-size: 18px;
+    margin: 1em 0 .5em 0;
+    font-weight: 600;
+  }
+
+  h5 {
+    color: $primary-color;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 2em;
+  }
+
+  h6 {
+    font-weight: 600;
+    font-size: 16px;
+    margin-top: 1.25em;
+  }
+
+  hr.end-section {
+    padding-bottom: 3em;
+    border-color: transparent;
+  }
+
+  a {
+    color: #4a4ae6;
+  }
+
+  p {
+    margin: 0 0 20px 0;
+  }
+
+  code {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    padding: 2px 3px;
+    font-weight: normal;
+    color: #444;
+    background-color: whitesmoke;
+    border: 1px solid #e1e1e8;
+    white-space: pre-line;
+    font-size: 12px;
+  }
+
+
+  ul,
+  ol {
+    li {
+      margin-top: 1em;
+    }
+  }
+
+  blockquote {
+    padding-top: 0;
+    color: black;
+
+    p {
+      font-size: normal;
+      color: black;
+    }
+
+    ol {
+      margin-left: 1em;
+    }
+  }
+
+  .step {
+    color: $orange;
+    font-size: 21px;
+    margin: 1.5em 0 .5em 0;
+    font-weight: normal;
+  }
+
+  .content-wrap {
+    min-width: 1024px;
+    max-width: 1200px;
+    margin: 0 3em;
+    padding: 1em;
+    background-color: white;
+    border: 1px solid #E2DBDB;
+    min-height: 500px;
+  }
+
+  table {
+    margin-bottom: 2em;
+  }
+
+  /* Table of contents */
+
+  /* Need to set width because .affix has fixed position, which follows viewport size */
+  .affix {
+    @media (max-width: 1200px) {
+      width: 220px;
+    }
+    @media (min-width: 1201px) {
+      width: 270px;
+    }
+  }
+
+  #affix-nav {
+    position: relative;
+
+    ul {
+      margin-left: 0;
+    }
+
+    li {
+      margin-top: .5em;
+
+      ul > li {
+        font-weight: normal;
+      }
+
+      &.active {
+      }
+    }
+  }
+
+
+  ul.affix-top {
+    position: static;
+  }
+
+  ul.affix-bottom {
+    position: absolute;
+  }
+
+  /* First level of nav */
+  .sidenav {
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+    margin-left: 0;
+
+    ul li {
+      margin-top: .25em;
+    }
+
+  }
+
+  /* All levels of nav */
+  .sidebar .nav {
+    > {
+      li > a {
+        display: block;
+        color: #716b7a;
+        padding: 3px 10px;
+        //font-size: 12px;
+        line-height: 1.4em;
+
+        &:hover, &:focus {
+          text-decoration: none;
+        }
+      }
+
+      .active {
+        > a, &:hover > a, &:focus > a {
+          color: $orange;
+          box-shadow: 3px 0 0 0 $orange inset;
+          background-color: transparent;
+        }
+      }
+    }
+    .doc-title {
+      padding-left: 10px;
+    }
+
+    .nav {
+      display: none;
+      margin-bottom: 8px;
+
+      > li > a {
+        padding-top: 3px;
+        padding-bottom: 3px;
+        padding-left: 30px;
+        //font-size: 12px;
+      }
+    }
+
+    > li.active .nav {
+      display: block;
+    }
+  }
+
+  table {
+    border: 1px solid $light-gray-border;
+
+    thead {
+      background-color: transparent !important;
+      background-image: none;
+      border: none;
+      border-bottom: 1px solid gray;
+    }
+
+    tr {
+      margin: .5em 0;
+      background-color: #fdfdfd !important;
+
+      td,
+      th {
+        padding: 8px 10px;
+      }
+    }
+
+    &.align-top {
+      td {
+        vertical-align: top;
+      }
+    }
+  }
+
+  /* Use this on the line that precedes a ul or ol (e.g., "To do something...") */
+  .list {
+    margin-bottom: 0;
+  }
+
+  /* Use this on a descriptive line before a block quote */
+  .pre-blockquote {
+    margin-bottom: .5em;
+  }
+
+  .note {
+    border: 1px solid $primary-color;
+    background-color: $light-blue-selection;
+    border-radius: 3px;
+    font-size: 14px !important;
+    padding: 1em;
+  }
+
+  /* Make images 50% wide and centered */
+  .width-50 {
+    width: 50%;
+  }
+
+  /* Make images 75% wide and centered */
+  .width-75 {
+    width: 75%;
+  }
+
+  .table-image {
+    tr {
+      background-color: white !important;
+
+      td {
+        border-right: 1px solid $light-gray-border;
+      }
+    }
+
+    img {
+      border: none !important;
+      margin: 0 !important;
+    }
+  }
+
+  /* Specify column widths for tables */
+
+  table {
+    width:100%;
+  }
+  .table-10-90 {
+    th:first-child {
+      width: 10%;
+    }
+  }
+
+  .table-20-80 {
+    th:first-child {
+      width: 20%;
+    }
+
+    th:nth-child(2) {
+      width: 80%;
+    }
+  }
+
+  .table-30-70 {
+    th:first-child {
+      width: 30%;
+    }
+
+    th:nth-child(2) {
+      width: 70%;
+    }
+
+    ol {
+      padding-left: 10px;
+    }
+  }
+
+  .table-15-15-70 {
+    th:first-child {
+      width: 15%;
+    }
+
+    th:nth-child(2) {
+      width: 15%;
+    }
+  }
+
+  .table-20-20-60 {
+    th:first-child {
+      width: 20%;
+    }
+
+    th:nth-child(2) {
+      width: 20%;
+    }
+  }
+
+  .table-20-40-40 {
+    th:first-child {
+      width: 20%;
+    }
+
+    th:nth-child(2) {
+      width: 40%;
+    }
+  }
+
+  .shell-instructions {
+    margin-bottom: 0;
+    border-bottom: 1px solid $light-gray-border;
+
+    li {
+      list-style-type: none;
+      float: left;
+      width: 50%;
+
+      &:first-child {
+        width: 5%;
+      }
+
+      &:nth-child(2) {
+        width: 50%;
+      }
+
+      &:nth-child(3) {
+        width: 45%;
+      }
+    }
+  }
+
+  .content {
+    padding: 40px;
+    img {
+      border: 1px solid $light-gray-border;
+      margin: 2em 0;
+      display: block;
+      max-width: 100%;
+    }
+
+    .image-no-outline {
+      img {
+        border: none;
+      }
+    }
+
+    .icon-edit {
+      color: $light-gray-border;
+    }
+
+    pre {
+      padding: 1em;
+      word-break: keep-all;
+
+      &.indent {
+        margin-left: 40px;
+      }
+
+      &.show-whitespaces .ws-space-l {
+        //For some reason, kramdown is inserting leading periods instead of spaces. Make them transparent.
+        color: transparent;
+      }
+
+      code {
+        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+        font-weight: normal;
+        border: none;
+        font-size: 12px;
+        white-space: pre;
+      }
+    }
+
+    dl > dd {
+      margin-left: 3em;
+    }
+
+    dt {
+      margin-top: 1em;
+    }
+  }
+
+  .jdbc-links {
+    pre {
+      margin: 10px 0;
+    }
+  }
+}
+.icon-checkmark {
+  font-size: 22px;
+  color: green;
+}

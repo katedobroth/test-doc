@@ -1,0 +1,117 @@
+@font-face {
+  font-family: 'Icomoon';
+  src:url('/../fonts/icomoon.eot');
+  src:url('/../fonts/icomoon.eot?#iefix') format('embedded-opentype'),
+    url('/../fonts/icomoon.svg#icomoon') format('svg'),
+    url('../fonts/icomoon.woff') format('woff'),
+    url('/../fonts/icomoon.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+	font-family: 'icomoon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+
+	/* Enable Ligatures ================ */
+	letter-spacing: 0;
+	-webkit-font-feature-settings: "liga";
+	-moz-font-feature-settings: "liga=1";
+	-moz-font-feature-settings: "liga";
+	-ms-font-feature-settings: "liga" 1;
+	-o-font-feature-settings: "liga";
+	font-feature-settings: "liga";
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+.icon-check-circle:before {
+  content: "\f058";
+}
+.icon-exclamation-circle:before {
+  content: "\f06a";
+}
+.icon-caret-down:before {
+  content: "\e902";
+}
+.icon-caret-right:before {
+  content: "\e903";
+}
+.icon-external-link:before {
+  content: "\e90a";
+}
+.icon-refresh:before {
+  content: "\e91a";
+}
+.icon-download:before {
+  content: "\e919";
+}
+.icon-unknown:before {
+  content: "\e918";
+}
+.icon-info:before {
+  content: "\e900";
+}
+.icon-stopped:before {
+  content: "\e90b";
+}
+.icon-data-movement:before {
+  content: "\e91b";
+}
+.icon-query:before {
+  content: "\e91c";
+}
+.icon-arrow-forward:before {
+  content: "\e901";
+}
+.icon-checkmark:before {
+  content: "\e904";
+}
+.icon-cross:before {
+  content: "\e905";
+}
+.icon-drag:before {
+  content: "\e906";
+}
+.icon-edit:before {
+  content: "\e907";
+}
+.icon-failed:before {
+  content: "\e908";
+}
+.icon-help:before {
+  content: "\e909";
+}
+.icon-null:before {
+  content: "\e90d";
+}
+.icon-pending:before {
+  content: "\e90e";
+}
+.icon-review:before {
+  content: "\e90f";
+}
+.icon-select:before {
+  content: "\e910";
+}
+.icon-sort-down:before {
+  content: "\e911";
+}
+.icon-sort-up:before {
+  content: "\e912";
+}
+.icon-trash:before {
+  content: "\e915";
+}
+.icon-user:before {
+  content: "\e916";
+}
+.icon-warning:before {
+  content: "\e917";
+}

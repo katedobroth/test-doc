@@ -1,0 +1,79 @@
+---
+layout: default
+title: Cazena Documentation
+---
+
+<div id="documentation" >
+  <div class="content-wrap">
+    <div class="row">
+      <div class="columns col-xs-3">
+        <nav id="affix-nav" class="sidebar ">
+          <div id="toc"></div>
+        </nav>
+      </div>
+
+      <div class="columns col-xs-9 content">
+        <section id="overview">
+          {% capture overview %}{% include_relative _sections/overview.md %}{% endcapture %}
+          {{ overview | markdownify }}
+        </section>
+
+        <section id="cloud_sockets">
+          {% capture cloud_sockets %}{% include_relative _sections/cloud_sockets.md %}{% endcapture %}
+          {{ cloud_sockets | markdownify }}
+        </section>
+
+        <section id="object_store">
+          {% capture object_store %}{% include_relative _sections/object_store.md %}{% endcapture %}
+          {{ object_store | markdownify }}
+        </section>
+
+        <section id="move_data">
+          {% capture move_data %}{% include_relative _sections/move_data.md %}{% endcapture %}
+          {{ move_data | markdownify }}
+        </section>
+
+        <section id="cazena_gateway">
+          {% capture cazena_gateway %}{% include_relative _sections/cazena_gateway.md %}{% endcapture %}
+          {{ cazena_gateway | markdownify }}
+        </section>
+
+        <section id="manage_cloud_sockets">
+          {% capture manage_cloud_sockets %}{% include_relative _sections/manage_cloud_sockets.md %}{% endcapture %}
+          {{ manage_cloud_sockets | markdownify }}
+        </section>
+
+        <section id="users">
+          {% capture users %}{% include_relative _sections/users.md %}{% endcapture %}
+          {{ users | markdownify }}
+        </section>
+
+        <section id="monitor_system">
+          {% capture monitor_system %}{% include_relative _sections/monitor_system.md %}{% endcapture %}
+          {{ monitor_system | markdownify }}
+        </section>
+
+
+        <section id="data_stores">
+          {% capture data_stores %}{% include_relative _sections/data_stores.md %}{% endcapture %}
+          {{ data_stores | markdownify }}
+        </section>
+
+
+        <section id="data_movement_guidelines">
+          {% capture data_movement_guidelines %}{% include_relative _sections/data_movement_guidelines.md %}{% endcapture %}
+          {{ data_movement_guidelines | markdownify }}
+        </section>
+
+
+        <section id="support">
+          {% capture support %}{% include_relative _sections/support.md %}{% endcapture %}
+          {{ support | markdownify }}
+        </section>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+

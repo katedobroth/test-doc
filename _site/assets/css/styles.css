@@ -1,0 +1,358 @@
+@font-face {
+  font-family: 'Icomoon';
+  src: url("/../fonts/icomoon.eot");
+  src: url("/../fonts/icomoon.eot?#iefix") format("embedded-opentype"), url("/../fonts/icomoon.svg#icomoon") format("svg"), url("../fonts/icomoon.woff") format("woff"), url("/../fonts/icomoon.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal; }
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'icomoon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Enable Ligatures ================ */
+  letter-spacing: 0;
+  -webkit-font-feature-settings: "liga";
+  -moz-font-feature-settings: "liga=1";
+  -moz-font-feature-settings: "liga";
+  -ms-font-feature-settings: "liga" 1;
+  -o-font-feature-settings: "liga";
+  font-feature-settings: "liga";
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.icon-check-circle:before {
+  content: "\f058"; }
+
+.icon-exclamation-circle:before {
+  content: "\f06a"; }
+
+.icon-caret-down:before {
+  content: "\e902"; }
+
+.icon-caret-right:before {
+  content: "\e903"; }
+
+.icon-external-link:before {
+  content: "\e90a"; }
+
+.icon-refresh:before {
+  content: "\e91a"; }
+
+.icon-download:before {
+  content: "\e919"; }
+
+.icon-unknown:before {
+  content: "\e918"; }
+
+.icon-info:before {
+  content: "\e900"; }
+
+.icon-stopped:before {
+  content: "\e90b"; }
+
+.icon-data-movement:before {
+  content: "\e91b"; }
+
+.icon-query:before {
+  content: "\e91c"; }
+
+.icon-arrow-forward:before {
+  content: "\e901"; }
+
+.icon-checkmark:before {
+  content: "\e904"; }
+
+.icon-cross:before {
+  content: "\e905"; }
+
+.icon-drag:before {
+  content: "\e906"; }
+
+.icon-edit:before {
+  content: "\e907"; }
+
+.icon-failed:before {
+  content: "\e908"; }
+
+.icon-help:before {
+  content: "\e909"; }
+
+.icon-null:before {
+  content: "\e90d"; }
+
+.icon-pending:before {
+  content: "\e90e"; }
+
+.icon-review:before {
+  content: "\e90f"; }
+
+.icon-select:before {
+  content: "\e910"; }
+
+.icon-sort-down:before {
+  content: "\e911"; }
+
+.icon-sort-up:before {
+  content: "\e912"; }
+
+.icon-trash:before {
+  content: "\e915"; }
+
+.icon-user:before {
+  content: "\e916"; }
+
+.icon-warning:before {
+  content: "\e917"; }
+
+html,
+body {
+  font-family: "Open Sans", Arial, sans-serif;
+  color: #444444;
+  background-color: #edf0f0; }
+
+#documentation {
+  /* Table of contents */
+  /* Need to set width because .affix has fixed position, which follows viewport size */
+  /* First level of nav */
+  /* All levels of nav */
+  /* Use this on the line that precedes a ul or ol (e.g., "To do something...") */
+  /* Use this on a descriptive line before a block quote */
+  /* Make images 50% wide and centered */
+  /* Make images 75% wide and centered */
+  /* Specify column widths for tables */ }
+  #documentation .logo {
+    padding: 10px 10px 10px;
+    width: 200px; }
+  #documentation h1 {
+    font-size: 38px;
+    font-weight: normal;
+    padding: 1em 0 .5em 0;
+    margin: 0;
+    color: #3a60aa;
+    line-height: 1.2em; }
+  #documentation h2 {
+    color: #444;
+    font-weight: normal;
+    font-size: 30px;
+    padding: 1em 0 .5em 0;
+    margin: 0; }
+  #documentation h3 {
+    font-size: 22px;
+    padding: 1em 0 .5em 0;
+    margin: 0;
+    font-weight: normal;
+    color: #3a60aa; }
+  #documentation h4 {
+    font-size: 18px;
+    margin: 1em 0 .5em 0;
+    font-weight: 600; }
+  #documentation h5 {
+    color: #3a60aa;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 2em; }
+  #documentation h6 {
+    font-weight: 600;
+    font-size: 16px;
+    margin-top: 1.25em; }
+  #documentation hr.end-section {
+    padding-bottom: 3em;
+    border-color: transparent; }
+  #documentation a {
+    color: #4a4ae6; }
+  #documentation p {
+    margin: 0 0 20px 0; }
+  #documentation code {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    padding: 2px 3px;
+    font-weight: normal;
+    color: #444;
+    background-color: whitesmoke;
+    border: 1px solid #e1e1e8;
+    white-space: pre-line;
+    font-size: 12px; }
+  #documentation ul li,
+  #documentation ol li {
+    margin-top: 1em; }
+  #documentation blockquote {
+    padding-top: 0;
+    color: black; }
+    #documentation blockquote p {
+      font-size: normal;
+      color: black; }
+    #documentation blockquote ol {
+      margin-left: 1em; }
+  #documentation .step {
+    color: #f4770f;
+    font-size: 21px;
+    margin: 1.5em 0 .5em 0;
+    font-weight: normal; }
+  #documentation .content-wrap {
+    min-width: 1024px;
+    max-width: 1200px;
+    margin: 0 3em;
+    padding: 1em;
+    background-color: white;
+    border: 1px solid #E2DBDB;
+    min-height: 500px; }
+  #documentation table {
+    margin-bottom: 2em; }
+  @media (max-width: 1200px) {
+    #documentation .affix {
+      width: 220px; } }
+  @media (min-width: 1201px) {
+    #documentation .affix {
+      width: 270px; } }
+  #documentation #affix-nav {
+    position: relative; }
+    #documentation #affix-nav ul {
+      margin-left: 0; }
+    #documentation #affix-nav li {
+      margin-top: .5em; }
+      #documentation #affix-nav li ul > li {
+        font-weight: normal; }
+  #documentation ul.affix-top {
+    position: static; }
+  #documentation ul.affix-bottom {
+    position: absolute; }
+  #documentation .sidenav {
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+    margin-left: 0; }
+    #documentation .sidenav ul li {
+      margin-top: .25em; }
+  #documentation .sidebar .nav > li > a {
+    display: block;
+    color: #716b7a;
+    padding: 3px 10px;
+    line-height: 1.4em; }
+    #documentation .sidebar .nav > li > a:hover, #documentation .sidebar .nav > li > a:focus {
+      text-decoration: none; }
+  #documentation .sidebar .nav > .active > a, #documentation .sidebar .nav > .active:hover > a, #documentation .sidebar .nav > .active:focus > a {
+    color: #f4770f;
+    box-shadow: 3px 0 0 0 #f4770f inset;
+    background-color: transparent; }
+  #documentation .sidebar .nav .doc-title {
+    padding-left: 10px; }
+  #documentation .sidebar .nav .nav {
+    display: none;
+    margin-bottom: 8px; }
+    #documentation .sidebar .nav .nav > li > a {
+      padding-top: 3px;
+      padding-bottom: 3px;
+      padding-left: 30px; }
+  #documentation .sidebar .nav > li.active .nav {
+    display: block; }
+  #documentation table {
+    border: 1px solid #DBDBDB; }
+    #documentation table thead {
+      background-color: transparent !important;
+      background-image: none;
+      border: none;
+      border-bottom: 1px solid gray; }
+    #documentation table tr {
+      margin: .5em 0;
+      background-color: #fdfdfd !important; }
+      #documentation table tr td,
+      #documentation table tr th {
+        padding: 8px 10px; }
+    #documentation table.align-top td {
+      vertical-align: top; }
+  #documentation .list {
+    margin-bottom: 0; }
+  #documentation .pre-blockquote {
+    margin-bottom: .5em; }
+  #documentation .note {
+    border: 1px solid #3a60aa;
+    background-color: #f8f8ff;
+    border-radius: 3px;
+    font-size: 14px !important;
+    padding: 1em; }
+  #documentation .width-50 {
+    width: 50%; }
+  #documentation .width-75 {
+    width: 75%; }
+  #documentation .table-image tr {
+    background-color: white !important; }
+    #documentation .table-image tr td {
+      border-right: 1px solid #DBDBDB; }
+  #documentation .table-image img {
+    border: none !important;
+    margin: 0 !important; }
+  #documentation table {
+    width: 100%; }
+  #documentation .table-10-90 th:first-child {
+    width: 10%; }
+  #documentation .table-20-80 th:first-child {
+    width: 20%; }
+  #documentation .table-20-80 th:nth-child(2) {
+    width: 80%; }
+  #documentation .table-30-70 th:first-child {
+    width: 30%; }
+  #documentation .table-30-70 th:nth-child(2) {
+    width: 70%; }
+  #documentation .table-30-70 ol {
+    padding-left: 10px; }
+  #documentation .table-15-15-70 th:first-child {
+    width: 15%; }
+  #documentation .table-15-15-70 th:nth-child(2) {
+    width: 15%; }
+  #documentation .table-20-20-60 th:first-child {
+    width: 20%; }
+  #documentation .table-20-20-60 th:nth-child(2) {
+    width: 20%; }
+  #documentation .table-20-40-40 th:first-child {
+    width: 20%; }
+  #documentation .table-20-40-40 th:nth-child(2) {
+    width: 40%; }
+  #documentation .shell-instructions {
+    margin-bottom: 0;
+    border-bottom: 1px solid #DBDBDB; }
+    #documentation .shell-instructions li {
+      list-style-type: none;
+      float: left;
+      width: 50%; }
+      #documentation .shell-instructions li:first-child {
+        width: 5%; }
+      #documentation .shell-instructions li:nth-child(2) {
+        width: 50%; }
+      #documentation .shell-instructions li:nth-child(3) {
+        width: 45%; }
+  #documentation .content {
+    padding: 40px; }
+    #documentation .content img {
+      border: 1px solid #DBDBDB;
+      margin: 2em 0;
+      display: block;
+      max-width: 100%; }
+    #documentation .content .image-no-outline img {
+      border: none; }
+    #documentation .content .icon-edit {
+      color: #DBDBDB; }
+    #documentation .content pre {
+      padding: 1em;
+      word-break: keep-all; }
+      #documentation .content pre.indent {
+        margin-left: 40px; }
+      #documentation .content pre.show-whitespaces .ws-space-l {
+        color: transparent; }
+      #documentation .content pre code {
+        font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+        font-weight: normal;
+        border: none;
+        font-size: 12px;
+        white-space: pre; }
+    #documentation .content dl > dd {
+      margin-left: 3em; }
+    #documentation .content dt {
+      margin-top: 1em; }
+  #documentation .jdbc-links pre {
+    margin: 10px 0; }
+
+.icon-checkmark {
+  font-size: 22px;
+  color: green; }

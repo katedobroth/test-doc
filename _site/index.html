@@ -1,0 +1,3436 @@
+<!doctype html>
+<html>
+<head>
+	
+		<meta name="description" content="Documentation for Cazena's Fully-Managed Big Data as a Service">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<script type="text/javascript" src="assets/javascripts/toc.js"></script>
+	<script type="text/javascript">
+      $(document).ready(function() {
+          $('#toc').toc();
+      });
+	</script>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="assets/css/styles.css">
+	<link rel="stylesheet"
+				href="https://fonts.googleapis.com/css?family=Open Sans">
+	<link rel="shortcut icon" href="assets/images/favicon.ico" />
+	<title>Cazena Documentation</title>
+</head>
+<body data-spy="scroll" data-target="#affix-nav">
+<div id="documentation" >
+  <div class="content-wrap">
+    <div class="row">
+      <div class="columns col-xs-3">
+        <nav id="affix-nav" class="sidebar ">
+          <div id="toc"></div>
+        </nav>
+      </div>
+
+      <div class="columns col-xs-9 content">
+        <section id="overview">
+          
+          
+<h1 id="ovw_overview">Cazena’s Fully-Managed Big Data as a Service Solution</h1>
+
+<p>Cazena’s Fully-Managed Big Data as a Service solution is a secure environment that helps enterprises to move and process data in the cloud. Cazena manages the creation, configuration, security setup, and management of cloud infrastructure to create a single-tenant datacloud. Cazena then continually monitors and manages this platform ensuring that it is secure and optimized for your current set of workloads.</p>
+
+<p>Cazena offers three solutions:</p>
+
+<ul>
+  <li>
+    <p><a href="https://www.cazena.com/solutions/data-lake">Data Lake as a Service</a></p>
+  </li>
+  <li>
+    <p><a href="https://www.cazena.com/solutions/data-mart">Data Mart as a Service</a></p>
+  </li>
+  <li>
+    <p><a href="https://www.cazena.com/solutions/data-science">Data Science Sandbox as a Service</a></p>
+  </li>
+</ul>
+
+<p>Each solution included the following components, in addition to data engines and cloud storage:</p>
+
+<ul>
+  <li>
+    <p><strong>Cazena Gateways</strong> provide a secure connection between the enterprise and the Cazena private datacloud (PDC). The gateway allows data to be moved securely into the datacloud, and also provides secure access for BI and analytics tools.</p>
+  </li>
+  <li>
+    <p><strong>Cloud Sockets</strong> expose Cazena services on your local network, providing access to web interfaces  and APIs. On-premises analytics and BI tools connect to the Cazena datacloud via cloud sockets.</p>
+  </li>
+  <li>
+    <p>The <strong>AppCloud</strong> allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud.</p>
+
+    <p><img src="assets/documentation/overview/system_diagram.png" alt=" Cazena System " title="Cazena System" /></p>
+  </li>
+</ul>
+
+<hr class="end-section" />
+
+        </section>
+
+        <section id="cloud_sockets">
+          
+          <h1 id="integration_with_datacloud">Access the Datacloud Via Cloud Sockets</h1>
+
+<p>The  <strong>Cloud Sockets</strong> tab displays the information needed to connect to various services exposed on the Cazena Gateway. You can use cloud sockets for <a href="#move_data">moving data</a> as well as for connecting tools to the datacloud.</p>
+
+<p>This tab displays the status (Good Health, Warning, or Critical) of preconfigured services. Click on any service on the left side of the screen to view cloud socket connection details for that service.</p>
+
+<p><img src="assets/documentation/cloud_sockets/sample_cloud_socket.png" alt=" RStudio Cloud Socket " title="RStudio Cloud Socket" /></p>
+
+<p class="list">The details for a cloud socket contain two sections:</p>
+
+<h5 id="from-outside-the-datacloud">From outside the datacloud</h5>
+<p>Use <strong>IP Address:Port</strong> to connect to a service from outside of the datacloud. This will establish a secure  connection to the service through the Cazena Gateway. For example, you would use <strong>IP Address:Port</strong> to connect to RStudio Server via the Cazena gateway.</p>
+
+<p class="width-75"><img src="assets/documentation/cloud_sockets/rstudio_ip_address.png" alt=" RStudio IP Address:Port " title="RStudio IP Address:Port" /></p>
+
+<p><br />
+<br /></p>
+
+<h5 id="from-inside-the-datacloud">From inside the datacloud</h5>
+<p>Use <strong>Internal IP:Port</strong> to connect to a service from an endpoint inside the datacloud. For example, once you had connected to RStudio, you could <a href="#hive">connect to Hive via RJDBC</a> using <strong>Internal IP:Port</strong>.  (See the example below for details about <a href="#hadoop_jars">Hadoop Jars</a>.)</p>
+
+<p class="width-75"><img src="assets/documentation/cloud_sockets/hive_ip_address.png" alt=" Hive Internal IP:Port " title="Hive Internal IP:Port" /></p>
+
+<p class="list">In this section, we review examples of how to use cloud socket information for the following tools:</p>
+
+<ul>
+  <li><a href="#rstudio">SparkR in RStudio Server</a></li>
+  <li><a href="#hive">Connect to Hive via RJDBC using RStudio</a></li>
+  <li><a href="#sql_workbench">SQL Workbench</a></li>
+</ul>
+
+<p>For examples of using cloud sockets for moving data, see the <a href="#move_data">Move Data</a> section.</p>
+
+<hr class="end-section" />
+
+<h2 id="rstudio">Example: SparkR in RStudio Server</h2>
+
+<p>Cazena data lakes include support for SparkR, an R package that provides a front end to use Apache Spark from R. Within a Cazena data lake, you can use SparkR from any R shell, including a Hue notebook or RStudio Server.</p>
+
+<p class="step">Step 1: Setup (Optional)</p>
+
+<p class="list">This example shows how you would use RStudio with a table that you move into a data lake. To follow the example, you would first have to use the Cazena console to move a file, <a href="assets/documents/nycflights.dsv" target="_blank">nycflights.dsv</a>, onto a data lake.</p>
+
+<ul>
+  <li>You can download the sample file here:  <a href="/documents/nycflights.dsv" target="_blank">nycflights.dsv</a></li>
+  <li>Follow the <a href="#console_import_local_file">instructions</a> for moving data from a local file.
+    <ul>
+      <li>Name the dataset <strong>db1</strong> and name the table <strong>nycflights</strong>.</li>
+      <li>For <strong>Text Delimiters</strong>, select <strong>Double Quote</strong>, and select the checkbox for <strong>First Row is Header</strong></li>
+    </ul>
+  </li>
+</ul>
+
+<p class="image-no-outline"><img src="assets/documentation/cloud_sockets/r_example.png" alt=" Move Sample File " title="Move Sample File" /></p>
+
+<p class="step">Step 2: Connect to RStudio Server Through Your Browser:</p>
+
+<ol>
+  <li>Select the <strong>Cloud Sockets</strong> tab.</li>
+  <li>On the left side of the screen, click on <strong>RStudio Server</strong>.</li>
+  <li>Click on the link that appears on the right side of the screen. If your company has more than one Cazena gateway, you may see more than one link; you can use any of them.</li>
+  <li>
+    <p>RStudio will open in a new tab. Sign in using your Cazena credentials.</p>
+
+    <p><img src="assets/documentation/cloud_sockets/rstudio_cloud_socket.png" alt=" R Connection Details " title="R Connection Details" /></p>
+  </li>
+</ol>
+
+<p class="step">Step 3: Run Sample Code</p>
+
+<p>From the RStudio web client or a Hue notebook:</p>
+
+<ol>
+  <li>
+    <p>Load SparkR and the magrittr library.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> library(SparkR)
+ library(magrittr)
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Create a SparkContext</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> sc &lt;- SparkR::sparkR.init(master = "yarn-client")
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Initialize the SQL context, which loads the required Hive libraries.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  hiveContext &lt;- sparkRHive.init(sc)
+  df &lt;- table(hiveContext, 'db1.nycflights')
+</code></pre></div>    </div>
+
+    <p class="note"><strong>Note</strong>: In this command, <strong>db1</strong> corresponds to the name of your Cazena dataset. <strong>nycflights</strong> corresponds to the name of the table that you want to load.</p>
+  </li>
+  <li>
+    <p>View the first few rows of data, and print the schema of the data.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  showDF(df)
+  printSchema(df)
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Run some basic summary stats, and display the results.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>finaldf &lt;- filter(df, df$distance &gt; 1000) %&gt;%
+group_by(df$dep_hour)%&gt;%
+summarize(mean=mean(df$distance))
+  arrange(finaldf, desc(finaldf$mean)) %&gt;% head
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Release the resources used for this session</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sparkR.stop()
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<hr class="end-section" />
+
+<h2 id="hive">Example: Connect to Hive via RJDBC using RStudio</h2>
+
+<h4 id="hadoop_jars" class="step">Location of Hadoop JARs</h4>
+
+<p>In order to use Hive with RStudio, you will need to access Hadoop JARs. The JARs are located in the standard install locations that are used by Cloudera:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HADOOP_HOME=/opt/cloudera/parcels/CDH/lib/hadoop
+
+HIVE_HOME=/opt/cloudera/parcels/CDH/lib/hive
+</code></pre></div></div>
+
+<p class="note"><strong>Note</strong>: Cloudera’s standard install locations are different from the locations used by open source Hadoop (<code class="highlighter-rouge">/usr/lib/hadoop/lib/</code> and <code class="highlighter-rouge">/usr/lib/hive/lib/</code>, respectively).</p>
+
+<p>This example shows how you would set up RStudio to connect to Hive via RJDBC.</p>
+
+<p class="step">Step 1: Setup</p>
+
+<ol>
+  <li>On the <strong>Cloud Sockets</strong> tab, select <strong>RStudio Server</strong> on the left side of the screen.</li>
+  <li>Under <strong>From outside the datacloud</strong>, click on the  link under <strong>IP Address:Port</strong>.</li>
+  <li>RStudio will open in a new tab. Sign in using your Cazena credentials.</li>
+</ol>
+
+<p class="indent"><img src="assets/documentation/cloud_sockets/rstudio_cloud_socket.png" alt=" R Connection Details " title="R Connection Details" /></p>
+
+<ol>
+  <li>
+    <p>From RStudio, load the RJDBC library</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> library(RJDBC)
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Load the Hive driver.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> hd &lt;- JDBC('org.apache.hive.jdbc.HiveDriver', '/opt/cloudera/parcels/CDH/lib/hive/lib/hive-jdbc.jar')
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add HADOOP_HOME and HIVE_HOME to the class path.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> for(l in list.files('/opt/cloudera/parcels/CDH/lib/hadoop/')){ .jaddClassPath(paste('/opt/cloudera/parcels/CDH/lib/hadoop/',l,sep=''))}
+    
+    
+ for(l in list.files('/opt/cloudera/parcels/CDH/lib/hive/lib/')){ .jaddClassPath(paste('/opt/cloudera/parcels/CDH/lib/hive/lib/',l,sep=''))}
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p class="step">Step 2: Connect to Hive</p>
+
+<ol>
+  <li>On the <strong>Cloud Sockets</strong> tab, select <strong>Hive</strong> on the left side of the screen.</li>
+  <li>Under <strong>From inside the datacloud</strong>, use <strong>Internal IP:Port</strong> .</li>
+</ol>
+
+<p class="indent"><img src="assets/documentation/cloud_sockets/hive_cloud_socket.png" alt=" Hive IP:Port " title="Hive IP:Port " /></p>
+
+<ol>
+  <li>
+    <p>Connect to your database using this command:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> c &lt;- dbConnect(hd,'jdbc:hive2://HIVE-IP-ADDRESS:PORT/DATABASE_NAME','USERNAME', 'PASSWORD')
+</code></pre></div>    </div>
+
+    <p>where:</p>
+
+    <ul>
+      <li><strong>HIVE-IP-ADDRESS:PORT</strong> is the Hive IP address and port from the <strong>Cloud Sockets</strong> tab.</li>
+      <li><strong>DATABASE_NAME</strong> is the name of the database or dataset.</li>
+      <li><strong>USERNAME</strong> and <strong>PASSWORD</strong> are your Cazena Credentials.</li>
+    </ul>
+
+    <p><br /></p>
+
+    <p>For example:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   c &lt;- dbConnect(hd,'jdbc:hive2://10.128.8.133:10000/cldftpds09222017145029530','my_username', 'my_password')
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Use <strong>dblistTables</strong> to see the tables in your dataset.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> dbListTables(c)
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<hr class="end-section" />
+
+<h2 id="sql_workbench">Example: Use JDBC to connect to SQL Workbench</h2>
+
+<p>On the <strong>Cloud Sockets</strong> tab, you can find the information that you need to connect various third-party tools to databases that you have loaded into a data mart. In this example, we use SQL Workbench to query a database in a data mart.</p>
+
+<ul>
+  <li>You can download SQL Workbench <a href="http://www.sql-workbench.net/downloads.html" target="_blank">here</a>.</li>
+  <li>You will also need a postgreSQL JDBC driver, which you can download <a href="https://jdbc.postgresql.org/download.html" target="_blank">here</a>.</li>
+</ul>
+
+<p><strong>From the Cazena console:</strong></p>
+
+<ol>
+  <li>From the <strong>Cloud Sockets</strong> tab, select <strong>MPP SQL</strong> on the left side of the screen.</li>
+  <li>Under <strong>From inside the datacloud</strong>, copy the <strong>Internal IP:Port</strong> address and port.</li>
+</ol>
+
+<p class="indent"><img src="assets/documentation/cloud_sockets/mpp_sql.png" alt=" MPP SQL " title="MPP SQL" /></p>
+
+<p class="list"><strong>From SQL Workbench:</strong></p>
+
+<ol>
+  <li>Start SQL Workbench, then select <strong>File</strong> &gt; <strong>Connect Window</strong>.</li>
+  <li>Select a PostgreSQL JDBC driver (download here)</li>
+  <li>
+    <p>Enter the URL:</p>
+
+    <p><code class="highlighter-rouge">jdbc:postgres://IP ADDRESS:PORT/czdataset</code></p>
+
+    <p>where:</p>
+
+    <ul>
+      <li>IP ADDRESS:PORT comes from the Cloud Sockets tab.</li>
+      <li>Use <strong>czdataset</strong> as the name of the database.</li>
+    </ul>
+  </li>
+  <li>Ask your system administrator for the username and password.</li>
+</ol>
+
+<p class="image-no-outline"><img src="assets/documentation/cloud_sockets/SQL_workbench.png" alt=" SQL Workbench " title="SQL Workbench" /></p>
+
+<p class="note"><strong>Note:</strong> Data moved to a Cazena data mart goes into a database named <strong>czdataset</strong>. The schema name matches the name of the dataset used when moving data into the cloud.</p>
+
+<hr class="end-section" />
+
+        </section>
+
+        <section id="object_store">
+          
+          <h1 id="object_store">Object Store</h1>
+
+<p>Depending on the configuration of your environment, data may be stored on Microsoft <a href="#adls_object_store">ADLS</a> or <a href="#aws_object_store">AWS</a> object storage.</p>
+
+<h2 id="adls_object_store">ADLS</h2>
+
+<p class="list">You may be able to link to two pages in <a href="#azure_monitor">Azure Monitor</a> from the Cazena console.</p>
+
+<ul>
+  <li>
+    <p>The ADLS Data Explorer allows you to browse through your ADLS directory.</p>
+  </li>
+  <li>
+    <p>The ADLS Metrics Overview displays metrics such as data storage utilization, read/write requests, and ingress/egress.</p>
+  </li>
+</ul>
+
+<p>You may also view <a href="#adls_account_information">ADLS account information</a> including IDs and instance names in the Cazena console.</p>
+
+<h3 id="azure_monitor">Link to Azure Monitor from the Cazena console</h3>
+
+<p>You must initiate sessions with Azure Monitor by linking from the Cazena console.</p>
+
+<ol>
+  <li>
+    <p>From the <strong>Cloud Sockets</strong> tab, select either <strong>ADLS Metrics Overview</strong> or <strong>ADLS Data Explorer</strong> on the left side.</p>
+  </li>
+  <li>
+    <p>Links to the Metrics Overview and Data Explorer will appear on the right side of the screen.</p>
+  </li>
+  <li>
+    <p>Sign in to ADLS as the <a href="#adls_user">Customer Access User</a>. If you see a message in ADLS that tells you that you don’t have access to the Metrics Overview, check that you are signed in as the Customer Access User, and not into your own Microsoft account.</p>
+
+    <p><img src="assets/documentation/monitor_system/adls_cloud_socket.png" alt=" ADLS Cloud Socket " title=" ADLS Cloud Socket" /></p>
+  </li>
+</ol>
+
+<p class="note indent"><strong>Note</strong>:  At the top of the ADLS Metrics Overview, there is a link labeled <strong>Data Explorer</strong>. The link leads to an inaccessible directory. Use the links provided in the Cazena console to link to the data explorer.
+    <img src="assets/documentation/monitor_system/adls_metrics_data_link.png" alt=" ADLS Data Explorer " title=" ADLS Data Explorer" /></p>
+
+<h3 id="adls_account_information">View ADLS IDs and Instance Name</h3>
+
+<p>To view variables such as tenant ID, client ID and ADLS Instance name, select the <strong>System</strong> tab, then <strong>ADLS</strong>. Links to ADLS Metrics Overview and ADLS Data Explorer are also available on this page.</p>
+
+<p><img src="assets/documentation/data_movement/adls_account_info.png" alt=" ADLS Account Information " title=" ADLS Account Information" /></p>
+
+<p>See the section on <a href="#adls_webhdfs">Moving Data to ADLS Using WebHDFS</a> for an example of how to use these variables.</p>
+
+<h2 id="aws_object_store">AWS S3</h2>
+
+<p>From the Cazena console, you may link to the AWS bucket and <a href="#aws_account_information">view keys and tokens</a> that can be used to access the bucket.</p>
+
+<h3 id="link-to-aws-bucket-from-the-cazena-console">Link to AWS bucket from the Cazena console</h3>
+
+<p>To link to the S3 bucket:</p>
+
+<ol>
+  <li>
+    <p>From the <strong>Cloud Sockets</strong> tab, select <strong>AWS Console Login</strong> on the left side of the screen.</p>
+  </li>
+  <li>
+    <p>A link to the AWS bucket will appear on the right side. Sessions that you initial from this link will expire after 12 hours.</p>
+
+    <p><img src="assets/documentation/object_store/aws_login_link.png" alt=" AWS Console Login " title="AWS Console Login" /></p>
+  </li>
+</ol>
+
+<h3 id="aws_account_information">View AWS Keys and Token</h3>
+
+<p>To view the bucket name, AWS access key, secret access key and session token, select the <strong>System</strong> tab, then <strong>S3</strong>. The AWS login link is also available on this page.</p>
+
+<p><img src="assets/documentation/object_store/s3_variables.png" alt=" AWS Keys and Token " title="AWS Keys and Token " /></p>
+
+<p class="note"><strong>Note</strong>: Keys and tokens will expire after 12 hours.</p>
+
+        </section>
+
+        <section id="move_data">
+          
+          
+<h1 id="move_data">Move Data</h1>
+
+<p class="list">The section covers the following types of data movements:</p>
+<ul>
+  <li><a href="#sqoop">Move to HDFS using Sqoop</a></li>
+  <li><a href="#hdfs">Move to HDFS using WebHDFS</a></li>
+  <li><a href="#adls_webhdfs">Move to ADLS using WebHDFS</a></li>
+  <li><a href="#move_cz_datamover">Move Using the Cazena Data Mover</a></li>
+</ul>
+
+<h2 id="sqoop">Move to HDFS Using Sqoop</h2>
+
+<p>Cazena will install any JDBC drivers that you need to use Sqoop for moving data from the enterprise into the datacloud. At a high level, you’ll follow these steps to move data into the Cazena datacloud using Sqoop:</p>
+
+<ol>
+  <li>Either a system administrator or Cazena support will <a href="#create_enterprise_socket">set up an enterprise cloud socket</a> that contains the information needed to connect to the enterprise resource.</li>
+  <li>Use the hostname and port provided by the enterprise cloud socket when you set up a Sqoop job. The example below will show how to use this information in Hue.</li>
+</ol>
+
+<h3 class="step" id="before-you-begin">Before You Begin</h3>
+
+<ul>
+  <li>
+    <p>You must have an <a href="#create_enterprise_socket">enterprise cloud socket</a>, which contains the information needed to connect to the enterprise resource where the data resides. The cloud socket must be set up by a system administrator or Cazena support.</p>
+  </li>
+  <li>
+    <p>If you are moving data from an Oracle server, the time zone of the data lake must be available to the Oracle database.</p>
+  </li>
+</ul>
+
+<h3 id="enterprise_cloud_socket" class="step">Step 1: Get Hostname and Port from the Cazena console</h3>
+
+<p class="list"><strong>On the Cazena console:</strong></p>
+
+<ol>
+  <li>Select the <strong>Cloud Sockets</strong> tab. On the left side of the screen, click on the name of the cloud socket you want to use. To search for a particular cloud socket, use your browser’s <strong>Find</strong> command.</li>
+  <li>
+    <p>The hostname and port will appear on the right side of the screen. Copy the hostname and port.</p>
+
+    <p><img src="assets/documentation/data_movement/enterprise_cloud_socket.png" alt=" Enterprise Service " title="Enterprise Service" /></p>
+  </li>
+</ol>
+
+<h3 id="cgw_hue_connection_links" class="step">Step 2: Use Hue to Create Connection Links</h3>
+
+<h4 id="connect-to-hue">Connect to Hue</h4>
+<ol>
+  <li>On the <strong>Cloud Sockets</strong> tab, select <strong>Hue Server</strong> on the left side of the screen</li>
+  <li>Click on the link on the right side of the screen to open Hue.</li>
+  <li>Sign into Hue using your Cazena credentials.</li>
+  <li>From the Hue user interface, open the left menu, then select <strong>Browsers &gt; Sqoop</strong>.</li>
+  <li>Click <strong>New Job</strong> in the upper right corner.</li>
+  <li>
+    <p>In the next step, you will use the hostname and port to create a link for the <strong>From link:</strong> field.</p>
+
+    <p class="image-no-outline width-75"><img src="assets/documentation/cazena_gateway/sqoop_new_link.png" alt=" Sqoop New Link " title="Sqoop New Link" /></p>
+  </li>
+</ol>
+
+<h4 id="create-a-link-to-the-enterprise-resource">Create a link to the enterprise resource</h4>
+
+<p class="list">Use the following information when you create the <strong>From link:</strong> for a Sqoop job.</p>
+
+<ol>
+  <li>For <strong>Connector</strong>, select <code class="highlighter-rouge">generic-jdbc-connector</code>.</li>
+  <li>For <strong>JDBC Driver Class</strong>, enter one of the following:
+    <ul>
+      <li>Oracle: <code class="highlighter-rouge">oracle.jdbc.OracleDriver</code></li>
+      <li>Netezza: <code class="highlighter-rouge">org.netezza.Driver</code></li>
+      <li>PostgreSQL: <code class="highlighter-rouge">org.postgresql.Driver</code></li>
+    </ul>
+  </li>
+  <li>
+    <p>Use Hostname and Port from the enterprise cloud socket (see Step 1) to create a JDBC string. For example, a JDBC string for Netezza might be:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> jdbc:netezza://czgw.cazena.internal:11000/marketing-db
+</code></pre></div>    </div>
+
+    <p>…where <strong>czgw.cazena.internal:11000</strong> is the hostname and port from the enterprise cloud socket.</p>
+  </li>
+</ol>
+
+<h5 id="troubleshooting-connection-links">Troubleshooting connection links</h5>
+
+<p class="list">If you are unable to save a JDBC connection link:</p>
+
+<ul>
+  <li>
+    <p>On the <strong>Manage Gateways</strong> page, make sure that the enterprise service that you are using is running and has been activated. On the left side of the screen, select <strong>Enterprise</strong>, then find the service on the right side of the screen. The switch in the <strong>Active</strong> column should be blue, and the status for the port should be green.</p>
+
+    <p><img src="assets/documentation/cazena_gateway/troubleshoot_ent_service.png" alt=" Troubleshoot enterprise cloud socket " title="Troubleshoot enterprise cloud_socket" /></p>
+  </li>
+  <li>
+    <p>From the machine that is running the gateway, run <code class="highlighter-rouge">cgw-show-ipservices</code>. If the service exists, it should show in the results, with the server IP and port that appears on the list of enterprise gateways (see above).</p>
+
+    <p><img src="assets/documentation/cazena_gateway/cgw-show-ipservices.png" alt=" Results of cgw-show-ipservices " title="Results of cgw-show-ipservices" /></p>
+  </li>
+  <li>
+    <p>To check that the link really has been created: In Hue, select <strong>Data Browsers &gt; Sqoop Transfer</strong>, the click on <strong>Manage Links</strong> in the upper right corner. See if the link that you tried to create is on the list.</p>
+  </li>
+</ul>
+
+<h4 class="list" id="create-a-link-for-hdfs">Create a link for HDFS</h4>
+
+<ol class="width-75">
+  <li>From the <strong>New Job</strong> screen, click <strong>Add a New Link</strong> to add a second link.</li>
+  <li>Give the connector a name.</li>
+  <li>For <strong>Connector</strong>, select <strong>hdfs-connector</strong>.</li>
+  <li>For <strong>HDFS URI</strong>, enter <code class="highlighter-rouge">hdfs://nameservice:8020</code></li>
+  <li>Click <strong>Save</strong>.
+  <img src="assets/documentation/cazena_gateway/sqoop_to_link.png" alt=" Sqoop To Link " title="Sqoop To Link" /></li>
+</ol>
+
+<ol>
+  <li>Back on the <strong>New Job</strong> screen, select that link as the <strong>To link</strong>.</li>
+</ol>
+
+<h3 id="cgw_hue_sqoop_job" class="step">Step 3: Create and Run the Sqoop Job</h3>
+
+<h4 class="list" id="step-1-hue">Step 1 (Hue)</h4>
+
+<table class="table-image">
+  <tbody>
+    <tr>
+      <td>Select the <strong>To</strong> and <strong>From</strong> links (described in the previous step), then click <strong>Next</strong>.</td>
+      <td><img src="assets/documentation/cazena_gateway/sqoop_job_step1.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 class="list" id="step-2-hue">Step 2 (Hue)</h4>
+
+<table class="table-image">
+  <tbody>
+    <tr>
+      <td>For <strong>Table name</strong>, enter the name of the table you want to import from your database. <br /><br /> For <strong>Partition Column</strong> (optional): Enter the name of the partition column, if applicable. The partition column is often the table’s primary key, but it can also be any column of your choosing. <br /><br />Click <strong>Next</strong>.</td>
+      <td><img src="assets/documentation/cazena_gateway/sqoop_job_step2.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 class="list" id="step-3-hue">Step 3 (Hue)</h4>
+
+<table class="table-image">
+  <tbody>
+    <tr>
+      <td>For <strong>Output Format</strong>, select <strong>TEXT_FILE</strong>.<br /><br />For <strong>Compression Format</strong>, select <strong>NONE</strong>.<br /><br />For <strong>Output directory</strong>, enter <code class="highlighter-rouge">/user/sqoop2/postgres</code><br /><br />Leave all other fields blank.<br /><br />Click <strong>Save and Run</strong>.</td>
+      <td><img src="assets/documentation/cazena_gateway/sqoop_job_step3.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<hr class="end-section" />
+
+<h2 id="hdfs">Move to HDFS Using WebHDFS</h2>
+
+<p>This example describes how to move a file (<strong>nycflights.dsv</strong>) into a directory (<strong>user/my_username/my_directory</strong>) on your Cazena data lake.</p>
+
+<p class="step">Step 1: Get the IP address and Port for WebHDFS</p>
+
+<ol>
+  <li>Select the <strong>Cloud Sockets</strong> tab. On the left side of the screen, under <strong>APIs</strong> , select <strong>WebHDFS</strong>.</li>
+  <li>Make a note of the IP address and port that appears on the left side of the page. You might want to copy the information and paste it into a text editor as you assemble the commands in the next steps.</li>
+</ol>
+
+<p><img src="assets/documentation/data_movement/webhdfs_cloud_socket.png" alt=" HDFS Cloud Socket " title="HDFS Cloud Socket" /></p>
+
+<p class="step">Step 2: Get the HDFS Location Where You Want to Move Data</p>
+
+<p>From a terminal window, run the following command to determine the location in HDFS where the data will go:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    curl -i -k -u &lt;USERNAME&gt;:&lt;PASSWORD&gt; -X PUT "http://&lt;IP-ADDRESS&gt;:&lt;PORT&gt;/gateway/cazena/webhdfs/v1/&lt;DIRECTORY&gt;/&lt;FILENAME&gt;?op=CREATE"
+</code></pre></div></div>
+
+<p>Where:</p>
+
+<p><code class="highlighter-rouge">&lt;USERNAME&gt;</code> and <code class="highlighter-rouge">&lt;PASSWORD&gt;</code> are your username and password for the Cazena console</p>
+
+<p><code class="highlighter-rouge">&lt;IP-ADDRESS&gt;</code> and <code class="highlighter-rouge">&lt;PORT&gt;</code> are the server and port from the Cloud Socket (HDFS-REST-API)</p>
+
+<p><code class="highlighter-rouge">&lt;DIRECTORY&gt;</code> is the path to the HDFS directory.</p>
+
+<p class="note"><strong>Note</strong>: The full path to the directory will always begin with <strong>user/&lt;username&gt;</strong>  . You can sign into Hue to see your directory structure.</p>
+
+<p><code class="highlighter-rouge">&lt;FILENAME&gt;</code> is the name of the file. You must include the filename, and it must match the name of the source file.</p>
+
+<p><strong>Example:</strong>  To move the file <strong>nycflights.dsv</strong> to the directory <strong>/user/my_username/my_directory</strong> , you would start with a command like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    curl -i -k -u my_username:mypassword -X PUT "http://1.2.3.4:11979/gateway/cazena/webhdfs/v1/user/my_username/my_directory/nycflights.dsv?op=CREATE”
+</code></pre></div></div>
+
+<p>The system will return several values, including the HDFS location, e.g.,</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  Location: http://1.2.3.4:11979/gateway/cazena/webhdfs/data/v1/webhdfs/v1/user/my_username/my_directory/nycflights.dsv?_=AAAACAAAABAAAAEAzrO5cJpwRtgS_VvH60NYdTGHgRY5YOcHT7bHdAPh5uADDoHlpHWuA5BkU7D_IwOWGQa7FSBj12Q0vwQ3LmYAx01AICxQ3ZCyY1TD29nHJdhMjSFVcdhDS5POisjHIS8gEeWgIWMdYOP51xi0HDjjO0iddgpnnCDiZ1NYqEZxhpuVtw9Hu_QX3IAYtuN11wP9AGqWccrDI6EiOaWkuoDMV_wiFySp02SGsFC2VpqjVgLxuF7y_TcjTfz_n5V6-ATadpKijxatihot_XGFoNwMUAnV_vMwYqOvYnEt0k6QegqbmTOUXUMpE2ocZ4VlXK13toqQKmDUS_kOFBrrqwaClA0wRpw2K1Tf4jPsOnjGQ_6PTPNtwYaGXg
+</code></pre></div></div>
+
+<p class="step">Step 3: Move Data to HDFS</p>
+
+<p>Use the location from the previous step in the command that will move the data into HDFS:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  curl -i -k -u &lt;USERNAME&gt;:&lt;PASSWORD&gt; -X PUT -T &lt;FILENAME&gt; "&lt;LOCATION&gt;"
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">&lt;USERNAME&gt;</code> and <code class="highlighter-rouge">&lt;PASSWORD&gt;</code> are your username and password for the Cazena console</p>
+
+<p><code class="highlighter-rouge">&lt;FILENAME&gt;</code> is the file containing the data that you want to move. This might include the path to the file. The name of the actual file must be the same as the name that you used in the previous step.</p>
+
+<p><code class="highlighter-rouge">&lt;LOCATION&gt;</code> is the location from the previous step</p>
+
+<p><strong>Example:</strong> To move the file nycflights.dsv into the location from the previous step, you would use a command like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  curl -i -k -u my_username:mypassword -X PUT -T nycflights.dsv "http://1.2.3.4:11979/gateway/cazena/webhdfs/data/v1/webhdfs/v1/user/my_username/my_directory/nycflights.dsv?_=AAAACAAAABAAAAEAzrO5cJpwRtgS_VvH60NYdTGHgRY5YOcHT7bHdAPh5uADDoHlpHWuA5BkU7D_IwOWGQa7FSBj12Q0vwQ3LmYAx01AICxQ3ZCyY1TD29nHJdhMjSFVcdhDS5POisjHIS8gEeWgIWMdYOP51xi0HDjjO0iddgpnnCDiZ1NYqEZxhpuVtw9Hu_QX3IAYtuN11wP9AGqWccrDI6EiOaWkuoDMV_wiFySp02SGsFC2VpqjVgLxuF7y_TcjTfz_n5V6-ATadpKijxatihot_XGFoNwMUAnV_vMwYqOvYnEt0k6QegqbmTOUXUMpE2ocZ4VlXK13toqQKmDUS_kOFBrrqwaClA0wRpw2K1Tf4jPsOnjGQ_6PTPNtwYaGXg"
+</code></pre></div></div>
+
+<p>The system response will include:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP/1.1 201 Created
+</code></pre></div></div>
+
+<p>To verify that the data has been moved, you can sign into Hue and navigate to the file.</p>
+
+<hr class="end-section" />
+
+<h2 id="adls_webhdfs">Move to ADLS Using WebHDFS</h2>
+<p>If your datacloud runs on Microsoft Azure infrastructure, you may have direct access to a shared folder in the object data store. From the Cazena console, you can view and copy information needed to <a href="#move_adls">move data into ADLS</a> using WebHDFS.</p>
+
+<h4 id="adls_account">ADLS Account Information</h4>
+
+<p>When your datacloud is provisioned, Cazena sets up a dedicated Customer Access User that has access to the Azure object data store. When you move data, use the username and password for the Customer Access User (i.e., not your own username and password).</p>
+
+<ol>
+  <li>From the <strong>System</strong> tab, select <strong>ADLS</strong>.</li>
+  <li>Your account data is displayed at the top of the page, including:
+    <ul>
+      <li>Tenant ID</li>
+      <li>Client ID</li>
+      <li>Instance name</li>
+      <li>ADLS Base URL (used in commands such as creating tables and databases)</li>
+      <li>Customer Access username</li>
+    </ul>
+  </li>
+</ol>
+
+<p><img src="assets/documentation/data_movement/adls_account_info.png" alt=" ADLS Account Information " title=" ADLS Account Information" /></p>
+
+<h5 id="adls_user">About ADLS Customer Access User</h5>
+
+<p>On the <strong>System &gt; ADLS</strong> page, there is a link for changing the password of the Customer Access user. To change the password, you will need to know the existing password, which is initially set by Cazena Support. If you don’t know the password, contact support@cazena.com.</p>
+
+<p>If you are signed in to your own Microsoft account on your browser when you click the <strong>Change Password</strong> link, you may go to a Microsoft screen for changing your own password, rather than the password for the Customer Access user. To avoid this situation, either sign out of your own Microsoft account, or open the link in an incognito browser window.</p>
+
+<h4 id="move_adls">ADLS Commands</h4>
+
+<p>The Cazena console displays the information needed to move data into ADLS using WebHDFS. Your account data is incorporated into a series of commands that you can use to set environment variables, obtain and refresh access tokens, and access the ADLS object store.</p>
+
+<p><img src="assets/documentation/data_movement/system_adls.png" alt=" System &gt; ADLS " title="System &gt; ADLS" /></p>
+
+<p>This example will show how to move data from your local file system into the ADLS shared folder.</p>
+
+<p class="step">Step 1: Set Client and Tenant IDs</p>
+
+<ol>
+  <li>In a terminal window, navigate to the directory that contains the data to be moved.</li>
+  <li>From the Cazena console, select the <strong>System</strong> tab, then <strong>ADLS</strong>.</li>
+  <li>
+    <p>Copy each of the first two commands and paste them into the terminal window. These commands will set the environment variables CLIENT_ID and TENANT_ID.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> export CLIENT_ID=685800e4-02d3-4fd4-b6f2-152b16aafe49
+
+ export TENANT_ID=2e941617-a05d-4a55-918f-757a04a7be11
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p class="step">Step 2: Set Access and Refresh Tokens</p>
+<ol>
+  <li>
+    <p>To set the CODES environment variable, copy the third command onto your clipboard and paste it into a text editor. Replace ADD-PASSWORD with the password for the <a href="#adls_account">Customer Access user</a>.</p>
+
+    <p><img src="assets/documentation/data_movement/adls_replace_password.png" alt=" ADLS Commans " title="ADLS Command" /></p>
+  </li>
+  <li>
+    <p>Paste the command containing the password into the terminal window.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> export CODES=$(curl -X POST https://login.microsoftonline.com/$TENANT_ID/oauth2/token -F grant_type=password -F resource=https://management.azure.com/ -F client_id=$CLIENT_ID -F username=cz123@cz123.cazena.com -F password=your-password)
+</code></pre></div>    </div>
+
+    <p>The system will respond with something like the following:</p>
+
+    <p>% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                  Dload  Upload   Total   Spent    Left  Speed
+    100  3080  100  2434  100   646   6396   1697 –:–:– –:–:– –:–:–  6405</p>
+  </li>
+  <li>
+    <p>To check whether the access code was generated, use <code class="highlighter-rouge">echo $CODES</code>.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo $CODES
+
+ {"token_type":"Bearer","scope":"user_impersonation","expires_in":"3600","ext_expires_in":"0","expires_on":"1503072287","not_before":"1503068387","resource":"https://management.azure.com/","access_token":"eyJ
+
+etc...
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Copy and paste the commands next to <strong>Get initial access and refresh tokens</strong>. These commands will set the ACCESS_TOKEN and REFRESH_TOKEN variables that will be used in subsequent commands.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> export ACCESS_TOKEN=$(echo $CODES | jq .access_token | sed -e "s/\"//g")
+ export REFRESH_TOKEN=$(echo $CODES | jq .refresh_token | sed -e "s/\"//g")
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p><strong>Refresh Access Codes</strong></p>
+
+<ol>
+  <li>
+    <p>Access codes will expire after 5 minutes. To refresh the access code, use the next command next to <strong>Refresh ACCESS_TOKEN</strong>.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> export ACCESS_TOKEN=$(curl -X POST https://login.microsoftonline.com/$TENANT_ID/oauth2/token -F grant_type=refresh_token -F resource=https://management.core.windows.net/ -F client_id=$CLIENT_ID -F refresh_token=$REFRESH_TOKEN | jq .access_token | sed -e "s/\"//g")
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p class="step">Step 3: Move Data into the ADLS folder</p>
+
+<ol>
+  <li>
+    <p>The final command on the <strong>System &gt; ADLS</strong> page will access the ADLS folder.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -X GET -H "Authorization: Bearer ${ACCESS_TOKEN}" "https://cz123.azuredatalakestore.net/webhdfs/v1/share?op=LISTSTATUS" | jq
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>If the folder is empty, the system will respond with something like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+    100    34  100    34    0     0     39      0 --:--:-- --:--:-- --:--:--    39
+    {
+      "FileStatuses": {
+        "FileStatus": []
+      }
+    }
+</code></pre></div></div>
+
+<ol>
+  <li>
+    <p>Set a variable with the name of the file, for example:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> export FILE_TO_USE=nycflights.dsv
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Use a command such as the following to move the file:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> curl -i -X PUT -L -T $FILE_TO_USE -H "Authorization: Bearer ${ACCESS_TOKEN}" "https://cz123.azuredatalakestore.net/webhdfs/v1/share/${FILE_TO_USE}?op=CREATE"
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>After the movement is complete, you can re-use the command to access the ADLS folder to see the data that you moved:</p>
+  </li>
+</ol>
+
+<div class="show-whitespaces indent highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -X GET -H "Authorization: Bearer ${ACCESS_TOKEN}" "https://cz123.azuredatalakestore.net/webhdfs/v1/share?op=LISTSTATUS" | jq
+
+         % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                        Dload  Upload   Total   Spent    Left  Speed
+           100   305  100   305    0     0    457      0 --:--:-- --:--:-- --:--:--   457
+
+         {
+        "FileStatuses": {
+          "FileStatus": [
+           {
+              "length": 1591,
+              "pathSuffix": "dmm.log.snippet",
+              "type": "FILE",
+              "blockSize": 268435456,
+              "accessTime": 1503061325322,
+              "modificationTime": 1503061325528,
+              "replication": 1,
+              "permission": "770",
+              "owner": "7b8783fe-e118-4632-91c4-3049cb85e28a",
+              "group": "bae379d5-e7f6-4c9f-aa89-37d9f71a7744"
+              }
+            ]
+          }
+        }
+</code></pre></div></div>
+
+<p>Alternately, you could use the <a href="#adls_object_store">ADLS Data Explorer</a> to see the file that you moved.</p>
+
+<hr class="end-section" />
+
+<h2 id="move_cz_datamover">Move Using the Cazena Data Mover</h2>
+
+<p class="list">From the Cazena console, you can initiate the following types of data movements:</p>
+<ul>
+  <li>Move data from <a href="#console_import_enterprise">a Netezza or Oracle server located within your enterprise</a></li>
+  <li><a href="#console_import_ftp">Import</a> or <a href="#console_export_ftp">export</a> data to/from a FTP or SFTP server. FTP/SFTP servers can be located either inside your enterprise or on the public internet.</li>
+  <li>Import data from <a href="#console_import_local_file">your local file system</a></li>
+  <li>Move data from other types of data sources, using a <a href="#custom_data_adapter">custom data adapter</a>.</li>
+  <li>Move data from one Cazena service into another.</li>
+  <li>After a data movement has successfully completed via the Cazena console, you can generate a script that will allow you to easily repeat the transfer outside of the Cazena console. For more information, see the section on <a href="#script_transfers">Scripting Transfers</a>.</li>
+</ul>
+
+<h3 id="import_enterprise">From a Netezza or Oracle Server</h3>
+
+<p class="step">Before You Begin</p>
+<p>You must have a <a href="#data_stores">data store</a> configured that contains the information needed to connect to the Netezza or Oracle server.</p>
+
+<p class="step">Step 1: Select Source and Destination</p>
+
+<ol>
+  <li>From the <strong>Datacloud</strong> tab, click the <strong>Move Data</strong> button.</li>
+  <li><em>On the dialog that appears:</em> Under <strong>Select Source</strong>, select <strong>Data Store</strong>, then select the  <a href="#data_stores">data store</a> for the server that contains your source data.  If you do not see the data store that you need, check that it has been set up.</li>
+  <li>Under <strong>Select Destination</strong>, select <strong>Cazena Service</strong>, then select the data lake/data mart and dataset where your data should go.
+    <ul>
+      <li>To create a new dataset, select <strong>New</strong>.</li>
+    </ul>
+  </li>
+  <li>Click <strong>Continue</strong>.</li>
+</ol>
+
+<p class="note"><strong>Note</strong>: Currently the database used for all objects created in an MPP SQL service called <strong>czdataset</strong>. The <strong>dataset</strong> name you enter here will become the schema name in the <strong>czdataset</strong> database in the MPP SQL service.</p>
+
+<p class="image-no-outline"><img src="assets/documentation/data_movement/datastore_source_destination.png" alt=" Select Source and Destination " title="Select Source and Destination" /></p>
+
+<p class="step">Step 2: Select Tables from the Source (Netezza or Oracle) Database</p>
+
+<p>Next, you will search for and select tables from your source database. When moving from Netezza or Oracle, you can select several tables at once.</p>
+
+<h4 id="about-data-conversion">About Data Conversion</h4>
+
+<p>When moving data, the Cazena dataset manager attempts to map column names, datatypes and keys from the source database to the target Cazena workload engine. For example, if a source Netezza database has a distribution column, the system will make the same distribution column if the target is a MPP SQL-based workload engine. For more details, see the section on <a href="#data_movement_details"><strong>Data Movement Details</strong></a>.</p>
+
+<p class="list">As you select tables to move from your source database, you may choose whether or not you want to review the mappings.</p>
+
+<ul>
+  <li>If you <strong>Review</strong> a table, you can view and edit mappings of datatypes, column names and keys.</li>
+  <li>If you <strong>Finalize</strong> a table, you accept the proposed mappings without reviewing them.</li>
+</ul>
+
+<p>To help you decide, Cazena will flag tables that appear to have conversion issues.</p>
+
+<p class="list"><strong>To select tables from your source database:</strong></p>
+
+<ol>
+  <li>Enter a text string to search for tables whose names contain the string, then click <strong>Search</strong>.</li>
+  <li>From the search results, select tables that you want to move:
+    <ul>
+      <li>Use the checkboxes to select multiple tables to either <strong>Review</strong> or <strong>Finalize</strong>.</li>
+      <li>You may also select <strong>Review</strong> or <strong>Finalize</strong> for individual tables using the dropdown menu in the Action column.</li>
+    </ul>
+
+    <p>The three columns on the right indicate whether there are conversion issue. For more information, hover over the numbers in the three columns on the right.</p>
+
+    <p>Your selection (<strong>Review</strong> or <strong>Finalize</strong>) for each table will appear in the <strong>Actions</strong> column. The total number of selections will also appear in the <strong>Your Selection</strong> box on the right side of the screen.</p>
+  </li>
+  <li>Click <strong>Continue</strong>.</li>
+</ol>
+
+<p><img src="assets/documentation/data_movement/select_tables.png" alt=" Select Tables " title="Select Tables" /></p>
+
+<p class="step">Step 3: Review and Finalize Table Definitions</p>
+
+<p class="list">Next, review the table definitions for tables that you have selected for review. Table definitions consist of:</p>
+
+<ul>
+  <li>Table names</li>
+  <li>Column names</li>
+  <li>Datatypes</li>
+  <li>Keys (optional; MPP SQL only)</li>
+</ul>
+
+<p class="list">The <strong>Review</strong> page lists all of the tables that you have selected.</p>
+
+<ul>
+  <li>Tables that you have selected for review are listed in the left column.</li>
+  <li>The table currently under review appears in the middle of the page.</li>
+  <li>Tables that are ready to be finalized appear in the right column. If you are following the example, the two tables that you elected to finalize without review will appear here.</li>
+</ul>
+
+<p class="note"><strong>Note:</strong> You may skip this page altogether if, on the previous page, you chose to finalize all selected tables without reviewing them.</p>
+
+<p><img src="assets/documentation/data_movement/review_table_def_ent.png" alt=" Review Table Definition " title="Review Table Definition" /></p>
+
+<p class="list"><strong>Review the table definition:</strong></p>
+<ol>
+  <li>Review the table name, column names and datatype conversions for each page.</li>
+  <li>If your table supports keys, select the <strong>Keys</strong> tab to review or add keys to your table definition.</li>
+  <li>
+    <p>To accept the table definition for the table under review, click <strong>Approve</strong>.</p>
+
+    <p class="width-75"><img src="assets/documentation/data_movement/keys.png" alt=" Enter Keys" title="Enter Keys" /></p>
+  </li>
+  <li>After you have reviewed all table definitions, click <strong>Finalize Tables</strong> on the right side of the screen. This will move all of your approved table definitions to the datacloud.</li>
+</ol>
+
+<p><img src="assets/documentation/data_movement/finalize_button.png" alt=" Finalize Table" title="Finalize Table " /></p>
+
+<p class="step">Step 4: Move Data (Optional)</p>
+
+<p>After you finalize tables, the table definition will be moved to the destination service. At this point, no data will have been moved to those tables. This allows you to schedule and run a data movement at a different time.</p>
+
+<p class="list">If you like, you can move data on the next page.</p>
+
+<ul>
+  <li>To specify a <strong>WHERE</strong> clause for a table, click  <strong>Add a Filter</strong>.</li>
+  <li>To move the first 100 rows of data, select the checkbox in the <strong>Move a Sample</strong> column.</li>
+</ul>
+
+<p>To move data, click <strong>Move Tables</strong>.</p>
+
+<p><img src="assets/documentation/data_movement/move_tables.png" alt="Move All Tables" title="Move tables Tables" /></p>
+
+<p>You can also generate a script for recurring transfers. For more information, see the section on <a href="#script_transfers">generating scripts for recurring data movements</a>.</p>
+
+<p>If you want to check on the progress of your data movement, see the section on <a href="#data_movement_progress">data movement progress</a>.</p>
+
+<h3 id="import_ftp">From FTP/SFTP Servers</h3>
+
+<p>You may import data from an FTP or SFTP server that is located either within the enterprise, or on the internet.</p>
+
+<p class="step list">Before You Begin</p>
+<ul>
+  <li>You must have a <a href="#data_stores">data store</a> configured that contains the information needed to connect to the FTP/SFTP server.</li>
+  <li>Data that you import from an FTP or SFTP server must be in the DSV (Delimeter Separated Values) format. For details about DSV format rules, see the section that describes <a href="#dmg_dsv_files"> Delimiter Separated Values (DSV) Files </a>.</li>
+</ul>
+
+<p class="step list">Step 1: Select Source and Destination</p>
+
+<ol>
+  <li>From the <strong>Datacloud</strong> tab, click the <strong>Move Data</strong> button.</li>
+  <li>Under <strong>Source</strong>, select <strong>Data Store</strong>, then the data store where the source data is located.</li>
+  <li>Under <strong>Destination</strong>, select <strong>Cazena Service</strong>, then select the data lake or data mart and dataset where you want to import data.</li>
+  <li>Click <strong>Continue</strong>.</li>
+</ol>
+
+<p class="image-no-outline"><img src="assets/documentation/data_movement/ftp_source_destination.png" alt=" Select FTP/SFTP Source/Destination " title="Select FTP/SFTP Source/Destination" /></p>
+
+<p class="step">Step 2: Search for Files on the FTP/SFTP Server</p>
+
+<p class="note"><strong>Note</strong>: Files to be imported must be in DSV format in order to be imported into a cloud service.  For details about DSV format rules, see: <a href="#dmg_dsv_files"> Supported Format for Delimiter Separated Values (DSV) Files </a>.</p>
+
+<ol>
+  <li>In the search box, enter a regular expression to search for files on the FTP/SFTP server.</li>
+  <li>Review your search results. Cazena will use the first file in the results to create a table definition. If you need to, you can enter a different regular expression to revise your search results.</li>
+  <li>Click <strong>Create Table Definition</strong>.</li>
+</ol>
+
+<p><img src="assets/documentation/data_movement/ftp_search.png" alt=" Search FTP/SFTP " title="Search FTP/SFTP" /></p>
+
+<p class="step">Step 3: Review Table Definition</p>
+
+<ol>
+  <li>Select the delimiters (e.g., comma, tab, etc) and whether the file has a header row.</li>
+  <li>Click <strong>OK</strong>. A list of columns in the file will appear.</li>
+  <li>To reload the file with different parameters (e.g., delimiters), make changes and then click <strong>OK</strong> again.</li>
+  <li>Give the table a name and review the table definition (column names and datatypes).</li>
+  <li>Click <strong>Finalize</strong> to move the table definition to the cloud.</li>
+</ol>
+
+<p><img src="assets/documentation/data_movement/ftp_review_table_definition.png" alt=" Review table definition " title="Review table definition" /></p>
+
+<p class="step">Step 4: Move Data (Optional)</p>
+
+<p>Finalizing the file will move the table definition to the cloud. On the next screen, you may select files to move into the table that you have created.</p>
+
+<p><img src="assets/documentation/data_movement/ftp_import_move_data.png" alt=" Move data " title="Move data" /></p>
+
+<p>If you want to check on the progress of your data movement, see the section on <a href="#data_movement_progress">data movement progress</a>.</p>
+
+<h3 id="console_import_local_file">From Your Local File System</h3>
+
+<p>Data that you import from your local file system server must be in the DSV (Delimeter Separated Values) format. For details about DSV format rules, see the section that describes <a href="#dmg_dsv_files"><strong>Delimiter Separated Values (DSV) Files</strong></a>.</p>
+
+<p class="step">Step 1: Identify Source and Destination</p>
+
+<ol>
+  <li>From the <strong>Datacloud</strong> tab, click the <strong>Move Data</strong> button.</li>
+  <li>Under <strong>Source</strong>, select <strong>Local File System</strong>.</li>
+  <li>Under <strong>Destination</strong>, first select Cazena Service, then select the data lake/data mart and dataset that you want. If you want to create a new dataset, select <strong>New</strong>.</li>
+  <li>Click <strong>Continue</strong>.</li>
+</ol>
+
+<p class="image-no-outline"><img src="assets/documentation/data_movement/local_source_destination.png" alt=" Select Destination  " title="Select Destination " /></p>
+
+<p class="note"><strong>Note</strong>: The database used for all objects created in an MPP SQL service is <strong>czdataset</strong>. The <strong>dataset</strong> name you enter here will become the schema name in the <strong>czdataset</strong> database in the MPP SQL service.</p>
+
+<p class="step">Step 2: Upload Data From Your Local File System</p>
+
+<p>On the next screen, select the file that you want to upload.</p>
+
+<p class="width-50"><img src="assets/documentation/data_movement/select_file.png" alt=" Select Local File " title="Select Local File" /></p>
+
+<p class="list">After the file is uploaded, the parameters for the file will appear.</p>
+<ol>
+  <li>Select the delimiters (e.g., comma, tab, etc) and whether the file has a header row.</li>
+  <li>Click <strong>OK</strong>. A list of columns in the file will appear.</li>
+  <li>To reload the file with different parameters (e.g., delimiters), make changes and then click <strong>OK</strong> again.</li>
+</ol>
+
+<p><img src="assets/documentation/data_movement/local_parameters.png" alt=" Datacloud Tab, Select Local File " title="Datacloud Tab, Select Local File" /></p>
+
+<p class="step">Step 3: Review Datatypes and Column Names</p>
+
+<p>Column names will be take from the header row in the source file, if you selected that option. Datatypes are assigned based on a sampling of the data. Where applicable, precision or length will also appear in the Datatype column.</p>
+
+<p class="list">Review the table definition:</p>
+<ol>
+  <li>Give the table a name.</li>
+  <li>Click on any column name to change it.</li>
+  <li>Review datatypes, precisions and lengths and make any changes that you desire.</li>
+</ol>
+
+<p><img src="assets/documentation/data_movement/local_table_definition.png" alt=" Review Table Definition " title="Review Table Definition" /></p>
+
+<p class="step">Step 4: Move Data (Optional)</p>
+
+<p>After you have finalized the table definition, the table schema will be created in the destination data mart or data lake. No actual data will be loaded into the table at this point. This allows you to schedule and run data movements at a different time. For more information, see the section on <a href="#script_transfers">scripting transfers</a>.</p>
+
+<p>In order to actually load data into the table, click <strong>Move Files</strong>.</p>
+
+<p><img src="assets/documentation/data_movement/local_move_data.png" alt=" Move Data Definition Confirmation " title="Move Data Definition Confirmation" /></p>
+
+<p>If you want to check on the progress of your data movement, see the section on <a href="#data_movement_progress">data movement progress</a>.</p>
+
+<h3 id="custom_data_adapter">Custom Data Adapters</h3>
+
+<p class="list">You may use a custom data adapter to import data from sources other than Netezza, Oracle, FTP/SFTP or local files. At a high level, custom data adapters work like this:</p>
+<ul>
+  <li>You or Cazena Support can write a program that will be installed on the Cazena gateway. The program must:
+    <ul>
+      <li>Connect to the desired data source.</li>
+      <li>Transform source data into <a href="#dsv_details">DSV-compatible format</a> (if not already DSV-compatible), and then output it to <code class="highlighter-rouge">stdout</code>. Cazena will capture <code class="highlighter-rouge">stdout</code> and move it to the datacloud.</li>
+      <li>Additional requirements for the program are <a href="#adapter_program_reqs">described in more detail</a> below.</li>
+    </ul>
+  </li>
+  <li>
+    <p>On the Cazena console, you then <a href="#custom_data_store">create a data store</a> using the path to the program and any arguments that the program needs.</p>
+  </li>
+  <li>In the console, you will then <a href="#console_use_data_adapter">follow steps</a> that are similar to moving data from FTP/SFTP, using the data store that references your program and its arguments. You will be able to to review column and table names, set datatypes, etc in the console.</li>
+</ul>
+
+<h4 id="sample-code">Sample Code</h4>
+
+<p>There is a directory of sample custom adapters available on the Cazena gateway, in the directory <code class="highlighter-rouge">/home/cazena/custom-adapters</code>. Each adapter has a README file that describes the requirements for using that adapter.</p>
+
+<p class="note">If you use the sample adapters, <strong>be sure that you copy them into a different directory</strong>. If the Cazena gateway is updated, new samples may overwrite the samples in <code class="highlighter-rouge">/home/cazena/custom-adapters</code>.</p>
+
+<h5 id="example-move-a-file-from-an-aws-bucket-to-the-datacloud">Example: Move a File From an AWS Bucket to the Datacloud</h5>
+
+<ol>
+  <li>The program <a href="assets/documents/s3_adapter.py" target="_blank"><strong>s3_adapter.py</strong></a> is a simple Python program that moves a file, <a href="aseets/documents/bankemps.dsv" target="_blank">bankemps.dsv</a>, from an AWS S3 bucket onto the datacloud.</li>
+  <li><a href="assets/documents/s3_adapter.ini" target="_blank"><strong>s3_adapter.ini</strong></a> contains arguments that are used in the program. Add your own credentials, etc to this file as described in the comments in that file.</li>
+  <li>If the programs are not already on a Cazena gateway, copy them onto a Cazena gateway.</li>
+  <li>Make sure that the files’ permissions allow them to be read and executed, e.g., <code class="highlighter-rouge">chmod 755 &lt;filename&gt;</code>.</li>
+  <li>Test the program by running it in the command line from the Cazena gateway. Be sure to test the four commands that are described in the next section.</li>
+  <li>
+    <p>Set up a <a href="#custom_data_store">data store</a> that contains the path to s3_adapter.py and s3_adapter.ini.</p>
+
+    <p><img src="assets/documentation/data_movement/s3_sample_data_store.png" alt=" S3 sample data store" title="S3 sample data store" /></p>
+  </li>
+  <li>Follow the <a href="#console_use_data_adapter">steps</a> for moving data using the Cazena console.</li>
+</ol>
+
+<h4 id="adapter_program_reqs">Program Requirements</h4>
+
+<p class="list">Your program must meet these requirements:</p>
+
+<ul>
+  <li>The program must return 0 on success.</li>
+  <li>The program must return 1 on failure.</li>
+  <li>The program will be run with <a href="#adapter_arguments">arguments</a> and one of four <a href="#adapter_options">options</a>. As you test your program in the command line, make sure that it supports the following commands:</li>
+</ul>
+
+<p><code class="highlighter-rouge">&lt;your program&gt; -pgm_args "&lt;text from data store&gt;" -version</code> (<a href="#example_version">see example</a>)</p>
+
+<p><code class="highlighter-rouge">&lt;your program&gt; -pgm_args "&lt;text from data store&gt;" -list</code>  (<a href="#example_list">see example</a>)</p>
+
+<p><code class="highlighter-rouge">&lt;your program&gt; -pgm_args "&lt;text from data store&gt;" -move &lt;entity&gt;</code>  (<a href="#example_move">see example</a>)</p>
+
+<p><code class="highlighter-rouge">&lt;your program&gt; -pgm_args "&lt;text from data store&gt;" -move &lt;entity&gt; -rows &lt;number&gt;</code>  (<a href="#example_move_number">see example</a>)</p>
+
+<h5 id="adapter_arguments">Arguments</h5>
+
+<p>The text in the <strong>Arguments</strong> field of the data store will be passed in to your program via the <code class="highlighter-rouge">-pgm_args</code> option. You can use any type of argument that you want, including a file name (such as the sample code)or a list of options, such as <code class="highlighter-rouge">-text1 -text2</code></p>
+
+<p class="note"><strong>Note</strong>: All text in the <strong>Arguments</strong> field will be wrapped in double-quotes when your program is run. Don’t put double-quotes in this field unless your program needs them around your argument string.</p>
+
+<h5 id="adapter_options">Options</h5>
+
+<p>Your program must support four options: <code class="highlighter-rouge">-version</code>, <code class="highlighter-rouge">-list</code>, <code class="highlighter-rouge">-move &lt;entity&gt;</code>, and <code class="highlighter-rouge">-rows &lt;max_number&gt;</code></p>
+
+<h6 id="-version">-version</h6>
+
+<p class="list">This option outputs the API version that your program is using. Cazena will run this command to check for possible incompatibilities.</p>
+<ul>
+  <li>The version must be equal to or less than the current API version.</li>
+  <li>The format must be <code class="highlighter-rouge">&lt;major&gt;.&lt;minor&gt;</code>, e.g., <code class="highlighter-rouge">1.0</code>.</li>
+  <li>As the time of writing this documentation, the API version is 1.0.</li>
+</ul>
+
+<h6 id="example_version"><strong>Example</strong>:</h6>
+
+<p>Running your program with the <code class="highlighter-rouge">-version</code> option might look something like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python s3_adapter.py -pgm_args "~/s3_adapter.ini" -version
+1.0
+</code></pre></div></div>
+
+<h6 id="-list">-list</h6>
+<p>This option must list all files/entities that the data adapter knows about. Cazena will run this option to test which entities are available.</p>
+
+<p>The list must output the following information for each entity/file, with commas separating fields:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  &lt;entity 1 name&gt;, &lt;size in bytes&gt;, &lt;last modified time in milliseconds since Epoch&gt;
+  &lt;entity 2 name&gt;, &lt;size in bytes&gt;, &lt;last modified time in milliseconds since Epoch&gt;
+  &lt;entity 3 name&gt;, &lt;size in bytes&gt;, &lt;last modified time in milliseconds since Epoch&gt;
+</code></pre></div></div>
+
+<p>Cazena will read the standard output, assuming newlines at the end of each line, and stopping at EOF.</p>
+
+<h6 id="example_list"><strong>Example</strong></h6>
+<p>Running your program from the command line with the <code class="highlighter-rouge">-list</code> option from the command line might look something like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python s3_adapter.py -pgm_args "~/s3_adapter.ini" -list
+
+bankemps.dsv, 464, 1472607957
+bankempsMore.dsv, 530, 1473444917
+nycflights.dsv, 343491, 1473444917
+titanic_training_data.dsv, 60316, 1473444918
+</code></pre></div></div>
+
+<h5 id="-move--entity">-move  &lt;entity&gt;</h5>
+
+<p class="list">This option will start a data movement of the entity that comes from the <code class="highlighter-rouge">-list</code> output.</p>
+
+<ul>
+  <li>When you run your program with this option from the command line, it should output data that you want to move into <code class="highlighter-rouge">stdout</code>.</li>
+  <li>Data that your program outputs must be compatible with <a href="#dsv_details">DSV</a> format.</li>
+  <li>A value for <code class="highlighter-rouge">&lt;entity&gt;</code> must be provided; no default value is assumed.</li>
+</ul>
+
+<h6 id="example_move"><strong>Example</strong></h6>
+
+<p>Running your program from the command line with the <code class="highlighter-rouge">-move &lt;entity&gt;</code> option might look something like this:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    $ python s3_adapter.py -pgm_args "~/s3_adapter.ini" -move bankemps.dsv
+    
+    1, Jones, Tom, 020345678, 1/1/1990, Branch Manager
+    2, Smith, Harry, 254567891, 1/1/1992, Teller
+    3, White, Ted, 254567896, 1/1/1994, Teller
+    4, Gray, George, 254567901, 1/1/1996, Teller
+    5, Taylor, Mary, 254567906, 1/1/1998, Assistant Branch Manager
+    6, Evans, Bob, 254567911, 1/1/1980, Vice President
+    7, Doe, John, 254567916, 1/1/1981, Marketing Specialist
+    8, Doe, Jane, 254567921, 1/1/1982, Portfolio Manager
+    9, Hardy, Helen, 254567926, 1/1/1983, Branch Manager
+    10, Johnson, Leo, 254567931, 1/1/1984, Branch Manager
+</code></pre></div></div>
+
+<h5 id="-rows--max_number">-rows  &lt;max_number&gt;</h5>
+
+<p>This option is used in combination with <code class="highlighter-rouge">-move &lt;entity&gt;</code> to specify the maximum number of rows to extract. If no value is provided, all rows will be moved.</p>
+
+<h6 id="example_move_number"><strong>Example</strong></h6>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ python s3_adapter.py -pgm_args "~/s3_adapter.ini" -move bankemps.dsv -rows 2
+
+1, Jones, Tom, 020345678, 1/1/1990, Branch Manager
+2, Smith, Harry, 254567891, 1/1/1992, Teller
+</code></pre></div></div>
+
+<h3 id="other-assumptions">Other Assumptions</h3>
+<ul>
+  <li>If the user stops the movement, a SIGTERM will be sent to the program.</li>
+</ul>
+
+<h3 id="console_use_data_adapter">Using the custom data adapter from the Cazena console</h3>
+
+<p class="step">Before you begin</p>
+
+<ol>
+  <li>Copy program files to the machine that is running the Cazena gateway.</li>
+  <li>If your program assumes the existence of certain packages, libraries, etc in the environment, make sure that they are available on the machine that runs the Cazena gateway.</li>
+  <li>Make sure that the files’ permissions allow them to be read and executed, e.g., <code class="highlighter-rouge">chmod 755 &lt;filename&gt;</code>.</li>
+  <li>Set up a <a href="#data_stores">data store</a> that references the path to the file and any arguments.</li>
+</ol>
+
+<p class="step list">Step 1: Select Source and Destination</p>
+
+<ol>
+  <li>From the <strong>Datacloud</strong> tab, click on the data lake or data mart where you want to move data.</li>
+  <li>Click <strong>Move Data</strong>.</li>
+  <li>Under <strong>Source</strong>, select <strong>Data Store</strong>, then the data store that refers to your program and arguments.</li>
+  <li>Under <strong>Destination</strong>, select <strong>Cazena Service</strong>, then select the service and dataset where you want to import data.</li>
+  <li>Click <strong>Continue</strong>.</li>
+</ol>
+
+<p class="image-no-outline"><img src="assets/documentation/data_movement/adapter_source_destination.png" alt=" Select Adapter Source/Destination " title="Select Source/Destination" /></p>
+
+<p class="step">Step 2: Search for Entities</p>
+
+<ol>
+  <li>In the search box, enter a regular expression to search for names of entities that you want to move.</li>
+  <li>Review your search results. Cazena will use the first item in the results to create a table definition. If you need to, you can enter a different regular expression to revise your search results.</li>
+  <li>Click <strong>Create Table Definition</strong>.</li>
+</ol>
+
+<p><img src="assets/documentation/data_movement/adapter_search.png" alt=" Search for filenames " title="Search for filenames" /></p>
+
+<p class="step">Step 3: Review Table Definition</p>
+
+<ol>
+  <li>Select the delimiters (e.g., comma, tab, etc) and whether the file has a header row.</li>
+  <li>Click <strong>Apply Changes</strong>. A list of columns in the file will appear.</li>
+  <li>To reload the file with different parameters (e.g., delimiters), make changes and then click <strong>Apply Changes</strong> again.</li>
+  <li>Give the table a name and review the table definition (column names and datatypes).</li>
+  <li>Click <strong>Finalize</strong> to move the table definition to the cloud.</li>
+</ol>
+
+<p><img src="assets/documentation/data_movement/adapter_review_table_definition.png" alt=" Review table definition " title="Review table definition" /></p>
+
+<p class="step">Step 4: Move Data (optional)</p>
+
+<p>Finalizing the file will move the table definition to the cloud. On the next screen, you may select files to move into the table that you have created.</p>
+
+<p><img src="assets/documentation/data_movement/adapter_move_data.png" alt=" Move data " title="Move data" /></p>
+
+<p>If you want to check on the progress of your data movement, see the section on <a href="#data_movement_progress">data movement progress</a>.</p>
+
+<h3 id="move-additional-data-into-a-table">Move Additional Data into a Table</h3>
+
+<h4 id="from-the-cazena-console">From the Cazena Console</h4>
+
+<p class="list">From the Cazena console, you can append or replace data in a table.</p>
+
+<ol>
+  <li>Navigate to the table where you want to move additional data.</li>
+  <li>Click <strong>Move More Data…</strong></li>
+  <li>The dialog that opens will depend on how the original table was set up.
+    <ul>
+      <li>If you set up the original table with a local file, the dialog will let you upload an additional file. It is assumed that the new file has the same table definition as the original table.</li>
+      <li>If you moved data from server, the dialog will be prepopulated with the information needed to connect to that server.</li>
+    </ul>
+  </li>
+  <li>Select whether you want to append to existing data (<strong>INSERT</strong>) or replace data (<strong>DELETE ALL</strong> followed by <strong>INSERT</strong>).</li>
+</ol>
+
+<p class="image-no-outline"><img src="assets/documentation/data_movement/move_more_data.png" alt=" Move More Data " title="Move More Data" /></p>
+
+<h4 id="script_transfers">Transfer Scripts</h4>
+
+<p class="list">If you moved data from a server or a Cazena service, you can generate a script for recurring transfers.</p>
+
+<ul>
+  <li>A script enables you to monitor data movement activities as well as initiate them.</li>
+  <li>Scripts can be run on a scheduled basis. For example, they can be integrated into your enterprise process scheduler.</li>
+</ul>
+
+<p>The script will also allow you to check the status of data movement activity.</p>
+
+<p>API scripts are available for any type of data movement that leverages a Cazena service, except for data movements from the local file system.</p>
+
+<p class="list"><strong>To Generate an API Script:</strong></p>
+
+<ol>
+  <li>From the <strong>Datacloud</strong> tab, click on the name of the data lake or data mart that was the source or destination for the desired movement.</li>
+  <li>Click the <strong>Transfers</strong> tab. A list of transfers will appear on the left side of the screen.</li>
+  <li>You may use the search field to filter the list of transfers, e.g., to find a transfer that moved data into a particular table.</li>
+  <li>Select the transfer that you want to replicate, then select a gateway on the right side of the screen.</li>
+  <li>Click <strong>Get API</strong>.</li>
+</ol>
+
+<p><img src="assets/documentation/transfers/transfer.png" alt=" Dataset Transfer " title="Dataset Transfer" /></p>
+
+<p class="list"><strong>To use the script:</strong></p>
+
+<ol>
+  <li>Copy the script to a machine that has connectivity to a Cazena gateway.</li>
+  <li>Check that  the machine that runs the script has the ‘<strong>curl</strong>’ utility installed on it. Note that <strong>curl</strong> is standard on most operating systems.</li>
+  <li>Change the permissions on the script file to be executable.</li>
+</ol>
+
+<p><br /></p>
+
+<p class="list"><strong>During a terminal session:</strong></p>
+
+<ul>
+  <li>Use the <code class="highlighter-rouge">--help</code> argument to get help (e.g., <code class="highlighter-rouge">my_script.sh --help</code>)</li>
+</ul>
+
+<div class="show-whitespaces indent highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ./nz_bankdemoTransfer.sh --help
+   --new {operation} : To create a new job. Valid operations: append, replace
+   --status {id} : View the stats of job with a given id
+   --stop {id} : Stop the job with the given id permanently
+   --test : Tests the connection to the console
+   --help : View this message
+</code></pre></div></div>
+
+<ul>
+  <li>To append data to the table(s), use the <code class="highlighter-rouge">--new append</code> argument. This will initiate a new data movement job that will append data to the service table(s) using the same configuration as the original data movement.</li>
+</ul>
+
+<div class="show-whitespaces indent highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ./nz_bankdemoTransfer.sh --new append
+
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                       a         Dload  Upload   Total   Spent    Left  Speed
+100  1032    0  1009  100    23    573     13  0:00:01  0:00:01 --:--:--   572   
+Successfully started job with id: 12
+</code></pre></div></div>
+
+<ul>
+  <li>To replace data in the table(s), use the <code class="highlighter-rouge">--new replace</code> argument.</li>
+</ul>
+
+<div class="show-whitespaces indent highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ./nz_bankdemoTransfer.sh --new replace
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100  1034    0  1010  100    24    450     10  0:00:02  0:00:02 --:--:--   450
+Successfully started job with id: 14
+</code></pre></div></div>
+
+<ul>
+  <li>To check the status of the job, use the argument use the argument <code class="highlighter-rouge">--status</code> with the <code class="highlighter-rouge">ID</code> that appears next to the message: <code class="highlighter-rouge">Successfully started job with id:</code>, such as <code class="highlighter-rouge">12</code> above. The complete argument would be <code class="highlighter-rouge">--status 12</code></li>
+</ul>
+
+<div class="show-whitespaces indent highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ ./nz_bankdemoTransfer.sh --status 12
+
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current Dload  Upload
+                                                         Total   Spent    Left  Speed
+    100  1020    0  1020    0     0  17591      0 --:--:-- --:--:-- --:--:-- 17894
+    in progress
+</code></pre></div></div>
+
+<h3 id="console_export_ftp">Export Data from the Cloud</h3>
+
+<p class="step">Step 1: Select Source and Destination</p>
+
+<ol>
+  <li>From the <strong>Datacloud</strong> tab, click on the data lake or data mart where you want to move data.</li>
+  <li>Click <strong>Move Data</strong>.</li>
+  <li>Under <strong>Source</strong>, select <strong>Cazena Service</strong>, then select the service and dataset from which you want to export data.</li>
+  <li>Under <strong>Destination</strong>, select <strong>Data Store</strong>, then the data store for the FTP/SFTP server that you want. This</li>
+  <li>Click <strong>Continue</strong>.</li>
+</ol>
+
+<p class="image-no-outline"><img src="assets/documentation/data_movement/export_source_destination.png" alt=" Select Source and Destination for FTP/SFTP " title="Select Source and Destination for FTP/SFTP" /></p>
+
+<p class="note"><strong>Note</strong>:  If you do not see the FTP/SFTP server that you want, be sure that your system administrator has configured a <a href="#data_stores">data store</a> that contains the information needed to sign into the server.</p>
+
+<p class="step">Step 2: Select Tables To Be Exported</p>
+<p>On the next page, you will see a list of tables that can be exported.</p>
+
+<ol>
+  <li>Select the tables that you want to export (e.g., <strong>customers</strong> and <strong>employees</strong>).</li>
+  <li>Click <strong>Move Tables</strong>.</li>
+</ol>
+
+<p><img src="assets/documentation/data_movement/ftp_export_move_data_selection.png" alt=" Enterprise FTP/SFTP Move Data Selection " title="Enterprise FTP/SFTP Move Data Selection" /></p>
+
+<p>If you want to check on the progress of your data movement, see the section on <a href="#data_movement_progress">data movement progress</a>.</p>
+
+        </section>
+
+        <section id="cazena_gateway">
+          
+          <h1 id="cgw_cazena_gateway">Cazena Gateways</h1>
+
+<p>A Cazena Gateway manages secure connections between the datacloud and on-premises environments, allowing networking, VPN, data access, user access, analytics tools and manageability.</p>
+
+<p>From the Cazena console, you can <a href="#manage_cloud_sockets">manage cloud sockets</a>, which establish port forwarding rules between the Cazena gateway and endpoints. Endpoints can be located in data lakes, data marts, on-premise locations, or the <a href="#ovw_overview">AppCloud</a>. For more information, see the sections on <a href="#manage_cloud_sockets">managing</a> and <a href="#integration_with_datacloud">using</a> cloud sockets.</p>
+
+<p>The screen below shows the services that can be reached through ports on the Cazena gateway named <strong>cz_gw_01</strong>. The columns under <strong>Cazena Gateway Port</strong> show the status of the port (up or down), the port number and whether the port is activated.</p>
+
+<p><img src="assets/documentation/cazena_gateway/cazena_gateway.png" alt=" Cazena Gateway on Console " title="Cazena Gateway on Console" /></p>
+
+<p class="list">You can connect the Cazena gateway to the datacloud using either of these methods:</p>
+
+<ul>
+  <li>
+    <p><a href="#cgw_installation"><strong>Port forwarding</strong></a>: This is a simple configuration of the Cazena Gateway that requirements minimum networking configuration within the enterprise. It allows access to UIs as well as tool connectivity to APIs that have a single end point e.g. ODBC / JDBC.</p>
+
+    <p>The port forwarding configuration can use either IPsec or TLS VPN types. All traffic between the datacloud and the enterprise flows only through the <a href="#integration_with_datacloud">cloud sockets</a> configured for the Cazena Gateway.</p>
+  </li>
+  <li>
+    <p><a href="#s2s_installation"><strong>Site-to-Site</strong></a>: This is a more complex configuration that requires networking configuration within the enterprise. It provides a wider range of tool connectivity options which include tools that rely on APIs that have multiple end points e.g. direct communication with Hadoop Namenode API.</p>
+
+    <p>The site-to-site configuration uses IPsec site-to-site VPN, joining the datacloud and enterprise networks virtually, as if they both were within a private enterprise network. In this way, all of the hosts in the PDC network can reach all the hosts in the enterprise network, and vice versa.  Additionally, any <a href="#integration_with_datacloud">cloud sockets</a> configured for the Cazena Gateway are also available.</p>
+  </li>
+</ul>
+
+<h3 id="requirements">Requirements</h3>
+<p>To install a Cazena gateway, you will download an OVA file and then install it on a virtual machine in the enterprise data center. The requirements for the virtual machine are described here.</p>
+
+<h4 id="vmware">VMWare</h4>
+<p class="list">Currently the OVA is supported on VMware systems.</p>
+
+<ul>
+  <li>VMware Fusion/Player 4.0 or later</li>
+  <li>Workstation 8.0 or later</li>
+  <li>vSphere/ESXi 5.0 to 6.0. VMware vSphere/ESXi 6.5 has deprecated its support for OVAs. If you use vSphere/ESXi 6.5, you will have to manually untar the file. <a href="#esxi_65">Instructions</a> are in the next section.</li>
+</ul>
+
+<h4 id="hardware">Hardware</h4>
+<ul>
+  <li>4 virtual CPU cores</li>
+  <li>2.0 GB free memory (4.0 GB recommended)</li>
+  <li>25 GB free disk space</li>
+</ul>
+
+<h4 id="connectivity">Connectivity</h4>
+<ul>
+  <li>JDBC/IP connectivity to enterprise database servers</li>
+  <li>Outbound Internet connectivity on ports TCP 443 (TLS/SSL), UDP 500 (ISAKMP/IKE), UDP 4500 (IPsec NAT-T), UDP 123 (NTP)</li>
+</ul>
+
+<h2 id="cgw_installation">Port Forwarding Configuration</h2>
+
+<p class="note"><strong>Note:</strong> Only system administrators may install Cazena gateways.</p>
+
+<p class="list">To install a Cazena gateway using port forwarding:</p>
+
+<ol>
+  <li><a href="#ipsec_tls_download_ova">Download the Cazena gateway .ova file</a>.</li>
+  <li><a href="#download_jdbc">Download JDBC files</a> (optional)</li>
+  <li><a href="#security_gateway">Gather information from the Cazena console,</a> including the DNS name of the security gateway, the OpenVPN certificate (for TLS) and the pre-shared key (for IPSec).</li>
+  <li><a href="#install_cgw">Install the Cazena gateway.</a></li>
+  <li><a href="#ipsec_tls_cgw-auto-start">Run <code class="highlighter-rouge">cgw-auto-start</code> to connect the gateway to your datacloud.</a></li>
+</ol>
+
+<p><br />
+These steps are described in detail in the following sections.</p>
+
+<h3 id="ipsec_tls_download_ova" class="step">Step 1: Download the Cazena Gateway .ova file</h3>
+
+<ol>
+  <li>Sign into the Cazena support site at <a href="https://support.cazena.com" target="_blank">support.cazena.com</a></li>
+  <li>Under <strong>Cazena Support</strong>, click on <strong>Downloads</strong>.</li>
+  <li>Click on the <strong>Cazena Gateway</strong> link to download the .ova file.</li>
+</ol>
+
+<h5 id="esxi_65">If you are using vSphere/ESXi 6.5</h5>
+
+<p>VMware vSphere/ESXi 6.5 and later has deprecated its support for OVAs.  Untar the OVA file to extract the OVF and VMDK files. You will not need the MF file.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ tar -xvf "CazenaGateway.ova"
+x CazenaGateway.ovf
+x CazenaGateway.mf
+x CazenaGateway-disk1.vmdk
+</code></pre></div></div>
+
+<h3 id="download_jdbc" class="step">Step 2: Download JDBC Files (optional)</h3>
+
+<p class="list">If you are connecting to Oracle or Netezza, you will need a database-specific JDBC driver. Currently, the Cazena Gateway has been qualified with the following JDBC drivers:</p>
+
+<ul>
+  <li>Netezza 7.2.0, release ojdbc7-12.1.0.1.0-linux.x64.jar</li>
+  <li>Oracle 11gR2, release nzjdbc3.jar</li>
+</ul>
+
+<p>These files can be downloaded from the appropriate vendor.</p>
+
+<h3 id="security_gateway" class="step">Step 3: Gather Information from the Cazena Console</h3>
+
+<p class="note"><strong>Note:</strong> If you are unable to sign into the Cazena console, contact support@cazena.com for the information necessary for installing a Cazena gateway.</p>
+
+<ol>
+  <li>In the Cazena Console, select the <strong>System</strong> tab.</li>
+  <li>On the <strong>Manage Gateways</strong> tab, click <strong>Add a New Gateway</strong></li>
+  <li>If you are using TLS, click on <strong>OpenVPN config</strong> to download the certificate.</li>
+  <li>Make a note of the <strong>Security Gateway</strong> field.</li>
+  <li>If you are using ipsec, you will also need the <strong>Pre-Shared Key</strong>.</li>
+  <li>You can copy the commands with most of the fields filled in from this screen.</li>
+</ol>
+
+<p><img src="assets/documentation/cazena_gateway/new_gateway.png" alt=" New Gateway " title="New Gateway button" /></p>
+
+<h3 id="install_cgw" class="step">Step 4: Install the Cazena Gateway</h3>
+
+<ol>
+  <li>
+    <p>Import the CazenaGateway.ova file.</p>
+
+    <table class="table-30-70">
+   <tbody>
+     <tr>
+       <th>Client</th>
+       <th>Instructions</th>
+     </tr>
+     <tr>
+       <td>VMWare Fusion</td>
+       <td>
+       <ol>
+           <li>Choose <strong>File &gt; Import...</strong></li>
+            <li>Select the CGW OVA file.</li>
+        </ol>
+        </td>
+     </tr>
+     <tr>
+       <td>Virtual Machine Manager</td>
+       <td>
+       <ol>
+           <li>Choose <strong>Add &gt; Import...</strong></li>
+            <li>Select the CGW OVA file.</li>
+        </ol>
+       </td>
+     </tr>
+     <tr>
+       <td>vSphere/ESXi Web client</td>
+       <td>
+         <ol>
+             <li>Choose <strong>Navigator -&gt; Virtual Machines -&gt; Create/Register VM...</strong></li>
+             <li>Select <strong>Deploy a virtual machine from an OVF or OVA file</strong></li>
+             <li>Enter a name</li>
+             <li>Select file(s)
+                 <ul>
+                 <li><em>5.0 to 6.0:</em> Add the OVA </li>
+                 <li><em>6.5 or later:</em> Add the OVF and VMDK files<br />
+                 (See <a href="#esxi_65">instructions</a> for untarring the OVA file.)
+                 </li>
+                 </ul>
+              </li>
+         </ol>
+        </td>
+     </tr>
+   </tbody>
+ </table>
+  </li>
+  <li>
+    <p><strong>Important:</strong> After the import has finished, open the VM’s network settings and make sure the network adapter is set to ‘bridged mode’. This will allow the CGW ethernet primary interface (eth0) to have an enterprise reachable IP address, so that it will be exposed to enterprise users.</p>
+  </li>
+  <li>Start the Cazena VM and sign into the gateway:
+    <ul>
+      <li>username: <code class="highlighter-rouge">cazena</code></li>
+      <li>password: <code class="highlighter-rouge">cazena</code>
+<br /><br /></li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>If you are using TLS</strong>: Copy the certificate that you downloaded in the previous steps to the cazena user home directory. Do not unpack the file.</p>
+
+    <p><strong>Example</strong>: <code class="highlighter-rouge">$ scp cazena-openvpn.tar cazena@u.v.w.x:~</code></p>
+  </li>
+  <li>
+    <p>If you are connecting to Oracle or Netezza, copy any needed JDBC driver(s) to the <strong>Downloads</strong> directory</p>
+
+    <p><strong>Example</strong>: <code class="highlighter-rouge">$ scp ~/Downloads/ojdbc7-12.1.0.1.0-linux.x64.jar cazena@v.x.y.z</code></p>
+  </li>
+</ol>
+
+<h3 id="ipsec_tls_cgw-auto-start" class="step">Step 5: Run <code class="highlighter-rouge">cgw-auto-start</code> to Connect the Cazena Gateway to Your Datacloud</h3>
+
+<ol>
+  <li>
+    <p>From a terminal window, use the IP address of the VM to connect to the Cazena gateway.</p>
+
+    <p><strong>Example</strong>:  <code class="highlighter-rouge">$ ssh cazena@w.x.y.z</code></p>
+  </li>
+  <li>
+    <p>Change the gateway’s default password.</p>
+
+    <p><code class="highlighter-rouge">$  sudo passwd</code></p>
+  </li>
+  <li>
+    <p>If you haven’t already, set up a <strong>dedicated</strong> user account with system administrator privileges for the Cazena gateway. (See <a href="#users">Instructions for setting up a user account</a>.)</p>
+  </li>
+  <li>
+    <p><a name="cgw-auto-start"></a>Use <code class="highlighter-rouge">cgw-auto-start</code> to connect to the gateway.</p>
+  </li>
+</ol>
+
+<p class="note"><strong>Note</strong>: You can copy these commands with some of the fields filled in from the screen that appears when you click <strong>Add a New Gateway</strong>.  See <strong><a href="#security_gateway">Step 3</a></strong>.</p>
+
+<p><strong>TLS</strong>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    cgw-auto-start -s [security-gateway-url] -t tls -u [cgw-user-username] -p [cgw-user-password] -n [cgw-name]
+</code></pre></div></div>
+
+<p><strong>ipsec</strong>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  cgw-auto-start -s [security-gateway-dns-name] -t ipsec -u [cgw-user-username] -p [cgw-user-password] -n [cgw-name] -k [preshared-key]
+</code></pre></div></div>
+
+<p>where:</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">[security-gateway-dns-name]</code> is the DNS name of the security gateway. (See <strong><a href="#security_gateway">Step 3</a></strong> ).</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">[cgw-user-username]</code> and <code class="highlighter-rouge">[cgw-user-password]</code> are the username and password of the dedicated gateway user.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">[cgw-name]</code> is a unique name for the Cazena gateway.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">[preshared-key]</code> is the preshared key.  (See <strong><a href="#security_gateway">Step 3</a></strong> ).</p>
+  </li>
+  <li>
+    <p>(Optional): Use <code class="highlighter-rouge">-m</code> to set a different timeout from the default timeout of 30 seconds (e.g., <code class="highlighter-rouge">-m 120</code>). This timeout is used when downloading the Cazena gateway software. You may want to change it if you have to <a href="#cgw_troubleshooting">troubleshoot</a> the Cazena gateway.</p>
+  </li>
+</ul>
+
+<p class="note"><strong>Note</strong>: The gateway name that you choose here will show on the <strong>System</strong> tab. See the sections on <a href="#update_ports">updating ports</a>, creating <a href="#data_stores">data stores</a> and <a href="#integration_with_datacloud">integration with the datacloud</a>.</p>
+
+<h4 id="example">Example</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> cgw-auto-start -s production.xxx.cazena.com -t tls -u cg_user -p my_password -n my_gateway
+</code></pre></div></div>
+
+<ol>
+  <li>
+    <p>The system will respond:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Starting up CGW auto restart
+ run cgw-auto-show or look in /var/log/cazena/cgw-auto.log to determine status
+</code></pre></div>    </div>
+
+    <p>Inside of /var/log/cazena/cgw-auto.log, there are three lines giving the network address info, similar to this:</p>
+
+    <ul>
+      <li>PDC network: 10.128.80.0/21</li>
+      <li>ENT address: 10.4.132.10</li>
+      <li>ENT network: 10.4.132.0/24 10.4.133.0/24 10.4.130.0/23</li>
+    </ul>
+
+    <p><br /> For PDC DNS, the IP address of the IPA server is found in the file /etc/resolv.conf, similar to this:</p>
+
+    <ul>
+      <li>nameserver  10.128.80.48   # by strongswan
+<br /></li>
+    </ul>
+  </li>
+  <li>
+    <p>Use <code class="highlighter-rouge">cgw-auto-show</code> to see the status:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $ cgw-auto-show
+ Tunnel is up
+ CGW DMC is up
+ CGW DMC version matches PDC version
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<hr class="end-section" />
+
+<h2 id="s2s_installation">Site-to-Site Configuration</h2>
+
+<p class="step">Before You Begin</p>
+
+<p class="list">The following can be obtained from Cazena support (support@cazena.com):</p>
+
+<ul>
+  <li>PDC CIDR network address</li>
+  <li>An IPsec site-to-site Pre-Shared Key (PSK) exclusively for machine authentication</li>
+  <li>Dedicated Cazena user account for the site-to-site VPN connection</li>
+  <li>DNS name of the security gateway</li>
+</ul>
+
+<p class="list">The following must be obtained from the enterprise network administrator:</p>
+
+<ul>
+  <li>
+    <p>Enterprise CIDR network address(es) that cater for all user and source locations within the enterprise network</p>
+  </li>
+  <li>
+    <p>Enterprise IP address assigned to the CGW (must be within one of the Enterprise network addresses)</p>
+  </li>
+</ul>
+
+<p class="list"><br />
+To install a Cazena gateway using IPSec site-to-site VPN, follow these steps:</p>
+
+<ol>
+  <li><a href="#s2s_download_ova">Download and install the Cazena gateway</a>.</li>
+  <li><a href="#s2s_step2">Run <code class="highlighter-rouge">cgw-auto-start</code></a> to connect the gateway to your datacloud.</li>
+  <li><a href="#routing_table">Modify the enterprise routing table</a> to add a static route for the PDC network.</li>
+  <li>(Optional) Add a DNS forwarding entry to the enterprise DNS for forwarding <code class="highlighter-rouge">cazena.internal</code> requests to the IPA server.</li>
+</ol>
+
+<p>See the sections below for more details.</p>
+
+<h3 id="s2s_download_ova" class="step">Step 1: Download and Install the Cazena Gateway .ova file</h3>
+
+<ol>
+  <li>Sign into the Cazena support site at <a href="https://support.cazena.com" target="_blank">support.cazena.com</a></li>
+  <li>Under <strong>Cazena Support</strong>, click on <strong>Downloads</strong>.</li>
+  <li>Click on the <strong>Cazena Gateway</strong> link to download the .ova file.</li>
+</ol>
+
+<h5 id="esxi_65">If you are using vSphere/ESXi 6.5</h5>
+
+<p>VMware vSphere/ESXi 6.5 and later has deprecated its support for OVAs.  Untar the OVA file to extract the OVF and VMDK files. You will not need the MF file.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ tar -xvf "CazenaGateway.ova"
+x CazenaGateway.ovf
+x CazenaGateway.mf
+x CazenaGateway-disk1.vmdk
+</code></pre></div></div>
+
+<ol>
+  <li>
+    <p>Import the CazenaGateway.ova file.</p>
+
+    <table class="table-30-70">
+   <tbody>
+     <tr>
+       <th>Client</th>
+       <th>Instructions</th>
+     </tr>
+     <tr>
+       <td>VMWare Fusion</td>
+       <td>
+       <ol>
+           <li>Choose <strong>File &gt; Import...</strong></li>
+            <li>Select the CGW OVA file.</li>
+        </ol>
+        </td>
+     </tr>
+     <tr>
+       <td>Virtual Machine Manager</td>
+       <td>
+       <ol>
+           <li>Choose <strong>Add &gt; Import...</strong></li>
+            <li>Select the CGW OVA file.</li>
+        </ol>
+       </td>
+     </tr>
+     <tr>
+       <td>vSphere/ESXi Web client</td>
+       <td>
+         <ol>
+             <li>Choose <strong>Navigator -&gt; Virtual Machines -&gt; Create/Register VM...</strong></li>
+             <li>Select <strong>Deploy a virtual machine from an OVF or OVA file</strong></li>
+             <li>Enter a name</li>
+             <li>Select file(s)
+                 <ul>
+                 <li><em>5.0 to 6.0:</em> Add the OVA </li>
+                 <li><em>6.5 or later:</em> Add the OVF and VMDK files<br />
+                 (See <a href="#esxi_65">instructions</a> for untarring the OVA file.)
+                 </li>
+                 </ul>
+              </li>
+         </ol>
+        </td>
+     </tr>
+   </tbody>
+ </table>
+  </li>
+  <li>
+    <p><strong>Important:</strong> After the import has finished, open the VM’s network settings and make sure the network adapter is set to ‘bridged mode’. This will allow the CGW ethernet primary interface (eth0) to have an enterprise reachable IP address, so that it will be exposed to enterprise users.</p>
+  </li>
+  <li>
+    <p>Start the Cazena VM and sign into the gateway:</p>
+    <ul>
+      <li>username: <code class="highlighter-rouge">cazena</code></li>
+      <li>password: <code class="highlighter-rouge">cazena</code>
+<br /><br /></li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="s2s_step2" class="step">Step 2: Run <code class="highlighter-rouge">cgw-auto-start</code> to Connect the Cazena Gateway to Your Datacloud</h3>
+
+<ol>
+  <li>
+    <p>From a terminal window, use the IP address of the VM to connect to the Cazena gateway.</p>
+
+    <p><strong>Example</strong>:  <code class="highlighter-rouge">$ ssh cazena@w.x.y.z</code></p>
+  </li>
+  <li>
+    <p>Change the gateway’s default password.</p>
+
+    <p><code class="highlighter-rouge">$  sudo passwd</code></p>
+  </li>
+  <li>
+    <p><a name="cgw-auto-start"></a>Use <code class="highlighter-rouge">cgw-auto-start</code> to connect to the gateway:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  cgw-auto-start -t ipsec-s2s -s [security-gateway-dns-name] -u [cgw-user-username] -p [cgw-user-password]  -n [cgw-name] -k [preshared-key] -e [enterprise-cidr-net-addresses]
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>where:</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">[security-gateway-dns-name]</code> is the DNS name of the security gateway. (Contact support@cazena.com for the DNS name).</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">[cgw-user-username]</code> and <code class="highlighter-rouge">[cgw-user-password]</code> are the username and password of the dedicated gateway user.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">[cgw-name]</code> is a unique name for the Cazena gateway.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">[preshared-key]</code> is the preshared key.</p>
+
+    <p class="note"><strong>Note:</strong> The preshared key for site-to-site is shown in the Cazena console, on the <strong>System &gt; VPN Configuration</strong> page. If you update the key, you will have to re-run <code class="highlighter-rouge">cgw-auto-start</code>.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">[enterprise-cidr-net-addresses]</code> is one or more enterprise CIDR net addresses.</p>
+
+    <ul>
+      <li>You may specify multiple address, either with separate <code class="highlighter-rouge">-e</code> flags or as a comma separated list (e.g., <code class="highlighter-rouge">-e 10.4.133.0/24,10.4.130.0/23</code>).</li>
+      <li>If an address is not specified, the address of the enterprise LAN network where the Cazena gateway resides will be used.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>For help with <code class="highlighter-rouge">cgw-auto-start</code> use <code class="highlighter-rouge">cgw-auto-start --help</code>.</p>
+
+<h4 id="example-1">Example</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   cgw-auto-start -t ipsec-s2s -u cg_user -p my_password -s production.xxx.cazena.com -n my_gateway -k my-key -e 10.4.132.0/24 -e 10.4.133.0/24,10.4.130.0/23
+</code></pre></div></div>
+
+<ol>
+  <li>
+    <p>The system will respond:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   Starting up CGW auto restart
+   run cgw-auto-show or look in /var/log/cazena/cgw-auto.log to determine status
+</code></pre></div>    </div>
+
+    <p>Inside of /var/log/cazena/cgw-auto.log, there are three lines giving the network address info, similar to this:</p>
+
+    <ul>
+      <li>PDC network: 10.128.80.0/21</li>
+      <li>ENT address: 10.4.132.10</li>
+      <li>ENT network: 10.4.132.0/24 10.4.133.0/24 10.4.130.0/23</li>
+    </ul>
+
+    <p><br /> For PDC DNS, the IP address of the IPA server is found in the file /etc/resolv.conf, similar to this:</p>
+
+    <ul>
+      <li>nameserver  10.128.80.48   # by strongswan
+<br /></li>
+    </ul>
+  </li>
+  <li>
+    <p>Use <code class="highlighter-rouge">cgw-auto-show</code> to see the status:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   $ cgw-auto-show
+   Tunnel is up
+   CGW DMC is up
+   CGW DMC version matches PDC version
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>If the system responds differently to these commands, see the section on <a href="#cgw_troubleshooting">troubleshooting.</a></p>
+
+<h3 id="routing_table" class="step">Step 3: Make changes in your network</h3>
+
+<ol>
+  <li>
+    <p>Modify the enterprise routing table to add a static route for the PDC network.</p>
+
+    <p><strong>Example:</strong> For a Linux network, add a route for the PDC network using the CGW’s enterprise network IP address as the gateway, e.g.:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      sudo route add –net 10.128.80.0/21 gw 10.4.132.10
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>(Optional) Add a DNS forwarding entry to the enterprise DNS for forwarding <code class="highlighter-rouge">cazena.internal</code> requests to Cazena’s internal DNS.</p>
+  </li>
+</ol>
+
+<h2 id="cgw_troubleshooting">Troubleshooting</h2>
+
+<p class="list">Follow these steps if you have run <code class="highlighter-rouge">cgw-auto-start</code> and either:</p>
+
+<ul>
+  <li>The Cazena gateway doesn’t appear in the Cazena console.</li>
+  <li>You are having trouble moving data.</li>
+</ul>
+
+<h3 id="check-that-the-cazena-gateway-is-operating-correctly">Check that the Cazena Gateway is Operating Correctly</h3>
+
+<p>First, run <code class="highlighter-rouge">cgw-auto-show</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    $ cgw-auto-show 
+    --Status--
+    Tunnel is up
+    Tunnel was started at Mon Jun 11 10:20:40 UTC 2018
+    Tunnel has been up for 7h:0m:42s
+    CGW DMC is up
+    CGW DMC version matches PDC version
+    CGW was started at Mon Jun 11 10:20:41 UTC 2018
+    CGW has been up for 7h:0m:41s
+
+    --Configuration--
+    Tunnel type is ipsec
+    Server is cazena-cz123.eastus2.cloudapp.azure.com
+    User is cz_user
+    CGW name is cazena-gw1
+</code></pre></div></div>
+
+<p>Depending on what <code class="highlighter-rouge">cgw-auto-show</code> returns, refer to one of these sections:</p>
+
+<ul>
+  <li><a href="#cgw_troubleshoot_tunnel">Tunnel is down</a></li>
+  <li><a href="#cgw_troubleshoot_cgw_dmc">CGW DMC is down</a></li>
+  <li>Both the tunnel and CGW DMC are up, but you are having <a href="#troubleshoot_connectivity">trouble moving data</a>.</li>
+</ul>
+
+<h3 id="cgw_troubleshoot_tunnel">If the Tunnel is Down</h3>
+
+<ul>
+  <li>
+    <p>Double-check your  <a href="#cgw-auto-start"> cgw-auto-start </a> command.</p>
+
+    <ul>
+      <li>Make sure that you are using the correct user name/password.</li>
+      <li>Check that the name/password are not being used by someone else.</li>
+      <li>Make sure that the secgw name and preshared key (if used) are correct.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>    If necessary, re-run <a href="#cgw-auto-start">cgw-auto-start</a>.</p>
+
+<ul>
+  <li>
+    <p>Check with Cazena support to see if your site has a whitelist of allowed IP addresses. If so, the IP address of the Cazena gateway must be included in the whitelist.</p>
+  </li>
+  <li>
+    <p>Run one of the following commands (depending on the type of tunnel):</p>
+
+    <ul>
+      <li>
+        <p><strong>For a TLS tunnel</strong>:</p>
+
+        <p><a name="cgw-show-tls"></a>Run <code class="highlighter-rouge">cgw-show-tls</code>.</p>
+
+        <p>If the tunnel is up, you should see:</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  $ cgw-show-tls
+  tls tunnel up: connected to &lt;DNS-NAME&gt; (34.192.178.80:443) on Fri Nov 18 13:28:26 UTC 2016
+</code></pre></div>        </div>
+      </li>
+      <li>
+        <p><strong>For an ipsec tunnel</strong>:</p>
+
+        <p><a name="cgw-show-ipsec"></a>Run  <code class="highlighter-rouge">cgw-show-ipsec</code>.</p>
+
+        <p>If the tunnel is up, you should see:</p>
+
+        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      $ cgw-show-ipsec
+
+      Redirecting to /bin/systemctl status strongswan.service
+      ipsec daemon running
+      Security Associations (2 up, 0 connecting):
+            dm-psk[9]: ESTABLISHED 4 minutes ago, 10.1.3.80[dm-user]...40.70.186.53[rw-psk]
+            dm-psk{24}:  INSTALLED, TUNNEL, reqid 1, ESP in UDP SPIs: c111a8c9_i c1b8fff2_o
+            dm-psk{24}:   10.255.252.2/32 === 10.128.8.0/21
+            dm-psk[8]: ESTABLISHED 50 minutes ago, 10.1.3.80[dm-user]...40.70.186.53[rw-psk]
+            dm-psk{22}:  INSTALLED, TUNNEL, reqid 1, ESP in UDP SPIs: c0b0c6ba_i caa3ea03_o
+            dm-psk{22}:   10.255.252.2/32 === 10.128.8.0/21
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="cgw_troubleshoot_cgw_dmc">If CGW DMC is Down</h3>
+
+<p>If <code class="highlighter-rouge">cgw-auto-show</code> indicates that the tunnel is up but the CGW DMC is down:</p>
+
+<ol>
+  <li>
+    <p>Check the log files.  Open <code class="highlighter-rouge">/var/log/cazena/&lt;gateway-name&gt;.log</code>, replacing <code class="highlighter-rouge">&lt;gateway-name&gt;</code> with the name of your gateway.</p>
+
+    <dl>
+      <dt>If you see <code class="highlighter-rouge">Operation timed out after</code></dt>
+      <dd>The CGW DMC software may not have not downloaded successfully. Try increasing the timeout value using the <code class="highlighter-rouge">-m</code> option of the <a href="#cgw-auto-start"> cgw-auto-start </a> command.</dd>
+      <dt>If you see WARN or ERROR messages:</dt>
+      <dd>This indicates that CGW DMC is having internal issues. The range of potential issues here are too numerous to list out.  Contact support/engineering for help.</dd>
+    </dl>
+  </li>
+  <li>
+    <p>Check that the CGW has the necessary port connectivity by running <code class="highlighter-rouge">cgw-reachable</code>.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cgw-reachable [DNS-NAME]
+ Checking cloud services reachability... 
+   Security Gateway TLS reachable: TRUE 
+   AWS S3 reachable: TRUE 
+   Azure storage reachable: TRUE 
+</code></pre></div>    </div>
+
+    <p>If any of these targets returns FALSE, confirm that the customer firewall is allowing the following ports outbound access from the Cazena gateway.</p>
+
+    <ul>
+      <li>TCP 443 (TLS/SSL)</li>
+      <li>UDP 500 (ISAKMP/IKE)</li>
+      <li>UDP 4500 (IPsec NAT-T)</li>
+    </ul>
+  </li>
+</ol>
+
+<p>###Trouble with data movement {#troubleshoot_connectivity}</p>
+
+<p>If you are having trouble moving data, first follow the steps in the previous section to ensure that the Cazena Gateway is operating correctly. Next, you can:</p>
+
+<ul>
+  <li><a href="#cgw_pdc_connection">Check connectivity between the gateway and the datacloud</a></li>
+  <li><a href="#cgw_enterprise_connection">Check connections to enterprise services</a></li>
+  <li><a href="#cgw_throughput_latency">Measure latency and throughput</a></li>
+</ul>
+
+<h4 id="cgw_pdc_connection">Check Connectivity Between the Cazena Gateway and the Datacloud</h4>
+<ol>
+  <li>
+    <p>Run <code class="highlighter-rouge">cgw-show-ipservices</code> to see whether the CGW is allowing access to the required ports/services within the PDC; for example:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> [cazena@cgw ~]$  cgw-show-ipservices
+ IpService ID: pdc-kibana (PDC-DNAT rule #4, PDC-FWRD rule #4)
+ target     prot opt source               destination
+ DNAT       tcp  --  0.0.0.0/0            10.4.131.136         tcp dpt:11494 /* id: pdc-kibana, name: kibana */ to:10.128.16.37:5601
+ ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0            ctstate NEW,ESTABLISHED ctproto 6 ctorigdst 10.4.131.136 ctorigdstport 11494 /* id: pdc-kibana, name: kibana */
+
+ etc
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>You can also look on the <strong>System</strong> tab of the Cazena Console to see whether Cazena gateway ports are active.
+<img src="assets/documentation/cazena_gateway/czgw_manage_ports.png" alt=" Activate and Update Ports " title="Activate and Update Ports" /></p>
+
+<h4 id="cgw_enterprise_connection">Check Connections to Enterprise Services</h4>
+
+<p class="list"><strong>For Netezza or Oracle:</strong></p>
+
+<ul>
+  <li>Make sure that the needed drivers are present in /home/cazena and are read/executable.
+    <ul>
+      <li><strong>Netezza</strong>: nzjdbc3-7.2.0.0-cazena.jar</li>
+      <li><strong>Oracle</strong>: ojdbc7-12.1.0.1.0-linux.x64.jar</li>
+    </ul>
+  </li>
+</ul>
+
+<p class="list"><strong>For Netezza, Oracle or FTP/SFTP:</strong></p>
+
+<ul>
+  <li>Make sure the servers can be reached.
+    <ol>
+      <li>If you do not have nmap, install it using <code class="highlighter-rouge">sudo yum install nmap</code>.</li>
+      <li>The following commands should show that the ports are open:
+        <ul>
+          <li><strong>Netezza</strong>:  <code class="highlighter-rouge">nmap -p 5480 &lt;NZ IP Address&gt; -Pn</code></li>
+          <li><strong>Oracle</strong>: <code class="highlighter-rouge">nmap -p 1521&lt;Oracle IP Address&gt; –Pn</code></li>
+          <li><strong>FTP</strong>: <code class="highlighter-rouge">nmap -p 21 &lt;FTP Server IP&gt; –Pn</code></li>
+          <li><strong>SFTP</strong>: <code class="highlighter-rouge">nmap -p 22 &lt;SFTP Server IP&gt; –Pn</code></li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+  <li>Check that the <a href="#data_stores">data store</a> contains a valid username and password that can access the database/schema/directory.</li>
+</ul>
+
+<p><br /></p>
+
+<h4 id="cgw_throughput_latency">Measure Latency and Throughput</h4>
+
+<p>If the tunnel and DMC are both up and the IP service connectivity is correct, then there could be an issue with latency or throughput performance. You can use <code class="highlighter-rouge">cgw-speed-test.py</code> to test both <a href="#speed-test-latency">latency</a> and <a href="#speed-test-throughput">throughput</a>.</p>
+
+<p class="step">Before You Begin</p>
+
+<p>Connect to the Cazena gateway and get the DNS name for the security gateway.</p>
+
+<ol>
+  <li>
+    <p>From a terminal window, use the IP address of the VM to connect to the Cazena gateway.</p>
+
+    <p><strong>Example</strong>:  <code class="highlighter-rouge">$ ssh cazena@w.x.y.z</code></p>
+  </li>
+  <li>
+    <p>Run <code class="highlighter-rouge">cgw-auto-show</code> to see the DNS name for your security gateway. The server name is in the section titled <strong>Configuration</strong>.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> --Configuration--
+ Tunnel type is ipsec
+ Server is cz123.eastus2.cloudapp.azure.com
+ User is dm-user
+ CGW name is AUTO-CGW
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h5 id="cli-arguments">CLI Arguments</h5>
+
+<p>The command line arguments for <code class="highlighter-rouge">cgw-speed-test.py</code> can be displayed by using the -h option:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    $ scripts/cgw-speed-test.py -h
+
+    cgw-test-speed.py -s &lt;secgw name&gt; -c &lt;aws, azure&gt; -l -d -t &lt;duration&gt;
+       -s  secgw name used for VPN connection
+       -c  cloud type (aws/azure)
+       -l  latency tests
+       -d  download tests
+       -t  maximum time to run each test in seconds
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="highlighter-rouge">-s</code>   Required. Specify the DNS name or the IP address of the PDC’s security gateway.</p>
+
+<p><code class="highlighter-rouge">-c</code>   Optional; default is both platforms. Specify the cloud platform, either <code class="highlighter-rouge">azure</code> or <code class="highlighter-rouge">aws</code>.</p>
+
+<p><code class="highlighter-rouge">-l</code>   Optional. Run the latency tests.</p>
+
+<p><code class="highlighter-rouge">-d</code>   Optional. Run the download tests.</p>
+
+<p>      <strong>Note:</strong> If neither <code class="highlighter-rouge">-l</code> or <code class="highlighter-rouge">-d</code> are specified, both types of tests will be run.</p>
+
+<p class="list"><code class="highlighter-rouge">-t</code>   Optional; default value is 30.</p>
+<ul>
+  <li>
+    <p>For latency: The number of tests executed (e.g. 30 TCP handshakes) to determine minimum/maximum/average round trip times.</p>
+  </li>
+  <li>
+    <p>For throughput: The maximum time boundary in seconds for the test to complete.</p>
+  </li>
+</ul>
+
+<h5 id="speed-test-latency">Network Latency</h5>
+
+<p class="list">The network latency test in <code class="highlighter-rouge">cge-speed-test.py</code> uses the <code class="highlighter-rouge">nping</code> utility for network packet generation, response analysis and response time measurement.  All tests use TCP for latency measurement. <code class="highlighter-rouge">nping</code> does a full TCP handshake, including both setup and teardown.  Latency tests are performed from the CGW to three PDC network interfaces:</p>
+
+<ul>
+  <li><strong>SGW’s public interface</strong>: The script tests routes through the public Internet to the PDC’s SSL port (443). Be sure that the port is open on the PDC.  If it is not open, N/A is returned for timing values.</li>
+  <li><strong>SGW’s private interface</strong>: The script tests routes through the VPN. Be sure that the VPN is connected and that the SSH port (22) is open.</li>
+  <li><strong>IPA’s private interface</strong>: The script tests routes through the VPN. Be sure that the VPN is connected and that the SSH port (22) is open.</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Sample latency test</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ scripts/cgw-speed-test.py -s cz123.cazena.com -c aws -l -t 3
+
+------- Parameters --------
+name is cz123.cazena.com
+cloud is aws
+tunnel is True
+latency test is True
+download test is False
+max duration is 3
+-----------------------------
+
+Beginning Latency Tests:
+  SecGW Public IP latency: Max: 2.138ms  Min: 2.058ms  Avg: 2.096ms
+  SecGW Private IP latency: Max: 2.485ms  Min: 1.860ms  Avg: 2.144ms
+  IPA Private IP latency: Max: 2.785ms  Min: 2.188ms  Avg: 2.505ms
+Complete
+</code></pre></div></div>
+
+<h5 id="speed-test-throughput">Network Throughput</h5>
+
+<p>The network throughput test in <code class="highlighter-rouge">cgi-speed-test.py</code> uses the <code class="highlighter-rouge">wget</code> utility to download files to the Cazena gateway from three sources:</p>
+
+<ul>
+  <li>Data Mover in the PDC</li>
+  <li>AWS S3 storage</li>
+  <li>Azure blob storage</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Sample throughput test</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ scripts/cgw-speed-test.py -s ken0608n6247dev.cazena-dev.com  -d -t 3
+
+------- Parameters --------
+name is ken0608n6247dev.cazena-dev.com
+cloud is both
+tunnel is True
+latency test is False
+download test is True
+max duration is 3
+-----------------------------
+
+Beginning Download Tests:
+  Azure Blob Store speed: 20.17 MBps, 161.33 Mbps; size: 60.50 MB
+  AWS S3 speed: 35.69 MBps, 285.55 Mbps; size: 107.08 MB
+  CGW Software speed: 35.79 MBps, 286.33 Mbps; size: 107.37 MB
+Complete
+</code></pre></div></div>
+
+<p><br />
+<strong>Measure latency and throughput from an external Linux or Mac system:</strong></p>
+
+<p>You can use <code class="highlighter-rouge">nping</code> and <code class="highlighter-rouge">wget</code> to measure latency and throughput through the Cazena gateway.</p>
+
+<ol>
+  <li>
+    <p>On the <strong>Cloud Sockets</strong> tab, select <strong>Cazena Console</strong> on the left side of the screen.</p>
+
+    <p><img src="assets/documentation/cazena_gateway/cgw_ip_port.png" alt=" Cazena Gateway IP and port " title="Cazena Gateway IP and port" /></p>
+  </li>
+  <li>
+    <p>Use <strong>IP Address:Port</strong> to run these commands:</p>
+
+    <ul class="list-unstyled">
+      <li><code class="highlighter-rouge">nping &lt;IP address&gt; -p &lt;PORT&gt;</code></li>
+      <li><code class="highlighter-rouge">wget -O /dev/null http://&lt;IP address&gt;:&lt;PORT&gt; /CazenaGateway.ova</code>
+ *</li>
+    </ul>
+
+    <p><br />
+<strong>Example:</strong></p>
+
+    <ul class="list-unstyled">
+      <li><code class="highlighter-rouge">nping 	192.131.12.2 -p 11092</code></li>
+      <li><code class="highlighter-rouge">wget -O /dev/null http://192.131.12.2:11092/CazenaGateway.ova</code></li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="cgw_delete">Stop and Delete a Cazena Gateway</h2>
+
+<p><strong>To stop a Cazena gateway:</strong></p>
+
+<ol>
+  <li>
+    <p>From a terminal window, use the IP address of the VM to connect to the Cazena gateway.</p>
+
+    <p><strong>Example</strong>:  <code class="highlighter-rouge">$ ssh cazena@w.x.y.z</code></p>
+  </li>
+  <li>
+    <p>Use <code class="highlighter-rouge">cgw-auto-stop</code> to stop the gateway:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $ cgw-auto-stop
+ Shutting down CGW auto restart
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Use <code class="highlighter-rouge">cgw-auto-show</code> to see the status. If the Cazena gateway has stopped, you will see:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $ cgw-auto-show
+ Tunnel is down
+ CGW DMC is down
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>You may use <a href="#cgw-auto-start"> cgw-auto-start </a> to restart the gateway.</p>
+  </li>
+</ol>
+
+<p><strong>To delete a Cazena gateway from the console:</strong></p>
+
+<ol>
+  <li>On the <strong>System</strong> tab, look at the list of Cazena gateways. A trash can icon will appear next to the name of any stopped gateways. Click the icon and confirm that you want to delete the gateway.</li>
+</ol>
+
+<p class="note"><strong>Note</strong>: If you delete a Cazena gateway, all <a href="#create_enterprise_socket">enterprise cloud sockets</a> and <a href="#data_stores">data stores</a> associated with that gateway will also be deleted.</p>
+
+<p><img src="assets/documentation/cazena_gateway/delete_gateway.png" alt=" Delete a stopped Cazena Gateway " title="Delete a stopped Cazena Gateway" /></p>
+
+<hr class="end-section" />
+
+        </section>
+
+        <section id="manage_cloud_sockets">
+          
+          <h1 id="manage_cloud_sockets">Manage Cloud Sockets</h1>
+
+<p>You can set up cloud sockets with endpoints in any of these components:</p>
+
+<ul>
+  <li>
+    <p><strong>Data Lake or Data Mart</strong></p>
+
+    <p>Example: Allow access to a tool such as Flume through a second Cazena gateway port.</p>
+  </li>
+  <li>
+    <p><strong>Enterprise</strong></p>
+
+    <p>Example: Set up a custom Enterprise cloud socket to move data from an enterprise server into the datacloud using Sqoop.</p>
+  </li>
+  <li>
+    <p><strong>AppCloud</strong></p>
+
+    <p>Example: Install Streamsets on an App Cloud node, and then create a custom cloud socket that allows access to that endpoint. The AppCloud allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud.</p>
+  </li>
+</ul>
+
+<h2 id="create_enterprise_socket">Example: Enterprise Cloud Socket</h2>
+
+<p>This examples shows how to set up a custom Enterprise cloud socket, which might be used to move data from an enterprise server into the datacloud using Sqoop. Instructions for using Sqoop can be found in the <a href="#sqoop">Data Movement section</a>.</p>
+
+<ol>
+  <li>On <strong>System &gt; Manage Gateways</strong> , select <strong>Enterprise</strong> on the left side of the screen. If there are multiple Cazena Gateways, make your selection under the gateway that you want to use.</li>
+  <li>Click <strong>New Cloud Socket</strong>.</li>
+  <li>Enter a name and (optional) description for the cloud socket.</li>
+  <li>Select the the port number and protocol that you want to use for the Cazena Gateway. You may use the same port number with different protocols. For example, you could have two cloud sockets that both use port 11300, with one over TCP and one over UDP.</li>
+  <li>In the <strong>Endpoint</strong> section, enter the IP address and port for the enterprise server.</li>
+  <li><em>Optional:</em> You may enter an additional path to the location on the enterprise server.</li>
+  <li>Click <strong>Save</strong>.</li>
+</ol>
+
+<p class="image-no-outline"><img src="assets/documentation/cloud_sockets/ent_cloud_socket.png" alt=" Enterprise Cloud Socket " title="Enterprise Cloud Socket" /></p>
+
+<h2 id="update_ports">Activate and Update Ports</h2>
+
+<p>From the Cazena console, system administrators may specify the ports in the environment that will be used for each service on Cazena gateway(s).</p>
+
+<p class="list">To manage ports, click on the <strong>System</strong> tab. By default, you will see a list Cazena gateways on the left side of the screen. Under each gateway, you will see each of your data lakes and/or data marts, as well as an option to view <a href="#enterprise_cloud_socket">enterprise services</a> associated with that gateway.</p>
+
+<ol>
+  <li>Under any Cazena gateway in the list, click on the name of a data lake or data mart, or Enterprise Services.</li>
+  <li>
+    <p>Click on any port number on the right to change its default value.</p>
+
+    <p class="note"><strong>Note:</strong> Port numbers must be in the range 32768 - 60999.</p>
+  </li>
+  <li>Use the slider in the <strong>Active</strong> column to activate or deactivate any port.</li>
+</ol>
+
+<p><img src="assets/documentation/cazena_gateway/czgw_manage_ports.png" alt=" Activate and Update Ports " title="Activate and Update Ports" /></p>
+
+<hr class="end-section" />
+
+        </section>
+
+        <section id="users">
+          
+          
+<h1 id="users_and_groups">Users and Groups</h1>
+
+<p>When Cazena creates your Cazena datacloud, Cazena support will create a system administrator account. The administrator will receive a welcome email that contains the IP address of the datacloud, a username and instructions for creating a password.</p>
+
+<h2 id="create_users">Create User Accounts</h2>
+
+<p class="note">Users with System Administrator privileges can manage users.</p>
+
+<p class="step">Before You Start</p>
+
+<p class="list">Before you can create new user accounts, you must have a Cazena gateway running. In addition, the Cazena console must be enabled on that gateway:</p>
+
+<ol>
+  <li>Select <strong>System</strong> &gt; <strong>Manage Gateways</strong>.</li>
+  <li>On the left side of the screen, select <strong>Cazena Datacloud</strong> under any running gateway.</li>
+  <li>On the right side of the screen, be sure that <strong>Cazena Console</strong> is active and that the status icon is green, indicating that the port is up .</li>
+</ol>
+
+<p><img src="assets/documentation/users/enable_cazena_console.png" alt=" Enable Cazena Console " title="Enable Cazena Console" /></p>
+
+<p class="step">To add a new user:</p>
+
+<ol>
+  <li>From the <strong>Users</strong> tab,  click <strong>New User</strong>.</li>
+  <li>Enter the username and email address for the user.</li>
+  <li>Select a <a href="#user_roles">role</a> for the user, and click <strong>Create</strong>.</li>
+</ol>
+
+<p><img src="assets/documentation/users/users_tab.png" alt=" Users Tab " title="Users Tab" /></p>
+
+<p>The new user will be sent a welcome email with an initial password and instructions for connecting to the console.</p>
+
+<h3 id="user_roles">User Roles</h3>
+<p>For every service that is created, Cazena support will designate an owner, or superuser. The privileges and permissions given to the superuser will depend on the type of data lake or data mart. Contact support@cazena.com for details.</p>
+
+<p>Privileges for the different Cazena user roles are as follows:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th style="text-align: center">System Admin</th>
+      <th style="text-align: center">Application Support</th>
+      <th style="text-align: center">Data Analyst</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Service Page</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td>Transfers</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td>Move Data</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Modify Datasets</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Add User</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Delete User</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Modify User</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Dashboard Page</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td>Workloads Page</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td>System Page</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td>Edit Cloud Sockets</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>View Cloud Sockets</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td>Create/Edit Data Store</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Delete Data Store</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Access to Admin Tools Menu</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Access to Log Server Console</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="using-groups-to-control-access-to-data">Using Groups to Control Access to Data</h2>
+
+<p>Cazena uses IPA authentication with Sentry for role-based authorization to data. You can create IPA groups in the Cazena console to help you manage access to data in a Cazena data lake. At a high level, the steps are as follows:</p>
+
+<ol>
+  <li>First, create <a href="#users">create_users</a> and <a href="#create_groups">groups</a> in the Cazena console.</li>
+  <li>Next, <a href="#import_groups_into_hue">import Cazena groups into Hue</a>. By importing groups into Hue, you can ensure that groups and roles will persist across the entire data lake. Persistence cannot be assured with groups that are created directly in Hue.</li>
+  <li>Use the Hue interface to manage data access for the imported groups.</li>
+</ol>
+
+<p>This section will review the how to create groups in the Cazena console and then import them into Hue.</p>
+
+<h3 id="create_groups">Create Groups</h3>
+<p class="list">To create a group using the Cazena console:</p>
+
+<ol>
+  <li>In the <strong>Users</strong> tab, select the <strong>Groups</strong> tab.</li>
+  <li>Click <strong>New Group</strong>.</li>
+  <li>Enter a name and short description for the group.</li>
+  <li>Select members for the group. You may have to scroll in the list to see all users in your organization.</li>
+  <li>Click <strong>Save</strong>.</li>
+</ol>
+
+<p><img src="assets/documentation/users/create_group.png" alt=" Create Group " title="Create Group" /></p>
+
+<h3 id="import_groups_into_hue">Import Groups into Hue</h3>
+
+<h4 id="sign-into-hue">Sign into Hue</h4>
+
+<ol>
+  <li>Under <strong>Cloud Sockets</strong>, select <strong>Hue Server</strong> on the left side of the screen.</li>
+  <li>The right side of the screen will show connection details for Hue. Click on the link under <strong>IP Address:Port</strong>.</li>
+  <li>Sign into Hue using the same credentials that you use for the Cazena console.</li>
+</ol>
+
+<p><img src="assets/documentation/users/hue_connection_details.png" alt=" Hue Connection Details " title="Hue Connection Details" /></p>
+
+<h4 id="after-you-have-signed-into-hue">After you have signed into Hue:</h4>
+
+<ol>
+  <li>Go to the Hue User Admin page. Consult the Hue documentation for more details.</li>
+</ol>
+
+<p class="note"><strong>Note:</strong>  You must be a Hue superuser to access the User Admin page. If you cannot access the page, contact support@cazena.com.</p>
+
+<ol>
+  <li>Select the <strong>Groups</strong> tab, then <strong>Add/Sync LDAP group</strong>.</li>
+</ol>
+
+<p><img src="assets/documentation/users/hue_add_groups.png" alt=" Add LDAP Users " title="Add LDAP Users" /></p>
+
+<ol>
+  <li>Type in the name of the groups you created in the Cazena console.</li>
+  <li>Select <strong>Import new members</strong>.</li>
+  <li>Click <strong>Add/Sync Group</strong>.</li>
+</ol>
+
+<p><img src="assets/documentation/users/create_hue_group.png" alt=" Hue Group Options " title="Hue Group Options" /></p>
+
+<p class="note"><strong>Note</strong>: If you add additional users to this group from the Cazena console, you will have to repeat this process for those users to be added to the Hue group.</p>
+
+        </section>
+
+        <section id="monitor_system">
+          
+          <h1 id="monitor-workloads-and-system-performance">Monitor Workloads and System Performance</h1>
+
+<p>The Cazena console provides tools for monitoring workloads, data movement progress, and system performance.</p>
+
+<h6 class="list" id="service-status">Service Status</h6>
+
+<ul>
+  <li>The <a href="#cloud_sockets_tab"><strong>Cloud Sockets</strong></a> tab shows the status of services (e.g., RStudio, Hue).</li>
+</ul>
+
+<h6 class="list" id="data-movement-progress-and-status-of-workloads">Data Movement Progress and Status of Workloads</h6>
+
+<ul>
+  <li>The <a href="#workloads_tab"><strong>Workloads</strong></a> tab displays information on individual jobs, which may include queries or data movements.
+    <ul>
+      <li>Depending on the type of data movement, you may be able to view detailed information on the <a href="#data_movement_progress">progress of data movements</a>.</li>
+      <li>You can <a href="#cancel_workload">stop or cancel data movements</a> from the workloads tab.</li>
+    </ul>
+  </li>
+</ul>
+
+<h6 class="list" id="object-store">Object Store</h6>
+
+<ul>
+  <li>Depending on the configuration of your environment, you can view information about your <a href="#adls">ADLS</a> or <a href="#aws_object_store">AWS</a> object store .</li>
+</ul>
+
+<h6 class="list" id="system-performance">System Performance</h6>
+
+<ul>
+  <li>The front page of the <a href="#datacloud_overview"><strong>Datacloud</strong></a> tab shows high level metrics for the past hour, as well as statuses for each data lake and data mart.</li>
+  <li>Within each data lake or data mart, the <a href="#dashboard"><strong>Dashboard</strong></a> tab provides an overview of performance over a period of time.</li>
+</ul>
+
+<h6 class="list" id="log-files">Log Files</h6>
+
+<ul>
+  <li><a href="#log_server_console"><strong>Centralized Logging</strong></a> contains system logs and analytic information for all data lakes and data marts. This information is only available to system administrators.</li>
+</ul>
+
+<h2 id="cloud_sockets_tab">Cloud Sockets</h2>
+
+<p>The <strong>Cloud Sockets</strong> tab shows the status (Good Health, Warning or Critical) of preconfigured services such as RStudio and Hue.</p>
+
+<p><img src="assets/documentation/monitor_system/service_status.png" alt=" Service status on Cloud Sockets tab " title=" Service status on Cloud Sockets tab" /></p>
+
+<p>If you are connecting to a service via a <a href="#cgw_cazena_gateway">Cazena Gateway</a>, you can also look on the <strong>System &gt; Manage Gateways</strong> tab to see the status of a Cazena gateway port for the service that you want.
+<img src="assets/documentation/cazena_gateway/czgw_manage_ports.png" alt=" Cazena Gateway Port Status " title="Cazena Gateway Port Status" /></p>
+
+<h2 id="dashboard">Dashboard</h2>
+
+<ol>
+  <li>From the <strong>Datacloud</strong> tab, click on the name of the data lake or data mart that you want to monitor.</li>
+  <li>Select the <strong>Dashboard</strong> tab.</li>
+  <li>By default, the <strong>Dashboard</strong> tab shows charts for the past hour. You can select a different timeframe at the top of the screen.</li>
+</ol>
+
+<p><img src="assets/documentation/monitor_system/dashboard.png" alt="  Dashboard " title=" Dashboard " /></p>
+
+<h3 id="data_lake_metrics">Metrics for Data Lakes</h3>
+
+<p>For data lakes, the dashboard displays graphs for these metrics over the selected timeframe:</p>
+
+<ul>
+  <li>CPU usage</li>
+  <li>Disk usage over the selected timeframe</li>
+  <li>Memory usage</li>
+  <li>Network received</li>
+</ul>
+
+<h3 id="data_mart_metrics">Metrics for Data Marts</h3>
+
+<p>For data marts, the dashboard displays graphs for these metrics over the selected timeframe:</p>
+
+<ul>
+  <li>CPU usage</li>
+  <li>Disk usage</li>
+  <li>Read and write throughput
+    <ul>
+      <li>This includes data going over the network to be imported to or exported from the cloud in a data movement operation as well as data being read from the cloud (For example:  by BI tools for analytic reporting or by an enterprise FTP/SFTP export request.</li>
+    </ul>
+  </li>
+  <li>Network received and transmitted</li>
+  <li>Read and write latency</li>
+  <li>Read and write IOPS</li>
+  <li>Number of database connections</li>
+  <li>Health status (healthy or unhealthy)</li>
+  <li>Maintenance mode (off or on)</li>
+</ul>
+
+<h2 id="workloads_tab">Workload Status</h2>
+
+<p>Within each data lake or data mart, the <strong>Workloads</strong> tab provides details about the activity that has occurred within a given timeframe. By default, workloads for the past hour are displayed.</p>
+
+<ul>
+  <li>You can select a different time frame in the upper right corner.</li>
+  <li>Use the filter buttons at the top of the screen to filter the list by workload type (queries or data movements) or status (e.g., completed, failed, etc)
+    <ul>
+      <li><strong>Queries</strong> might include SQL DML, SQL DDL as well as non SQL workloads.</li>
+      <li><strong>Data Movements</strong> includes background operations involved in the movement of data at various phases, such as compression of data or selecting sample data</li>
+    </ul>
+  </li>
+  <li>Use the text search fields to view only the records that contain a particular text string.</li>
+  <li>To sort the table, click on any column header.</li>
+</ul>
+
+<p><img src="assets/documentation/monitor_system/workload_filters.png" alt=" Workload Filters " title="Workload Filters" /></p>
+
+<h2 id="data_movement_progress">Data Movement Progress</h2>
+
+<p>Depending on the type of data movement, you may be able to view details on the progress of each table in a data movement.</p>
+
+<p>In this example, the workload list is filtered to show only data movements that are currently running. To see details about a particular data movement, click on the link in the PID column.</p>
+
+<p><img src="assets/documentation/monitor_system/data_movements.png" alt=" Data Movement Filters " title="Data Movement Filters" /></p>
+
+<p>Details on a selected data movement will contain a list of tables that are to be moved. Each table shows a status (e.g., Running, Complete, Pending).</p>
+
+<p><img src="assets/documentation/monitor_system/workload_details.png" alt=" Data Movement Details " title="Data Movement Details" /></p>
+
+<p>Depending on the type of data movement, you may be able to see details about the progress of individual tables. If there is a chevron on the left side of a row, click the row to open it for more details.</p>
+
+<p><img src="assets/documentation/monitor_system/dm_table_progress.png" alt=" Data Movement Table Progress " title="Data Movement Progress" /></p>
+
+<p>You can also see performance metrics from the data movement’s time of execution.</p>
+
+<p><img src="assets/documentation/monitor_system/dm_charts.png" alt=" Data Movement Charts " title="Data Movement Charts" /></p>
+
+<h2 id="cancel_workload">Cancel Jobs</h2>
+
+<p class="list">To cancel any data movement job in progress:</p>
+
+<ol>
+  <li>Use the filter buttons at the top of the screen to select only <strong>Active</strong> workloads.</li>
+  <li>Click the <strong>Stop</strong> button, and then confirm the cancellation.</li>
+</ol>
+
+<p><img src="assets/documentation/monitor_system/cancel_task.png" alt=" Cancel Task " title="Cancel Task" /></p>
+
+<p>After the job has been stopped it will appear in the list with the stopped icon: <span class="icon-stopped"></span></p>
+
+<p class="note"><strong>Note</strong>: Workloads that do not have a task ID are background tasks. Although they can affect performance, they cannot be cancelled. You will only see the <strong>Stop</strong> button for tasks that you are allowed to cancel.</p>
+
+<h2 id="log_server_console">Centralized Logging</h2>
+
+<p class="note"><strong>Note:</strong> Only system administrators can view system logs.</p>
+
+<p>To access Centralized Logging:</p>
+
+<ol>
+  <li>From the <strong>Cloud Sockets</strong> tab, select <strong>Centralized Logging</strong>.</li>
+  <li>Click on the URL that appears on the right side of the screen.</li>
+</ol>
+
+<p><img src="assets/documentation/monitor_system/centralized_logging.png" alt=" Centralized Logging " title="Centralized Logging" /></p>
+
+<p>The log server console contains a user interface that provides a view into Cazena’s centralized logging capability. Logs from all components of the Cazena Service are continuously aggregated into an internal ElasticSearch repository that allows easy access to all logs from a single search based interface. These logs can be used as the basis for troubleshooting data pipeline operations or form the basis for compliance or auditing. For complete details on how to use the visual interface, consult the documentation at <a href="https://www.elastic.co/guide/en/kibana/current/dashboard.html" target="_blank">Elastic</a>.</p>
+
+<p><img src="assets/documentation/monitor_system/log_server_console.png" alt=" Log Server Console " title="Log Server Console" /></p>
+
+        </section>
+
+
+        <section id="data_stores">
+          
+          <h1 id="data_stores">Data Stores</h1>
+
+<p class="note"><strong>Note</strong>: Users with System Administrator or Application Support privileges can create, edit or delete data stores.</p>
+
+<p class="list">Data stores contain the information that are used to connect to repositories of data that reside outside the Cazena datacloud.</p>
+
+<ul>
+  <li>Data stores con connect to <a href="#netezza_data_store">Netezza</a>, <a href="#oracle_data_store">Oracle</a>, <a href="#ent_ftp_data_store">enterprise FTP/SFTP</a>, and <a href="#int_ftp_data_store">internet FTP/SFTP servers</a>.</li>
+  <li>For Netezza or Oracle, a data store can be viewed as being equivalent to a JDBC data source. It contains the connection information not only to the DBMS server, but also to the specific database, and optionally the schema within the database.</li>
+  <li><strong>Local File System</strong> is a preconfigured data store used for moving files from your local file system (e.g., your desktop or a remote drive).</li>
+</ul>
+
+<p>This table shows which types of data stores can be used to import or export data from the datacloud.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Connector</th>
+      <th style="text-align: left">Import to the Cloud</th>
+      <th style="text-align: left">Export from the Cloud</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Oracle</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Netezza</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Enterprise FTP/SFTP</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Internet FTP/SFTP</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Custom Data Adapter</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"> </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Local File System</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="note"><strong>Note</strong>:  Moving data between two Cazena services does not require a data store.</p>
+
+<p><strong>To create a data store:</strong></p>
+
+<ol>
+  <li>From the <strong>System</strong> tab, select <strong>Data Stores</strong>.</li>
+  <li>
+    <p>To create a data store, click <strong>New Data Store</strong>. (To edit an existing data store, click the pencil icon (<span class="icon-edit"></span>) on the right edge of the row.)<br /><br />
+  <img src="assets/documentation/data_stores/data_stores.png" alt=" Data Stores " title="Data Stores" /></p>
+  </li>
+  <li>Complete the form that appears. Refer to the sections below for more information about the type of data store that you are creating:
+    <ul>
+      <li><a href="#oracle_data_store">Oracle</a></li>
+      <li><a href="#netezza_data_store">Netezza</a></li>
+      <li><a href="#ent_ftp_data_store">Enterprise FTP/SFTP</a></li>
+      <li><a href="#int_ftp_data_store">Internet FTP/SFTP</a></li>
+      <li><a href="#custom_data_store">Custom Data Store</a></li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="oracle_data_store">Oracle Data Store</h2>
+
+<table class="table-image">
+  <tbody>
+    <tr>
+      <td>You can connect to either a database (SID) or a service.<br /><br />The user must have the following permissions: <br /><br /> <strong>CREATE SESSION</strong> for the database instance <br /><br /> <strong>SELECT</strong> on any tables are to be imported</td>
+      <td><img src="assets/documentation/data_stores/oracle_data_store.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="netezza_data_store">Netezza Data Store</h2>
+
+<table class="table-image">
+  <tbody>
+    <tr>
+      <td>The user must have the following permissions:  <br /><br /><strong>LIST</strong> on the database <br /><br /><strong>SELECT</strong> on any tables that are to be imported<br /><br /> <strong>CREATE EXTERNAL TABLE</strong> privilege</td>
+      <td><img src="assets/documentation/data_stores/netezza_data_store.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="ent_ftp_data_store">Enterprise FTP/SFTP Data Store</h2>
+
+<h3 id="for-exporting-data">For Exporting Data</h3>
+
+<table class="table-image">
+  <tbody>
+    <tr>
+      <td><strong>Cazena Gateway</strong>: Select any gateway other than <strong>INTERNET</strong> <br /><br /> <strong>Connector</strong>: Select either FTP or SFTP <br /><br /> <strong>Path</strong>: Provide a path to a directory relative to the home directory, e.g., <code class="highlighter-rouge">home/_my_username/banktest</code>.<br /><br /> The directory must exist and the user must have read/write access.<br /><br />Exported data will go into a directory that is named <code class="highlighter-rouge">&lt;dataset&gt;/&lt;YYYYMMDD_**T**HHMISS-MSEC/&lt;table&gt;/&lt;datafile&gt;</code> <br /><br />Files are exported as they are stored on the system. This means that there may be multiple files exported for a single table. <br /><br /> Exported files are in DSV file format.</td>
+      <td><img src="assets/documentation/data_stores/ftp_export_data_store.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="for-importing-data">For Importing Data</h3>
+<ul>
+  <li>Provide a complete string to the directory where the files are located.</li>
+  <li>The user must have read access to the directory. Write access is not required.</li>
+</ul>
+
+<h2 id="int_ftp_data_store">Internet FTP/SFTP Data Store</h2>
+
+<table class="table-image">
+  <tbody>
+    <tr>
+      <td><strong>Cazena Gateway</strong>: Select  <strong>INTERNET</strong> <br /><br /> <strong>Connector</strong>: Select either FTP or SFTP <br /><br /> <strong>Path</strong>: the directory path at the FTP host<br /><br /><strong>Host</strong>: the name or IP of the public FTP/SFTP site. Be sure to exclude <code class="highlighter-rouge">"http://"</code>.<br /><br /><strong>Username</strong>: If the site supports public access, this might be <code class="highlighter-rouge">anonymous</code>.</td>
+      <td><img src="assets/documentation/data_stores/internet_data_store.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="custom_data_store">Custom Data Store</h2>
+
+<table class="table-image">
+  <tbody>
+    <tr>
+      <td><strong>Cazena Gateway</strong>: Select  the Cazena gateway that you want to use <br /><br /> <strong>Connector</strong>: select <strong>Custom Data Adapter</strong><br /><br /><strong>Program</strong>: the path to your program file on the Cazena gateway.<br /><br /><strong>Arguments</strong>: Argument to be passed to your program <br /><br /><strong>Note</strong>: All text in the <strong>Arguments</strong> field will be wrapped in double-quotes when used by Cazena. Don’t put double-quotes in this field unless your program needs them around your argument string.</td>
+      <td><img src="assets/documentation/data_stores/adapter_data_store.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+
+        </section>
+
+
+        <section id="data_movement_guidelines">
+          
+          <h1 id="data_movement_details">Details for Oracle, Netezza and DSV</h1>
+
+<p class="list">This section reviews the details of each type of data movement for various types of source data:  <a href="#oracle_details">Oracle</a>, <a href="#netezza_details">Netezza</a> and <a href="#dsv_details">Delimiter Separated Values (DSV) files</a>. For each source type, we review:</p>
+
+<ul>
+  <li>Support for object and data types</li>
+  <li>File structure for DSV (DSV only)</li>
+  <li>Constraints for movement into MPP SQL</li>
+  <li>Table and column names</li>
+</ul>
+
+<p>If you move data into the cloud using the Cazena Console, you will have the opportunity to review datatypes, table and column names, and constraints for each table that you move.  See the section on <a href="#move_data">moving data from the console</a> for more details.</p>
+
+<p>There is a limit of 1 table move at a time per <a href="#data_stores">data store</a>. You may start multiple table moves on a single data store, but they will be queued up and performed serially.</p>
+
+<h2 id="oracle_details">Oracle</h2>
+
+<h3 id="objects">Objects</h3>
+<p>You may move Oracle <strong>tables</strong> into your Cazena datacloud. Other Oracle object types are not supported.</p>
+
+<h3 id="datatypes">Datatypes</h3>
+<p>The following Oracle datatypes are supported. Some datatypes are supported with qualifications for various target service types. These qualifications are described below.</p>
+
+<h4 id="numeric">Numeric</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Datatype</th>
+      <th style="text-align: left">Hive Metastore</th>
+      <th style="text-align: left">MPP SQL (Redshift)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">number(p,s)</td>
+      <td style="text-align: left">Possible loss in precision</td>
+      <td style="text-align: left">Possible loss in precision</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">float(p)</td>
+      <td style="text-align: left">Possible loss in precision</td>
+      <td style="text-align: left">Possible loss in precision</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">binary_float</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">binary_double</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="character">Character</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Datatype</th>
+      <th style="text-align: left">Hive Metastore</th>
+      <th style="text-align: left">MPP SQL (Redshift)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">char(n)</td>
+      <td style="text-align: left">Converts to varchar for large values of n</td>
+      <td style="text-align: left">Converts to varchar for large values of n</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">varchar2(n)</td>
+      <td style="text-align: left">Possible truncation for large values of n </td>
+      <td style="text-align: left">Possible truncation for large values of n</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">nvarchar(n)</td>
+      <td style="text-align: left">Possible truncation for large values of n </td>
+      <td style="text-align: left">Possible truncation for large values of n</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">nchar(n)</td>
+      <td style="text-align: left">Converts to varchar for large values of n </td>
+      <td style="text-align: left">Converts to varchar for large values of n </td>
+    </tr>
+    <tr>
+      <td style="text-align: left">nvarchar2(n)</td>
+      <td style="text-align: left">Possible truncation for large values of n </td>
+      <td style="text-align: left">Possible truncation for large values of n</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="temporal">Temporal</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Datatype</th>
+      <th style="text-align: left">Hive Metastore</th>
+      <th style="text-align: left">MPP SQL (Redshift)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">date</td>
+      <td style="text-align: left">Not supported as a temporal datatype; converts to varchar.</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">timestamp</td>
+      <td style="text-align: left">Possible data loss</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">timestamp with time zone</td>
+      <td style="text-align: left">Not supported as a temporal datatype; defaults to varchar</td>
+      <td style="text-align: left">Not supported as a temporal datatype; defaults to varchar</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">timestamp with local time zone</td>
+      <td style="text-align: left">Not supported as a temporal datatype; defaults to varchar</td>
+      <td style="text-align: left">Not supported as a temporal datatype; defaults to varchar</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">interval year to month</td>
+      <td style="text-align: left">Not supported as a temporal datatype; defaults to varchar</td>
+      <td style="text-align: left">Not supported as a temporal datatype; defaults to varchar</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">interval day to second</td>
+      <td style="text-align: left">Not supported as a temporal datatype; defaults to varchar</td>
+      <td style="text-align: left">Not supported as a temporal datatype; defaults to varchar</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="other">Other</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Datatype</th>
+      <th style="text-align: left">Hive Metastore</th>
+      <th style="text-align: left">MPP SQL (Redshift)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">rowid</td>
+      <td style="text-align: left">Does not support intended meaning, defaults to varchar</td>
+      <td style="text-align: left">Does not support intended meaning, defaults to varchar</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">urowid</td>
+      <td style="text-align: left">Does not support intended meaning, defaults to varchar</td>
+      <td style="text-align: left">Does not support intended meaning, defaults to varchar</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">mlslabel</td>
+      <td style="text-align: left">Does not support intended meaning, defaults to varchar</td>
+      <td style="text-align: left">Does not support intended meaning, defaults to varchar</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="constraint-support">Constraint Support</h3>
+<p class="list">The following types of Oracle construct clauses are supported by your Cazena datacloud:</p>
+
+<ul>
+  <li>Primary key</li>
+  <li>Foreign key</li>
+  <li>Unique key</li>
+  <li>Not null (column attribute)</li>
+</ul>
+
+<h3 id="table-and-column-names">Table and Column Names</h3>
+<p>When moving data, the source and target services may have different rules for valid table and column names. As a result, table or column names may be changed in any of the following ways:</p>
+
+<ul>
+  <li>The name may be truncated, quoted or changed to make it unique.</li>
+  <li>Invalid/unsupported characters may be substituted. For example, Amazon Redshift requires ASCII only characters.</li>
+  <li>Reserved words may be removed from names.</li>
+</ul>
+
+<p>If you <a href="#import_enterprise">move data using the Cazena console</a>, these changes will be displayed during the review process. At that time, you can override the choices.</p>
+
+<h3 id="data-store">Data Store</h3>
+<p>See <a href="#oracle_data_store">Creating an Oracle data store</a> for information on creating a data store that is able to access the data on the server.</p>
+
+<p>##Netezza {#netezza_details}</p>
+
+<h3 id="objects-1">Objects</h3>
+<p>You may move Netezza <strong>tables</strong> and <strong>external tables</strong> into your Cazena datacloud. Other Netezza object types are not supported.</p>
+
+<h3 id="datatypes-1">Datatypes</h3>
+<p>Cazena supports the following Netezza datatypes. Some datatypes are supported with qualifications for various target service types. These qualifications are described below.</p>
+
+<h4 id="numeric-1">Numeric</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Datatype</th>
+      <th style="text-align: left">Hive Metastore</th>
+      <th style="text-align: left">MPP SQL (Redshift)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">byteint (alias int1)</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">smallint (alias int2)</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">integer (alias int or int4)</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">bigint (alias int8)</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">numeric (p, s)</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">numeric(p)</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">numeric</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">decimal (alias for numeric)</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">float(p)</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">real (same as float(6))</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">double precision (same as float(15))</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="character-1">Character</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Datatype</th>
+      <th style="text-align: left">Hive Metastore</th>
+      <th style="text-align: left">MPP SQL (Redshift)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">char (n)</td>
+      <td style="text-align: left">Converts to varchar for large values of n</td>
+      <td style="text-align: left">Converts to varchar for large values of n</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">varchar(n)</td>
+      <td style="text-align: left">Possible truncation for large values of n</td>
+      <td style="text-align: left">Possible truncation for large values of n</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">nchar(n)</td>
+      <td style="text-align: left">Converts to nvarchar for large values of n</td>
+      <td style="text-align: left">Converts to nvarchar for large values of n</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">nvarchar(n)</td>
+      <td style="text-align: left">Possible truncation for large values of n</td>
+      <td style="text-align: left">Possible truncation for large values of n</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="temporal-1">Temporal</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Datatype</th>
+      <th style="text-align: left">Hive Metastore</th>
+      <th style="text-align: left">MPP SQL (Redshift)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">date</td>
+      <td style="text-align: left">Not supported as a temporal datatype in Cloudera Hadoop, converts to varchar.</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">time</td>
+      <td style="text-align: left">Not supported as a temporal datatype; converts to varchar</td>
+      <td style="text-align: left">Not supported as a temporal datatype; converts to varchar</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">time with time zone (alias timetz)</td>
+      <td style="text-align: left">Not supported as a temporal datatype; converts to varchar</td>
+      <td style="text-align: left">Not supported as a temporal datatype; converts to varchar</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">timestamp</td>
+      <td style="text-align: left">Possible data loss</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td style="text-align: left">timestamp with time zone</td>
+      <td style="text-align: left">Not supported as a temporal datatype; converts to varchar</td>
+      <td style="text-align: left">Not supported as a temporal datatype; converts to varchar</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">interval</td>
+      <td style="text-align: left">Not supported as a temporal datatype; converts to varchar</td>
+      <td style="text-align: left">Not supported as a temporal datatype; converts to varchar</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="other-1">Other</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Datatype</th>
+      <th style="text-align: left">Hive Metastore</th>
+      <th style="text-align: left">MPP SQL (Redshift)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">boolean</td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+      <td style="text-align: left"><span class="icon-checkmark"></span></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="constraint-support-1">Constraint Support</h3>
+<p class="list">The following types of Netezza construct clauses may be moved into your Cazena datacloud:</p>
+
+<ul>
+  <li>Primary key</li>
+  <li>Foreign key</li>
+  <li>Unique key</li>
+  <li>distkey</li>
+  <li>diststyle (e.g., HASH, RANDOM)</li>
+  <li>not null (column attribute)</li>
+</ul>
+
+<p>Although Netezza does not enforce keys, some Netezza tables may still include them for SQL compatibility. Note that when a Netezza table is imported to a service type that supports keys (e.g., MPP SQL), these constructs will be used in the creation of the target table if they are encountered.</p>
+
+<h3 id="table-and-column-names-1">Table and Column Names</h3>
+<p>When moving data, the source and target services may have different rules for valid table and column names. As a result, table or column names may be changed in any of the following ways:</p>
+
+<ul>
+  <li>The name may be truncated, quoted or changed to make it unique.</li>
+  <li>Invalid/unsupported characters may be substituted. For example, Amazon Redshift requires ASCII only characters.</li>
+  <li>Reserved words may be removed from names.</li>
+</ul>
+
+<p>If you <a href="#import_enterprise">move data using the Cazena console</a>, these changes will be displayed during the review process. At that time, you can override the choices.</p>
+
+<h3 id="dsv_details">Data Store</h3>
+<p>See <a href="#netezza_data_store">Creating a Netezza data store</a> for information on creating a data store that is able to access the data on the server.</p>
+
+<h2 id="dmg_dsv_files">Delimiter Separated Values (DSV) Files</h2>
+
+<h3 id="file-format">File format</h3>
+
+<p>Delimiter Separated Values (DSV) files may be moved into the cloud from any type of source. They are most commonly moved from either the local file system or FTP/SFTP servers.</p>
+
+<p>This section describes how DSV files must be constructed so that they can be successfully loaded into your Cazena datacloud.</p>
+
+<h4 id="lines">Lines</h4>
+
+<ul>
+  <li>Lines are delimited using LF (default) or CRLF</li>
+  <li>Each row of the file must have exactly the same number of fields.</li>
+  <li>Blank lines are invalid.</li>
+  <li>The end of file is determined by either the termination of the last line (EOL/EOF character sequence) or at the beginning of a blank line at the end of the file.</li>
+</ul>
+
+<p>This screenshot illustrates the default options for reading DSV files. These values can be changed when moving data using the Cazena Console.</p>
+
+<p class="width-75"><img src="assets/documentation/data_movement_details/column_delimiter.png" alt=" DSV Options " title="Get Cazena Gateway IP Address" /></p>
+
+<h4 id="column-delimiter">Column Delimiter</h4>
+<p>By default, a comma is used as a column delimiter. The delimiter can be any printable ASCII character or tab character. Other non-printing or UTF-8 characters are not supported.</p>
+
+<h4 id="header-row">Header Row</h4>
+<ul>
+  <li>The file can optionally have one header row that contains column names.</li>
+  <li>The rules for reading the header row are the same as for any row, using the same quoting, field delimiting, line delimiting and escaping.</li>
+</ul>
+
+<h4 id="escape-character">Escape Character</h4>
+<ul>
+  <li>A backslash (\) can be used as an escape key.
+    <ul>
+      <li><strong>Example:</strong> <code class="highlighter-rouge">\n\t\f \075</code> results in <code class="highlighter-rouge">ntf 075</code></li>
+    </ul>
+  </li>
+  <li>The backslash can escape itself. Doubling the backslash will include the escape character in the resulting field.
+    <ul>
+      <li><strong>Example</strong>: A double backslash in <code class="highlighter-rouge">abc\\def</code> results in <code class="highlighter-rouge">abc\def</code></li>
+    </ul>
+  </li>
+  <li>Backslashes cannot escape control characters or be used to include unicode, hexadecimal, or octal characters.</li>
+</ul>
+
+<h4 id="text-quoting">Text Quoting</h4>
+<p class="list">Text delimiters can be used to include either line delimiters or column delimiters within a string. If you choose the option to use a text delimiter, then any string whose first non-space character is a quote will be interpreted as a quoted string. Nonquoted strings will be parsed verbatim.</p>
+<ul>
+  <li>You can use either single quotes (‘) or double quotes (“) as a text delimiter.</li>
+  <li>Backslashes can escape the line delimiter, the field delimiter, or any text quote character.
+    <ul>
+      <li><strong>Example:</strong> Including a newline (LF) in quotes in <code class="highlighter-rouge">"abc[LF]def"</code> results in <code class="highlighter-rouge">abc[LF]def</code>. LF is not treated as a line delimiter.</li>
+      <li><strong>Example:</strong> Including a comma in quotes in <code class="highlighter-rouge">"abc,def"</code> results in <code class="highlighter-rouge">abc,def</code>. The comma is not treated as a field delimiter.</li>
+    </ul>
+  </li>
+  <li>If you have selected the option to use backslash as an escape character, then backslashes will be applied within quoted strings. To include a backslash in the resulting field, use a double backslash.
+    <ul>
+      <li><strong>Example:</strong> Escaping the quote in <code class="highlighter-rouge">"abc\"\"def"</code> results in <code class="highlighter-rouge">abc""def</code></li>
+    </ul>
+  </li>
+  <li>To include the text delimiter character within a string, double the character.
+    <ul>
+      <li><strong>Example:</strong> Using double quotes in <code class="highlighter-rouge">"abc""""def"</code> results in <code class="highlighter-rouge">abc""def</code></li>
+    </ul>
+  </li>
+  <li>In general, leading and trailing spaces are ignored between the field delimiters. If leading and trailing spaces are significant, then text quoting needs to be used.
+    <ul>
+      <li><strong>Example:</strong> Quoting spaces in <code class="highlighter-rouge">"trailingSpaces            "</code> results in <code class="show-whitespace highlighter-rouge">trailingSpaces            </code> .</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="datatypes-2">Datatypes</h3>
+
+<p>In addition to strings as described in the previous sections, the following datatypes are recognized in DSV files.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Datatype</th>
+      <th style="text-align: left">Format</th>
+      <th style="text-align: left">Example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">date</td>
+      <td style="text-align: left">YYYY-MM-DD</td>
+      <td style="text-align: left">5/17/15</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">time</td>
+      <td style="text-align: left">HH:MI:SS</td>
+      <td style="text-align: left">25:51.2</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">timestamp</td>
+      <td style="text-align: left">YYYY-MM-DD HH:MI:SS</td>
+      <td style="text-align: left">25:51.2</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">time with time zone</td>
+      <td style="text-align: left">HH:MI:SSTZ</td>
+      <td style="text-align: left">14:25:51.246-06:00</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">timestamp with time zone</td>
+      <td style="text-align: left">YYYY-MM-DD HH:MI:SSTZ</td>
+      <td style="text-align: left">2015-05-17 14:25:51.246-06:00</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Integer</td>
+      <td style="text-align: left"><sign><digits> Sign is optional</digits></sign></td>
+      <td style="text-align: left">+1 -231 15</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Decimal / Floating point</td>
+      <td style="text-align: left">&lt;sign&gt;&lt;digits&gt;.&lt;digits&gt;<br />Sign is optional <br />Fractional component is optional Is a leading 0 required?</td>
+      <td style="text-align: left">-123.45 2 3.00000</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Null</td>
+      <td style="text-align: left">\N</td>
+      <td style="text-align: left">When <code class="highlighter-rouge">\N</code> is the only character in a field, it indicates the null value. Null-ness may not be preserved in all workload engines.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="table-and-column-names-2">Table and Column Names</h3>
+<p>When moving data, the source and target services may have different rules for valid table and column names. As a result, table or column names may be changed in any of the following ways:</p>
+
+<ul>
+  <li>The name may be truncated, quoted or changed to make it unique.</li>
+  <li>Invalid/unsupported characters may be substituted. For example, Amazon Redshift requires ASCII only characters.</li>
+  <li>Reserved words may be removed from names.</li>
+</ul>
+
+<p>If you <a href="#import_ftp">move data using the Cazena console</a>, these changes will be displayed during the review process. At that time, you can override the choices.</p>
+
+<h3 id="data-store-1">Data Store</h3>
+<p>See <a href="#ent_ftp_data_store">Creating an Enterprise FTP/SFTP data store</a> or <a href="#int_ftp_data_store">Creating an Internet FTP/SFTP data store</a> for information on creating data stores that are able to access the data on the server.</p>
+
+
+        </section>
+
+
+        <section id="support">
+          
+          <h1 id="sup_support">Support</h1>
+
+<p>To contact Cazena support:</p>
+
+<p><strong>Phone</strong>:<br />
+  US +1 (844) 781-2986​<br />
+  UK +44 808 164 1104​</p>
+
+<p><strong>Web</strong>: https://support.cazena.com​</p>
+
+<p><strong>Email</strong>: support@cazena.com</p>
+
+        </section>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>
