@@ -47,15 +47,15 @@ From the Cazena console, you may link to the AWS bucket and [view keys and token
 
 To link to the S3 bucket:
 
-1. From the __Cloud Sockets__ tab, select __AWS Console Login__ on the left side of the screen.
+1. From the __Cloud Sockets__ tab, select __AWS S3 Console__ on the left side of the screen.
 
 1. A link to the AWS bucket will appear on the right side. Sessions that you initial from this link will expire after 12 hours.
 
-    ![ AWS Console Login ](assets/documentation/object_store/aws_login_link.png "AWS Console Login")
+    ![ AWS S3 Console ](assets/documentation/object_store/aws_login_link.png "AWS S3 Console ")
 
 ### View AWS Keys and Token {#aws_account_information}
 
-To view the bucket name, AWS access key, secret access key and session token, select the __System__ tab, then __S3__. The AWS login link is also available on this page.
+To view the bucket name, AWS access key, secret access key and session token, select the __System__ tab, then __S3__. The AWS S3 link is also available on this page.
 
   ![ AWS Keys and Token ](assets/documentation/object_store/s3_variables.png "AWS Keys and Token ")
 

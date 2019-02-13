@@ -64,8 +64,6 @@
   </li>
   <li>
     <p>The <strong>AppCloud</strong> allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud.</p>
-
-    <p><img src="assets/documentation/overview/system_diagram.png" alt=" Cazena System " title="Cazena System" /></p>
   </li>
 </ul>
 
@@ -86,9 +84,9 @@
 <p class="list">The details for a cloud socket contain two sections:</p>
 
 <h5 id="from-outside-the-datacloud">From outside the datacloud</h5>
-<p>Use <strong>IP Address:Port</strong> to connect to a service from outside of the datacloud. This will establish a secure  connection to the service through the Cazena Gateway. For example, you would use <strong>IP Address:Port</strong> to connect to RStudio Server via the Cazena gateway.</p>
+<p>Use the URL on the right side to connect to a service (e.g., RStudio) from outside of the datacloud. This will establish a secure connection to the service through the Cazena Gateway.</p>
 
-<p class="width-75"><img src="assets/documentation/cloud_sockets/rstudio_ip_address.png" alt=" RStudio IP Address:Port " title="RStudio IP Address:Port" /></p>
+<p class="width-75"><img src="assets/documentation/cloud_sockets/rstudio_url.png" alt=" RStudio URL " title="RStudio IP Address:Port" /></p>
 
 <p><br />
 <br /></p>
@@ -116,7 +114,7 @@
 
 <p class="step">Step 1: Setup (Optional)</p>
 
-<p class="list">This example shows how you would use RStudio with a table that you move into a data lake. To follow the example, you would first have to use the Cazena console to move a file, <a href="assets/documents/nycflights.dsv" target="_blank">nycflights.dsv</a>, onto a data lake.</p>
+<p class="list">This example shows how you would use RStudio with a table that you move into a data lake. To follow the example, you would first use the Cazena console to move a file, <a href="assets/documents/nycflights.dsv" target="_blank">nycflights.dsv</a>, onto a data lake.</p>
 
 <ul>
   <li>You can download the sample file here:  <a href="/documents/nycflights.dsv" target="_blank">nycflights.dsv</a></li>
@@ -135,7 +133,7 @@
 <ol>
   <li>Select the <strong>Cloud Sockets</strong> tab.</li>
   <li>On the left side of the screen, click on <strong>RStudio Server</strong>.</li>
-  <li>Click on the link that appears on the right side of the screen. If your company has more than one Cazena gateway, you may see more than one link; you can use any of them.</li>
+  <li>Click on the URL that appears on the right side of the screen. If your company has more than one Cazena gateway, you may see more than one link; you can use any of them.</li>
   <li>
     <p>RStudio will open in a new tab. Sign in using your Cazena credentials.</p>
 
@@ -392,18 +390,18 @@ HIVE_HOME=/opt/cloudera/parcels/CDH/lib/hive
 
 <ol>
   <li>
-    <p>From the <strong>Cloud Sockets</strong> tab, select <strong>AWS Console Login</strong> on the left side of the screen.</p>
+    <p>From the <strong>Cloud Sockets</strong> tab, select <strong>AWS S3 Console</strong> on the left side of the screen.</p>
   </li>
   <li>
     <p>A link to the AWS bucket will appear on the right side. Sessions that you initial from this link will expire after 12 hours.</p>
 
-    <p><img src="assets/documentation/object_store/aws_login_link.png" alt=" AWS Console Login " title="AWS Console Login" /></p>
+    <p><img src="assets/documentation/object_store/aws_login_link.png" alt=" AWS S3 Console " title="AWS S3 Console " /></p>
   </li>
 </ol>
 
 <h3 id="aws_account_information">View AWS Keys and Token</h3>
 
-<p>To view the bucket name, AWS access key, secret access key and session token, select the <strong>System</strong> tab, then <strong>S3</strong>. The AWS login link is also available on this page.</p>
+<p>To view the bucket name, AWS access key, secret access key and session token, select the <strong>System</strong> tab, then <strong>S3</strong>. The AWS S3 link is also available on this page.</p>
 
 <p><img src="assets/documentation/object_store/s3_variables.png" alt=" AWS Keys and Token " title="AWS Keys and Token " /></p>
 
@@ -2591,12 +2589,6 @@ Complete
   <li>Within each data lake or data mart, the <a href="#dashboard"><strong>Dashboard</strong></a> tab provides an overview of performance over a period of time.</li>
 </ul>
 
-<h6 class="list" id="log-files">Log Files</h6>
-
-<ul>
-  <li><a href="#log_server_console"><strong>Centralized Logging</strong></a> contains system logs and analytic information for all data lakes and data marts. This information is only available to system administrators.</li>
-</ul>
-
 <h2 id="cloud_sockets_tab">Cloud Sockets</h2>
 
 <p>The <strong>Cloud Sockets</strong> tab shows the status (Good Health, Warning or Critical) of preconfigured services such as RStudio and Hue.</p>
@@ -2699,23 +2691,6 @@ Complete
 <p>After the job has been stopped it will appear in the list with the stopped icon: <span class="icon-stopped"></span></p>
 
 <p class="note"><strong>Note</strong>: Workloads that do not have a task ID are background tasks. Although they can affect performance, they cannot be cancelled. You will only see the <strong>Stop</strong> button for tasks that you are allowed to cancel.</p>
-
-<h2 id="log_server_console">Centralized Logging</h2>
-
-<p class="note"><strong>Note:</strong> Only system administrators can view system logs.</p>
-
-<p>To access Centralized Logging:</p>
-
-<ol>
-  <li>From the <strong>Cloud Sockets</strong> tab, select <strong>Centralized Logging</strong>.</li>
-  <li>Click on the URL that appears on the right side of the screen.</li>
-</ol>
-
-<p><img src="assets/documentation/monitor_system/centralized_logging.png" alt=" Centralized Logging " title="Centralized Logging" /></p>
-
-<p>The log server console contains a user interface that provides a view into Cazena’s centralized logging capability. Logs from all components of the Cazena Service are continuously aggregated into an internal ElasticSearch repository that allows easy access to all logs from a single search based interface. These logs can be used as the basis for troubleshooting data pipeline operations or form the basis for compliance or auditing. For complete details on how to use the visual interface, consult the documentation at <a href="https://www.elastic.co/guide/en/kibana/current/dashboard.html" target="_blank">Elastic</a>.</p>
-
-<p><img src="assets/documentation/monitor_system/log_server_console.png" alt=" Log Server Console " title="Log Server Console" /></p>
 
         </section>
 

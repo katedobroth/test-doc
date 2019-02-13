@@ -20,10 +20,5 @@ Each solution included the following components, in addition to data engines and
 
 * The __AppCloud__ allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud.
 
-
-
-    ![ Cazena System ](assets/documentation/overview/system_diagram.png "Cazena System")
-
-
 ---
 {:.end-section}

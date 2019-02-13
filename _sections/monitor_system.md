@@ -28,12 +28,6 @@ The Cazena console provides tools for monitoring workloads, data movement progre
 * The front page of the [__Datacloud__](#datacloud_overview) tab shows high level metrics for the past hour, as well as statuses for each data lake and data mart.
 * Within each data lake or data mart, the [__Dashboard__](#dashboard) tab provides an overview of performance over a period of time.
 
-###### Log Files
-{:.list}
-
-* [__Centralized Logging__](#log_server_console) contains system logs and analytic information for all data lakes and data marts. This information is only available to system administrators.
-
-
 ## Cloud Sockets {#cloud_sockets_tab}
 
 The __Cloud Sockets__ tab shows the status (Good Health, Warning or Critical) of preconfigured services such as RStudio and Hue.
@@ -127,25 +121,3 @@ After the job has been stopped it will appear in the list with the stopped icon:
 
 __Note__: Workloads that do not have a task ID are background tasks. Although they can affect performance, they cannot be cancelled. You will only see the __Stop__ button for tasks that you are allowed to cancel.
 {:.note}
-
-
-
-
-
-## Centralized Logging {#log_server_console} 
-
-__Note:__ Only system administrators can view system logs.
-{:.note} 
-
-
-To access Centralized Logging:
-
-1. From the __Cloud Sockets__ tab, select __Centralized Logging__.
-1. Click on the URL that appears on the right side of the screen.
-
-![ Centralized Logging ](assets/documentation/monitor_system/centralized_logging.png "Centralized Logging")
-
-
-The log server console contains a user interface that provides a view into Cazena’s centralized logging capability. Logs from all components of the Cazena Service are continuously aggregated into an internal ElasticSearch repository that allows easy access to all logs from a single search based interface. These logs can be used as the basis for troubleshooting data pipeline operations or form the basis for compliance or auditing. For complete details on how to use the visual interface, consult the documentation at <a href="https://www.elastic.co/guide/en/kibana/current/dashboard.html" target="_blank">Elastic</a>.  
-
-![ Log Server Console ](assets/documentation/monitor_system/log_server_console.png "Log Server Console")

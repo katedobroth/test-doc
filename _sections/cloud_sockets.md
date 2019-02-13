@@ -12,10 +12,10 @@ The details for a cloud socket contain two sections:
 {:.list}
 
 ##### From outside the datacloud
- Use __IP Address:Port__ to connect to a service from outside of the datacloud. This will establish a secure  connection to the service through the Cazena Gateway. For example, you would use __IP Address:Port__ to connect to RStudio Server via the Cazena gateway.
+ Use the URL on the right side to connect to a service (e.g., RStudio) from outside of the datacloud. This will establish a secure connection to the service through the Cazena Gateway. 
 
 
-![ RStudio IP Address:Port ](assets/documentation/cloud_sockets/rstudio_ip_address.png "RStudio IP Address:Port")
+![ RStudio URL ](assets/documentation/cloud_sockets/rstudio_url.png "RStudio IP Address:Port")
 {:.width-75}
 
 <br/>
@@ -49,7 +49,7 @@ Cazena data lakes include support for SparkR, an R package that provides a front
 Step 1: Setup (Optional)
 {:.step}
 
-This example shows how you would use RStudio with a table that you move into a data lake. To follow the example, you would first have to use the Cazena console to move a file, <a href="assets/documents/nycflights.dsv" target="_blank">nycflights.dsv</a>, onto a data lake. 
+This example shows how you would use RStudio with a table that you move into a data lake. To follow the example, you would first use the Cazena console to move a file, <a href="assets/documents/nycflights.dsv" target="_blank">nycflights.dsv</a>, onto a data lake. 
 {:.list}
 
 * You can download the sample file here:  <a href="/documents/nycflights.dsv" target="_blank">nycflights.dsv</a>
@@ -65,7 +65,7 @@ Step 2: Connect to RStudio Server Through Your Browser:
 
 1. Select the __Cloud Sockets__ tab.
 1. On the left side of the screen, click on __RStudio Server__.
-1. Click on the link that appears on the right side of the screen. If your company has more than one Cazena gateway, you may see more than one link; you can use any of them.
+1. Click on the URL that appears on the right side of the screen. If your company has more than one Cazena gateway, you may see more than one link; you can use any of them.
 1. RStudio will open in a new tab. Sign in using your Cazena credentials.
 
     ![ R Connection Details ](assets/documentation/cloud_sockets/rstudio_cloud_socket.png "R Connection Details")
