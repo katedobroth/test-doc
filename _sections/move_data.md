@@ -261,9 +261,9 @@ Step 2: Set Access and Refresh Tokens
     The system will respond with something like the following:
 
 
-    % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
-                                     Dload  Upload   Total   Spent    Left  Speed
-       100  3080  100  2434  100   646   6396   1697 --:--:-- --:--:-- --:--:--  6405
+        % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                         Dload  Upload   Total   Spent    Left  Speed
+           100  3080  100  2434  100   646   6396   1697 --:--:-- --:--:-- --:--:--  6405
 
 1. To check whether the access code was generated, use `echo $CODES`.
 

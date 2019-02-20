@@ -41,11 +41,11 @@ See the section on [Moving Data to ADLS Using WebHDFS](#adls_webhdfs) for an exa
 
 ## AWS S3 {#aws_object_store}
 
-From the Cazena console, you may link to the AWS bucket and [view keys and tokens](#aws_account_information) that can be used to access the bucket.
+From the Cazena console, you may link to the AWS S3 console and [view keys and tokens](#aws_account_information) that can be used to access the bucket.
 
 ### Link to AWS bucket from the Cazena console
 
-To link to the S3 bucket:
+To link to the AWS S3 console:
 
 1. From the __Cloud Sockets__ tab, select __AWS S3 Console__ on the left side of the screen.
 

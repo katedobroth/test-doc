@@ -35,23 +35,24 @@
         <section id="overview">
           
           
-<h1 id="ovw_overview">Cazena’s Fully-Managed Big Data as a Service Solution</h1>
+<h1 id="ovw_overview">Cazena Documentation</h1>
+
+<h2 id="fully-managed-big-data-as-a-service">Fully-Managed Big Data as a Service</h2>
 
 <p>Cazena’s Fully-Managed Big Data as a Service solution is a secure environment that helps enterprises to move and process data in the cloud. Cazena manages the creation, configuration, security setup, and management of cloud infrastructure to create a single-tenant datacloud. Cazena then continually monitors and manages this platform ensuring that it is secure and optimized for your current set of workloads.</p>
 
-<p>Cazena offers three solutions:</p>
+<p>Cazena’s two flagship solutions are:</p>
 
 <ul>
   <li>
     <p><a href="https://www.cazena.com/solutions/data-lake">Data Lake as a Service</a></p>
   </li>
   <li>
-    <p><a href="https://www.cazena.com/solutions/data-mart">Data Mart as a Service</a></p>
-  </li>
-  <li>
     <p><a href="https://www.cazena.com/solutions/data-science">Data Science Sandbox as a Service</a></p>
   </li>
 </ul>
+
+<p>There is more information about other solutions in the <a href="https://www.cazena.com/solutions">Solutions Gallery</a> on Cazena’s website.</p>
 
 <p>Each solution included the following components, in addition to data engines and cloud storage:</p>
 
@@ -66,6 +67,10 @@
     <p>The <strong>AppCloud</strong> allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud.</p>
   </li>
 </ul>
+
+<h2 id="cazena-web-console">Cazena Web Console</h2>
+
+<p>Cazena’s service can be managed from the Cazena web console. This documentation covers tasks that can be done from the console. These tasks are listed in the table of contents navigation on the left side of this screen.</p>
 
 <hr class="end-section" />
 
@@ -382,11 +387,11 @@ HIVE_HOME=/opt/cloudera/parcels/CDH/lib/hive
 
 <h2 id="aws_object_store">AWS S3</h2>
 
-<p>From the Cazena console, you may link to the AWS bucket and <a href="#aws_account_information">view keys and tokens</a> that can be used to access the bucket.</p>
+<p>From the Cazena console, you may link to the AWS S3 console and <a href="#aws_account_information">view keys and tokens</a> that can be used to access the bucket.</p>
 
 <h3 id="link-to-aws-bucket-from-the-cazena-console">Link to AWS bucket from the Cazena console</h3>
 
-<p>To link to the S3 bucket:</p>
+<p>To link to the AWS S3 console:</p>
 
 <ol>
   <li>
@@ -701,9 +706,10 @@ HIVE_HOME=/opt/cloudera/parcels/CDH/lib/hive
 
     <p>The system will respond with something like the following:</p>
 
-    <p>% Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                   Dload  Upload   Total   Spent    Left  Speed
-    100  3080  100  2434  100   646   6396   1697 –:–:– –:–:– –:–:–  6405</p>
+    100  3080  100  2434  100   646   6396   1697 --:--:-- --:--:-- --:--:--  6405
+</code></pre></div>    </div>
   </li>
   <li>
     <p>To check whether the access code was generated, use <code class="highlighter-rouge">echo $CODES</code>.</p>
@@ -1498,7 +1504,7 @@ x CazenaGateway-disk1.vmdk
   <li>
     <p>Import the CazenaGateway.ova file.</p>
 
-    <table class="table-30-70">
+    <table class="table-30-70 row-borders">
    <tbody>
      <tr>
        <th>Client</th>
@@ -1719,7 +1725,7 @@ x CazenaGateway-disk1.vmdk
   <li>
     <p>Import the CazenaGateway.ova file.</p>
 
-    <table class="table-30-70">
+    <table class="table-30-70 row-borders">
    <tbody>
      <tr>
        <th>Client</th>

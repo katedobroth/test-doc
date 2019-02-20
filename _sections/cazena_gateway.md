@@ -109,7 +109,7 @@ __Note:__ If you are unable to sign into the Cazena console, contact support@caz
 1. Import the CazenaGateway.ova file.
 
 
-    <table class="table-30-70">
+    <table class="table-30-70 row-borders">
       <tbody>
         <tr>
           <th>Client</th>
@@ -303,7 +303,7 @@ VMware vSphere/ESXi 6.5 and later has deprecated its support for OVAs.  Untar th
 1. Import the CazenaGateway.ova file.
 
 
-    <table class="table-30-70">
+    <table class="table-30-70 row-borders">
       <tbody>
         <tr>
           <th>Client</th>

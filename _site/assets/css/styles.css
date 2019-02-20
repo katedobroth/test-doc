@@ -111,8 +111,7 @@
 html,
 body {
   font-family: "Open Sans", Arial, sans-serif;
-  color: #444444;
-  background-color: #edf0f0; }
+  color: #444444; }
 
 #documentation {
   /* Table of contents */
@@ -182,7 +181,7 @@ body {
     padding-top: 0;
     color: black; }
     #documentation blockquote p {
-      font-size: normal;
+      font-size: inherit;
       color: black; }
     #documentation blockquote ol {
       margin-left: 1em; }
@@ -194,10 +193,8 @@ body {
   #documentation .content-wrap {
     min-width: 1024px;
     max-width: 1200px;
-    margin: 0 3em;
+    margin: 0 auto;
     padding: 1em;
-    background-color: white;
-    border: 1px solid #E2DBDB;
     min-height: 500px; }
   #documentation table {
     margin-bottom: 2em; }
@@ -291,6 +288,8 @@ body {
     width: 20%; }
   #documentation .table-20-80 th:nth-child(2) {
     width: 80%; }
+  #documentation .row-borders tr {
+    border-bottom: 1px solid #DBDBDB; }
   #documentation .table-30-70 th:first-child {
     width: 30%; }
   #documentation .table-30-70 th:nth-child(2) {
