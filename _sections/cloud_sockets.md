@@ -71,6 +71,7 @@ Step 2: Add the Hostname and Port to the Connection Pane
 
 1. In the Cazena console, on the __Cloud Sockets__ tab, select __Hive__ (or Impala) on the left side of the screen. 
 1. Copy the DNS address and port from the right side of the screen, then paste them into the Connection Pane in RStudio.
+1. Add `,SSL=1` to the connection string, before the final parentheses.
 
 
 ![ Hive Connection ](assets/documentation/cloud_sockets/hive_connection.png "Hive Connection")
@@ -239,7 +240,7 @@ This example shows how to use SQL Workbench to query a database in a data mart.
 Step 1: Copy the IP Address and Port for MPP SQL
 {:.step}
 
-1. IN the Cazena console: From the __Cloud Sockets__ tab, select __MPP SQL__ on the left side of the screen.
+1. In the Cazena console: From the __Cloud Sockets__ tab, select __MPP SQL__ on the left side of the screen.
 1. Under __From inside the datacloud__, copy the __Internal IP:Port__ address and port.
 
 ![ MPP SQL ](assets/documentation/cloud_sockets/mpp_sql.png "MPP SQL")

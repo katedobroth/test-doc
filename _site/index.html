@@ -144,6 +144,7 @@
 <ol>
   <li>In the Cazena console, on the <strong>Cloud Sockets</strong> tab, select <strong>Hive</strong> (or Impala) on the left side of the screen.</li>
   <li>Copy the DNS address and port from the right side of the screen, then paste them into the Connection Pane in RStudio.</li>
+  <li>Add <code class="highlighter-rouge">,SSL=1</code> to the connection string, before the final parentheses.</li>
 </ol>
 
 <p><img src="assets/documentation/cloud_sockets/hive_connection.png" alt=" Hive Connection " title="Hive Connection" /></p>
@@ -313,7 +314,7 @@ HIVE_HOME=/opt/cloudera/parcels/CDH/lib/hive
 <p class="step">Step 1: Copy the IP Address and Port for MPP SQL</p>
 
 <ol>
-  <li>IN the Cazena console: From the <strong>Cloud Sockets</strong> tab, select <strong>MPP SQL</strong> on the left side of the screen.</li>
+  <li>In the Cazena console: From the <strong>Cloud Sockets</strong> tab, select <strong>MPP SQL</strong> on the left side of the screen.</li>
   <li>Under <strong>From inside the datacloud</strong>, copy the <strong>Internal IP:Port</strong> address and port.</li>
 </ol>
 
