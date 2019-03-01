@@ -334,7 +334,7 @@ body {
       color: #DBDBDB; }
     #documentation .content pre {
       padding: 1em;
-      word-break: keep-all; }
+      word-break: break-all; }
       #documentation .content pre.indent {
         margin-left: 40px; }
       #documentation .content pre.show-whitespaces .ws-space-l {
@@ -343,8 +343,7 @@ body {
         font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
         font-weight: normal;
         border: none;
-        font-size: 12px;
-        white-space: pre; }
+        font-size: 12px; }
     #documentation .content dl > dd {
       margin-left: 3em; }
     #documentation .content dt {
@@ -355,3 +354,6 @@ body {
 .icon-checkmark {
   font-size: 22px;
   color: green; }
+
+p.header {
+  margin-bottom: 0; }

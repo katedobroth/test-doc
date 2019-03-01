@@ -3,7 +3,7 @@
 
 You can set up cloud sockets with endpoints in any of these components:
 
-* __Data Lake or Data Mart__
+* __Data Lake or Data Mart__.
 
     Example: Allow access to a tool such as Flume through a second Cazena gateway port.
 

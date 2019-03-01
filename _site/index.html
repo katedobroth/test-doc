@@ -37,9 +37,11 @@
           
 <h1 id="ovw_overview">Cazena Documentation</h1>
 
-<h2 id="fully-managed-big-data-as-a-service">Fully-Managed Big Data as a Service</h2>
+<p>Welcome to the documentation for the Cazena web console. To learn more about Cazena’s Fully-Managed Big Data As a Service, visit <a href="https://www.cazena.com">www.cazena.com</a>.</p>
 
-<p>Cazena’s Fully-Managed Big Data as a Service solution is a secure environment that helps enterprises to move and process data in the cloud. Cazena manages the creation, configuration, security setup, and management of cloud infrastructure to create a single-tenant datacloud. Cazena then continually monitors and manages this platform ensuring that it is secure and optimized for your current set of workloads.</p>
+<h2 id="cazenas-fully-managed-big-data-as-a-service">Cazena’s Fully-Managed Big Data as a Service</h2>
+
+<p>Cazena is a Fully-Managed Big Data as a Service that enables enterprises to securely migrate, store and analyze their data in the cloud. Cazena manages the creation, configuration, security setup, and management of cloud infrastructure to create a single-tenant datacloud. Cazena then continually monitors and manages this platform ensuring that it is secure and optimized for your current set of workloads.</p>
 
 <p>Cazena’s two flagship solutions are:</p>
 
@@ -68,21 +70,17 @@
   </li>
 </ul>
 
-<h2 id="cazena-web-console">Cazena Web Console</h2>
-
-<p>Cazena’s service can be managed from the Cazena web console. This documentation covers tasks that can be done from the console. These tasks are listed in the table of contents navigation on the left side of this screen.</p>
-
-<hr class="end-section" />
+<p>This documentation covers tasks that can be done from the Cazena web console. These tasks are listed in the table of contents navigation on the left side of this screen.</p>
 
         </section>
 
         <section id="cloud_sockets">
           
-          <h1 id="integration_with_datacloud">Access the Datacloud Via Cloud Sockets</h1>
+          <h1 id="integration_with_datacloud">Connect to the Datacloud Via Cloud Sockets</h1>
 
-<p>The  <strong>Cloud Sockets</strong> tab displays the information needed to connect to various services exposed on the Cazena Gateway. You can use cloud sockets for <a href="#move_data">moving data</a> as well as for connecting tools to the datacloud.</p>
+<p>The  <strong>Cloud Sockets</strong> tab displays the URLs, hostnames and ports needed to connect to various services exposed on the Cazena Gateway. This tab also displays the status (Good Health, Warning, or Critical) of preconfigured services. Click on any service on the left side of the screen to view connection details for that service.</p>
 
-<p>This tab displays the status (Good Health, Warning, or Critical) of preconfigured services. Click on any service on the left side of the screen to view cloud socket connection details for that service.</p>
+<p>See the section on <a href="#manage_cloud_sockets">Managing Cloud Sockets</a> to learn how to configure custom cloud sockets.</p>
 
 <p><img src="assets/documentation/cloud_sockets/sample_cloud_socket.png" alt=" RStudio Cloud Socket " title="RStudio Cloud Socket" /></p>
 
@@ -91,21 +89,26 @@
 <h5 id="from-outside-the-datacloud">From outside the datacloud</h5>
 <p>Use the URL on the right side to connect to a service (e.g., RStudio) from outside of the datacloud. This will establish a secure connection to the service through the Cazena Gateway.</p>
 
-<p class="width-75"><img src="assets/documentation/cloud_sockets/rstudio_url.png" alt=" RStudio URL " title="RStudio IP Address:Port" /></p>
+<p>If your site uses a site-to-site Cazena gateway configuration, the DNS link at the bottom of the screen will also work.</p>
+
+<p><img src="assets/documentation/cloud_sockets/rstudio_url.png" alt=" RStudio URL " title="RStudio IP Address:Port" /></p>
 
 <p><br />
 <br /></p>
 
 <h5 id="from-inside-the-datacloud">From inside the datacloud</h5>
-<p>Use <strong>Internal IP:Port</strong> to connect to a service from an endpoint inside the datacloud. For example, once you had connected to RStudio, you could <a href="#hive">connect to Hive via RJDBC</a> using <strong>Internal IP:Port</strong>.  (See the example below for details about <a href="#hadoop_jars">Hadoop Jars</a>.)</p>
+<p>Use the DNS address to connect to a service from an endpoint inside the datacloud. For example, once you had connected to RStudio, you could <a href="#hive">connect to Hive via RJDBC</a> using the DNS address.  (See the example below for details about <a href="#hadoop_jars">Hadoop Jars</a>.)</p>
 
-<p class="width-75"><img src="assets/documentation/cloud_sockets/hive_ip_address.png" alt=" Hive Internal IP:Port " title="Hive Internal IP:Port" /></p>
+<p><img src="assets/documentation/cloud_sockets/hive_dns.png" alt=" Hive DNS:Port " title="Hive DNS:Port" /></p>
 
-<p class="list">In this section, we review examples of how to use cloud socket information for the following tools:</p>
+<p class="list">In this section, we review examples of how to use cloud sockets to make the following kinds of connections:</p>
 
 <ul>
-  <li><a href="#rstudio">SparkR in RStudio Server</a></li>
-  <li><a href="#hive">Connect to Hive via RJDBC using RStudio</a></li>
+  <li><a href="#rstudio_connection_pane">Connect to Hive or Impala with the RStudio Connections Pane</a></li>
+  <li><a href="#rjdbc">Connect to Hive or Impala via RJDBC using RStudio</a></li>
+  <li><a href="#beeline">Connect to Hive using beeline</a></li>
+  <li><a href="#impala_shell">Connect to Impala using the Impala shell</a></li>
+  <li><a href="#sparkr">SparkR in RStudio Server</a></li>
   <li><a href="#sql_workbench">SQL Workbench</a></li>
 </ul>
 
@@ -113,27 +116,11 @@
 
 <hr class="end-section" />
 
-<h2 id="rstudio">Example: SparkR in RStudio Server</h2>
+<h2 id="rstudio_connection_pane">Connect to Hive or Impala With the RStudio Connections Pane</h2>
 
-<p>Cazena data lakes include support for SparkR, an R package that provides a front end to use Apache Spark from R. Within a Cazena data lake, you can use SparkR from any R shell, including a Hue notebook or RStudio Server.</p>
+<p>In this section, we review how to connect to Hive or Impala using the RStudio Connections Pane. We use Hive in this example; however, you can follow similar steps to connect to Impala.</p>
 
-<p class="step">Step 1: Setup (Optional)</p>
-
-<p class="list">This example shows how you would use RStudio with a table that you move into a data lake. To follow the example, you would first use the Cazena console to move a file, <a href="assets/documents/nycflights.dsv" target="_blank">nycflights.dsv</a>, onto a data lake.</p>
-
-<ul>
-  <li>You can download the sample file here:  <a href="/documents/nycflights.dsv" target="_blank">nycflights.dsv</a></li>
-  <li>Follow the <a href="#console_import_local_file">instructions</a> for moving data from a local file.
-    <ul>
-      <li>Name the dataset <strong>db1</strong> and name the table <strong>nycflights</strong>.</li>
-      <li>For <strong>Text Delimiters</strong>, select <strong>Double Quote</strong>, and select the checkbox for <strong>First Row is Header</strong></li>
-    </ul>
-  </li>
-</ul>
-
-<p class="image-no-outline"><img src="assets/documentation/cloud_sockets/r_example.png" alt=" Move Sample File " title="Move Sample File" /></p>
-
-<p class="step">Step 2: Connect to RStudio Server Through Your Browser:</p>
+<h3 id="connect_to_rstudio" class="step">Step 1: Connect to the RStudio web interface</h3>
 
 <ol>
   <li>Select the <strong>Cloud Sockets</strong> tab.</li>
@@ -144,9 +131,148 @@
 
     <p><img src="assets/documentation/cloud_sockets/rstudio_cloud_socket.png" alt=" R Connection Details " title="R Connection Details" /></p>
   </li>
+  <li>
+    <p>In RStudio, open the Connections Pane by selecting the <strong>Connections</strong> tab, then <strong>New Connection</strong>.</p>
+
+    <p class="width-50"><img src="assets/documentation/cloud_sockets/rstudio_connection_pane.png" alt=" RStudio Connection Pane " title="RStudio Connection Pane" /></p>
+  </li>
+  <li>Scroll down and select <strong>Hive</strong> (or Impala) from the options.</li>
 </ol>
 
-<p class="step">Step 3: Run Sample Code</p>
+<p class="step">Step 2: Add the Hostname and Port to the Connection Pane</p>
+
+<ol>
+  <li>In the Cazena console, on the <strong>Cloud Sockets</strong> tab, select <strong>Hive</strong> (or Impala) on the left side of the screen.</li>
+  <li>Copy the DNS address and port from the right side of the screen, then paste them into the Connection Pane in RStudio.</li>
+</ol>
+
+<p><img src="assets/documentation/cloud_sockets/hive_connection.png" alt=" Hive Connection " title="Hive Connection" /></p>
+
+<hr class="end-section" />
+
+<h2 id="rjdbc">Connect to Hive or Impala via RJDBC using RStudio</h2>
+
+<p>In this section, we review how to connect to Hive or Impala via RJDBC. We use Hive in this example; however, you can follow similar steps to connect to Impala.</p>
+
+<h4 id="hadoop_jars" class="step">Location of Hadoop JARs</h4>
+
+<p>In order to use Hive with RStudio, you will need to access Hadoop JARs. The JARs are located in the standard install locations that are used by Cloudera:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HADOOP_HOME=/opt/cloudera/parcels/CDH/lib/hadoop
+
+HIVE_HOME=/opt/cloudera/parcels/CDH/lib/hive
+</code></pre></div></div>
+
+<p class="note"><strong>Note</strong>: Cloudera’s standard install locations are different from the locations used by open source Hadoop (<code class="highlighter-rouge">/usr/lib/hadoop/lib/</code> and <code class="highlighter-rouge">/usr/lib/hive/lib/</code>, respectively).</p>
+
+<p>This example shows how you would set up RStudio to connect to Hive via RJDBC.</p>
+
+<h3 class="step" id="step-1-set-up-the-hive-environment-in-rstudio">Step 1: Set up the Hive environment in RStudio</h3>
+
+<ol>
+  <li>
+    <p>Follow the instructions for <a href="#connect_to_rstudio">connecting to the RStudio web interface through your browser</a>.</p>
+  </li>
+  <li>
+    <p>From RStudio, load the RJDBC library.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &gt; library(RJDBC)
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Load the Hive driver.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &gt; hd &lt;- JDBC('org.apache.hive.jdbc.HiveDriver', '/opt/cloudera/parcels/CDH/lib/hive/lib/hive-jdbc.jar')
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Add HADOOP_HOME and HIVE_HOME to the class path.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &gt; for(l in list.files('/opt/cloudera/parcels/CDH/lib/hadoop/')){ .jaddClassPath(paste('/opt/cloudera/parcels/CDH/lib/hadoop/',l,sep=''))}
+    
+    
+ &gt; for(l in list.files('/opt/cloudera/parcels/CDH/lib/hive/lib/')){ .jaddClassPath(paste('/opt/cloudera/parcels/CDH/lib/hive/lib/',l,sep=''))}
+        
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h3 id="hive_cloud_socket" class="step">Step 2: Get the Hive host address and port from the Cazena console</h3>
+
+<ol>
+  <li>On the <strong>Cloud Sockets</strong> tab, select <strong>Hive</strong> on the left side of the screen.</li>
+  <li>
+    <p>Under <strong>From inside the datacloud</strong>, copy the DNS address and port.</p>
+
+    <p class="indent"><img src="assets/documentation/cloud_sockets/hive_cloud_socket.png" alt=" Hive IP:Port " title="Hive IP:Port " /></p>
+  </li>
+  <li>
+    <p>Connect to your database using the Hive (or Impala) hostname and port in this command:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> jdbc:hive2://&lt;HIVE-HOST&gt;:&lt;HIVE-PORT&gt;/&lt;DATABASE&gt;;ssl=true 
+</code></pre></div>    </div>
+
+    <p>For example:</p>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &gt; c &lt;- dbConnect(hd,'jdbc:hive2://hive-ysewsr7iqy8qm6eb.qa0213aws2.pvt.cazena-sqa.com:10000/my_database; ssl=true;','my_username', 'my_password') 
+    
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<hr class="end-section" />
+
+<h2 id="beeline">Connect to Hive using beeline</h2>
+
+<ol>
+  <li>
+    <p>Follow the instructions to find the <a href="#hive_cloud_socket">Hive host address and port</a> from the Cazena console.</p>
+  </li>
+  <li>
+    <p>Copy the host and port into the following string:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> !connect jdbc:hive2://&lt;HIVE-HOST&gt;:&lt;HIVE-PORT&gt;/&lt;DATABASE&gt;;ssl=true
+</code></pre></div>    </div>
+
+    <p>For example:</p>
+    <div class="indent highlighter-rouge"><div class="highlight"><pre class="highlight"><code> beeline&gt; !connect jdbc:hive2://hive-ysewsr7iqy8qm6eb.qa0213aws2.pvt.cazena-sqa.com:10000/my_database;ssl=true 
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<hr class="end-section" />
+
+<h2 id="impala_shell">Connect to Impala using the Impala Shell</h2>
+
+<p class="step">Step 1: Copy the Hostname and Port for Impala</p>
+
+<ol>
+  <li>On the <strong>Cloud Sockets</strong> tab, select <strong>Impala</strong> on the left side of the screen.</li>
+  <li>
+    <p>Under <strong>From inside the datacloud</strong>, copy the DNS address and port.</p>
+
+    <p class="indent"><img src="assets/documentation/cloud_sockets/impala_cloud_socket.png" alt=" Impala Cloud Socket " title="Impala Cloud Socket " /></p>
+  </li>
+</ol>
+
+<p class="step">Step 2: Connect to the Impala Shell</p>
+
+<p>Paste the DNS address and port into the following command:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>impala-shell -i &lt;IMPALA-HOST&gt;:&lt;IMPALA-PORT&gt; -–ssl
+</code></pre></div></div>
+
+<p>For example:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>impala-shell -i impala.5631b377b0cc20e.pvt.cazena-sqa.com:21050 --ssl
+</code></pre></div></div>
+
+<h2 id="sparkr">SparkR in RStudio Server</h2>
+
+<p>Within a Cazena data lake, you can use SparkR from any R shell, including a Hue notebook or RStudio Server.</p>
+
+<p class="step">Step 1: Connect to RStudio Server Through Your Browser:</p>
+
+<p>Follow the instructions to <a href="#connect_to_rstudio">connect to RStudio through your browser</a>.</p>
+
+<p class="step">Step 2: Run Sample Code</p>
 
 <p>From the RStudio web client or a Hue notebook:</p>
 
@@ -170,144 +296,30 @@
     <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  hiveContext &lt;- sparkRHive.init(sc)
   df &lt;- table(hiveContext, 'db1.nycflights')
 </code></pre></div>    </div>
-
-    <p class="note"><strong>Note</strong>: In this command, <strong>db1</strong> corresponds to the name of your Cazena dataset. <strong>nycflights</strong> corresponds to the name of the table that you want to load.</p>
-  </li>
-  <li>
-    <p>View the first few rows of data, and print the schema of the data.</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  showDF(df)
-  printSchema(df)
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Run some basic summary stats, and display the results.</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>finaldf &lt;- filter(df, df$distance &gt; 1000) %&gt;%
-group_by(df$dep_hour)%&gt;%
-summarize(mean=mean(df$distance))
-  arrange(finaldf, desc(finaldf$mean)) %&gt;% head
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Release the resources used for this session</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sparkR.stop()
-</code></pre></div>    </div>
   </li>
 </ol>
 
 <hr class="end-section" />
 
-<h2 id="hive">Example: Connect to Hive via RJDBC using RStudio</h2>
+<h2 id="sql_workbench">Use JDBC to connect to SQL Workbench</h2>
 
-<h4 id="hadoop_jars" class="step">Location of Hadoop JARs</h4>
-
-<p>In order to use Hive with RStudio, you will need to access Hadoop JARs. The JARs are located in the standard install locations that are used by Cloudera:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HADOOP_HOME=/opt/cloudera/parcels/CDH/lib/hadoop
-
-HIVE_HOME=/opt/cloudera/parcels/CDH/lib/hive
-</code></pre></div></div>
-
-<p class="note"><strong>Note</strong>: Cloudera’s standard install locations are different from the locations used by open source Hadoop (<code class="highlighter-rouge">/usr/lib/hadoop/lib/</code> and <code class="highlighter-rouge">/usr/lib/hive/lib/</code>, respectively).</p>
-
-<p>This example shows how you would set up RStudio to connect to Hive via RJDBC.</p>
-
-<p class="step">Step 1: Setup</p>
-
-<ol>
-  <li>On the <strong>Cloud Sockets</strong> tab, select <strong>RStudio Server</strong> on the left side of the screen.</li>
-  <li>Under <strong>From outside the datacloud</strong>, click on the  link under <strong>IP Address:Port</strong>.</li>
-  <li>RStudio will open in a new tab. Sign in using your Cazena credentials.</li>
-</ol>
-
-<p class="indent"><img src="assets/documentation/cloud_sockets/rstudio_cloud_socket.png" alt=" R Connection Details " title="R Connection Details" /></p>
-
-<ol>
-  <li>
-    <p>From RStudio, load the RJDBC library</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> library(RJDBC)
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Load the Hive driver.</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> hd &lt;- JDBC('org.apache.hive.jdbc.HiveDriver', '/opt/cloudera/parcels/CDH/lib/hive/lib/hive-jdbc.jar')
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Add HADOOP_HOME and HIVE_HOME to the class path.</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> for(l in list.files('/opt/cloudera/parcels/CDH/lib/hadoop/')){ .jaddClassPath(paste('/opt/cloudera/parcels/CDH/lib/hadoop/',l,sep=''))}
-    
-    
- for(l in list.files('/opt/cloudera/parcels/CDH/lib/hive/lib/')){ .jaddClassPath(paste('/opt/cloudera/parcels/CDH/lib/hive/lib/',l,sep=''))}
-</code></pre></div>    </div>
-  </li>
-</ol>
-
-<p class="step">Step 2: Connect to Hive</p>
-
-<ol>
-  <li>On the <strong>Cloud Sockets</strong> tab, select <strong>Hive</strong> on the left side of the screen.</li>
-  <li>Under <strong>From inside the datacloud</strong>, use <strong>Internal IP:Port</strong> .</li>
-</ol>
-
-<p class="indent"><img src="assets/documentation/cloud_sockets/hive_cloud_socket.png" alt=" Hive IP:Port " title="Hive IP:Port " /></p>
-
-<ol>
-  <li>
-    <p>Connect to your database using this command:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> c &lt;- dbConnect(hd,'jdbc:hive2://HIVE-IP-ADDRESS:PORT/DATABASE_NAME','USERNAME', 'PASSWORD')
-</code></pre></div>    </div>
-
-    <p>where:</p>
-
-    <ul>
-      <li><strong>HIVE-IP-ADDRESS:PORT</strong> is the Hive IP address and port from the <strong>Cloud Sockets</strong> tab.</li>
-      <li><strong>DATABASE_NAME</strong> is the name of the database or dataset.</li>
-      <li><strong>USERNAME</strong> and <strong>PASSWORD</strong> are your Cazena Credentials.</li>
-    </ul>
-
-    <p><br /></p>
-
-    <p>For example:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   c &lt;- dbConnect(hd,'jdbc:hive2://10.128.8.133:10000/cldftpds09222017145029530','my_username', 'my_password')
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Use <strong>dblistTables</strong> to see the tables in your dataset.</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> dbListTables(c)
-</code></pre></div>    </div>
-  </li>
-</ol>
-
-<hr class="end-section" />
-
-<h2 id="sql_workbench">Example: Use JDBC to connect to SQL Workbench</h2>
-
-<p>On the <strong>Cloud Sockets</strong> tab, you can find the information that you need to connect various third-party tools to databases that you have loaded into a data mart. In this example, we use SQL Workbench to query a database in a data mart.</p>
+<p>This example shows how to use SQL Workbench to query a database in a data mart.</p>
 
 <ul>
   <li>You can download SQL Workbench <a href="http://www.sql-workbench.net/downloads.html" target="_blank">here</a>.</li>
   <li>You will also need a postgreSQL JDBC driver, which you can download <a href="https://jdbc.postgresql.org/download.html" target="_blank">here</a>.</li>
 </ul>
 
-<p><strong>From the Cazena console:</strong></p>
+<p class="step">Step 1: Copy the IP Address and Port for MPP SQL</p>
 
 <ol>
-  <li>From the <strong>Cloud Sockets</strong> tab, select <strong>MPP SQL</strong> on the left side of the screen.</li>
+  <li>IN the Cazena console: From the <strong>Cloud Sockets</strong> tab, select <strong>MPP SQL</strong> on the left side of the screen.</li>
   <li>Under <strong>From inside the datacloud</strong>, copy the <strong>Internal IP:Port</strong> address and port.</li>
 </ol>
 
 <p class="indent"><img src="assets/documentation/cloud_sockets/mpp_sql.png" alt=" MPP SQL " title="MPP SQL" /></p>
 
-<p class="list"><strong>From SQL Workbench:</strong></p>
+<p class="step">Step 1: Paste the IP Address and Port into SQL Workbench</p>
 
 <ol>
   <li>Start SQL Workbench, then select <strong>File</strong> &gt; <strong>Connect Window</strong>.</li>
@@ -321,7 +333,7 @@ HIVE_HOME=/opt/cloudera/parcels/CDH/lib/hive
 
     <ul>
       <li>IP ADDRESS:PORT comes from the Cloud Sockets tab.</li>
-      <li>Use <strong>czdataset</strong> as the name of the database.</li>
+      <li>If you moved data using the Cazena console, use <strong>czdataset</strong> as the name of the database.</li>
     </ul>
   </li>
   <li>Ask your system administrator for the username and password.</li>
@@ -2293,7 +2305,7 @@ Complete
 
 <ul>
   <li>
-    <p><strong>Data Lake or Data Mart</strong></p>
+    <p><strong>Data Lake or Data Mart</strong>.</p>
 
     <p>Example: Allow access to a tool such as Flume through a second Cazena gateway port.</p>
   </li>

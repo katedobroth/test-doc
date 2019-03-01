@@ -1,9 +1,11 @@
 
 # Cazena Documentation {#ovw_overview}
 
-## Fully-Managed Big Data as a Service 
+Welcome to the documentation for the Cazena web console. To learn more about Cazena's Fully-Managed Big Data As a Service, visit [www.cazena.com](https://www.cazena.com).
 
-Cazena's Fully-Managed Big Data as a Service solution is a secure environment that helps enterprises to move and process data in the cloud. Cazena manages the creation, configuration, security setup, and management of cloud infrastructure to create a single-tenant datacloud. Cazena then continually monitors and manages this platform ensuring that it is secure and optimized for your current set of workloads.
+## Cazena's Fully-Managed Big Data as a Service 
+
+Cazena is a Fully-Managed Big Data as a Service that enables enterprises to securely migrate, store and analyze their data in the cloud. Cazena manages the creation, configuration, security setup, and management of cloud infrastructure to create a single-tenant datacloud. Cazena then continually monitors and manages this platform ensuring that it is secure and optimized for your current set of workloads.
 
 Cazena's two flagship solutions are:
 
@@ -23,9 +25,4 @@ Each solution included the following components, in addition to data engines and
 * The __AppCloud__ allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud.
 
 
-## Cazena Web Console
-
-Cazena's service can be managed from the Cazena web console. This documentation covers tasks that can be done from the console. These tasks are listed in the table of contents navigation on the left side of this screen.
-
----
-{:.end-section}
+This documentation covers tasks that can be done from the Cazena web console. These tasks are listed in the table of contents navigation on the left side of this screen.

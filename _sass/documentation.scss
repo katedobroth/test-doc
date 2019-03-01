@@ -405,8 +405,7 @@ body {
 
     pre {
       padding: 1em;
-      word-break: keep-all;
-
+      word-break: break-all;
       &.indent {
         margin-left: 40px;
       }
@@ -421,7 +420,6 @@ body {
         font-weight: normal;
         border: none;
         font-size: 12px;
-        white-space: pre;
       }
     }
 
@@ -443,4 +441,8 @@ body {
 .icon-checkmark {
   font-size: 22px;
   color: green;
+}
+
+p.header {
+  margin-bottom: 0;
 }
