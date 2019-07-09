@@ -32,6 +32,7 @@ The details for a cloud socket contain two sections:
 In this section, we review examples of how to use cloud sockets to make the following kinds of connections:
 {:.list}
 
+* [Kafka and Zookeeper](#kafka_strings)
 * [Connect to Hive or Impala with the RStudio Connections Pane](#rstudio_connection_pane)
 * [Connect to Hive or Impala via RJDBC using RStudio](#rjdbc)
 * [Connect to Hive using beeline](#beeline)
@@ -43,6 +44,87 @@ For examples of using cloud sockets for moving data, see the [Move Data](#move_d
 
 ---
 {:.end-section}
+
+## Kafka and Zookeeper {#kafka_strings}
+
+Depending on the Cazena configuration at your site, you may have access to a multinode Kafka cluster.
+
+* This type of cluster requires a site-to-site configuration
+* Endpoints are TLS and require Kerberos authentication
+
+### Step 1: Kerberos setup
+{:.step}
+
+1. In the command line, create a file called `client.properties` with the the following:
+
+<div class="code-wrapper">
+<pre class="indent copy-area" id="client-properties">
+sasl.kerberos.service.name = kafka
+sasl.mechanism = GSSAPI
+security.protocol = SASL_SSL
+sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
+        useTicketCache=true; 
+</pre>
+<button class="btn clipboard-btn" data-clipboard-target="#client-properties">Copy</button>
+</div>
+
+2. Run `kinit <username>` and provide your password when prompted.
+
+
+### Step 2: Get Broker / Zookeeper strings
+{:.step}
+
+1. In the Cazena console, select the __Cloud Sockets__ tab.
+1. On the left side of the screen, click on one of the Kafka cloud sockets:
+    * __Kafka Broker__ for producers or consumers
+    * __Kafka Zookeeper__ for topics
+    ![ Kafka Strings ](assets/documentation/cloud_sockets/kafka_strings.png "Kafka Strings")
+1. Use the strings on the right side of the screen to create commands as follows:
+
+##### Producer
+{:.indent}
+
+<div class="code-wrapper">
+<pre class="indent copy-area" id="kafka-producer-string">kafka-console-producer --broker-list <span style="color:red"> BoostrapBrokerString </span> --topic testftb --producer.config <span style="color:red">client.properties</span>
+</pre>
+<button class="btn clipboard-btn" data-clipboard-target="#kafka-producer-string">Copy</button>
+</div>
+
+  * Replace __BootstrapBrokerString__ with the string copied from the Kafka Broker cloud socket page.
+  * Replace __client.properties__ with the name of the file you created in step 1.
+  {:.indent}
+
+##### Consumer
+{:.indent}
+
+
+<div class="code-wrapper">
+<pre class="indent copy-area" id="kafka-consumer-string">kafka-console-consumer --bootstrap-server <span style="color:red">BoostrapBrokerString</span> --topic testftb --from-beginning --consumer.config <span style="color:red">client.properties</span>
+</pre>
+<button class="btn clipboard-btn" data-clipboard-target="#kafka-consumer-string">Copy</button>
+</div>
+
+  * Replace __BootstrapBrokerString__ with the string copied from the Kafka Broker cloud socket page.
+  * Replace __client.properties__ with the name of the file you created in step 1.
+  {:.indent}
+
+
+##### Topic
+{:.indent}
+
+
+<div class="code-wrapper">
+<pre class="indent copy-area" id="kafka-topic-string">kafka-topics --create --zookeeper <span style="color:red">ZookeeperConnectString</span> --replication-factor 1 --partitions 1 --topic testftb 
+</pre>
+<button class="btn clipboard-btn" data-clipboard-target="#kafka-topic-string">Copy</button>
+</div>
+
+  * Replace __ZookeeperConnectString__ with the string copied from the Kafka Zookeeper cloud socket page.
+  {:.indent}
+
+---
+{:.end-section}
+
 
 ## Connect to Hive or Impala With the RStudio Connections Pane {#rstudio_connection_pane}
 

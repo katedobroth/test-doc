@@ -333,10 +333,9 @@ body {
     #documentation .content .icon-edit {
       color: #DBDBDB; }
     #documentation .content pre {
-      padding: 1em;
+      padding: 25px 10px 10px;
+      white-space: pre-wrap;
       word-break: break-all; }
-      #documentation .content pre.indent {
-        margin-left: 40px; }
       #documentation .content pre.show-whitespaces .ws-space-l {
         color: transparent; }
       #documentation .content pre code {
@@ -344,6 +343,8 @@ body {
         font-weight: normal;
         border: none;
         font-size: 12px; }
+    #documentation .content .indent {
+      margin-left: 30px; }
     #documentation .content dl > dd {
       margin-left: 3em; }
     #documentation .content dt {
@@ -357,3 +358,35 @@ body {
 
 p.header {
   margin-bottom: 0; }
+
+.code-wrapper {
+  position: relative; }
+  .code-wrapper button {
+    position: absolute;
+    background-color: #3a60aa;
+    border-radius: 2px;
+    color: white;
+    top: 0;
+    right: 0;
+    padding: 2px 10px;
+    font-size: .8em; }
+    .code-wrapper button:hover {
+      box-shadow: rgba(0, 0, 0, 0.33) 1px 1px 5px;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.11);
+      color: #fff;
+      background-color: #5379c4; }
+    .code-wrapper button:active, .code-wrapper button:focus {
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.11);
+      color: #fff;
+      background-color: #2d4b84; }
+  .code-wrapper pre {
+    border-radius: 1px; }
+    .code-wrapper pre.copy-area {
+      padding: 25px 10px 10px; }
+    .code-wrapper pre code {
+      border: none;
+      color: #444444;
+      display: block;
+      padding: 25px 10px 10px;
+      white-space: inherit;
+      word-break: inherit; }

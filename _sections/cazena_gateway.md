@@ -2,17 +2,10 @@
 
 A Cazena Gateway manages secure connections between the datacloud and on-premises environments, allowing networking, VPN, data access, user access, analytics tools and manageability.
 
-From the Cazena console, you can [manage cloud sockets](#manage_cloud_sockets), which establish port forwarding rules between the Cazena gateway and endpoints. Endpoints can be located in data lakes, data marts, on-premise locations, or the [AppCloud](#ovw_overview). For more information, see the sections on [managing](#manage_cloud_sockets) and [using](#integration_with_datacloud) cloud sockets.
-
-  The screen below shows the services that can be reached through ports on the Cazena gateway named __cz_gw_01__. The columns under __Cazena Gateway Port__ show the status of the port (up or down), the port number and whether the port is activated.
-
-![ Cazena Gateway on Console ](assets/documentation/cazena_gateway/cazena_gateway.png "Cazena Gateway on Console")
-
-
-You can connect the Cazena gateway to the datacloud using either of these methods:
+Cazena Gateways may be configured in either of the following ways:
 {:.list}
 
-* [__Port forwarding__](#cgw_installation): This is a simple configuration of the Cazena Gateway that requirements minimum networking configuration within the enterprise. It allows access to UIs as well as tool connectivity to APIs that have a single end point e.g. ODBC / JDBC.
+* [__Port forwarding__](#cgw_installation): This is a simple configuration of the Cazena Gateway that requirements minimal networking configuration within the enterprise. It allows access to UIs as well as tool connectivity to APIs that have a single end point e.g., ODBC / JDBC.
 
     The port forwarding configuration can use either IPsec or TLS VPN types. All traffic between the datacloud and the enterprise flows only through the [cloud sockets](#integration_with_datacloud) configured for the Cazena Gateway.
 
@@ -20,6 +13,13 @@ You can connect the Cazena gateway to the datacloud using either of these method
 * [__Site-to-Site__](#s2s_installation): This is a more complex configuration that requires networking configuration within the enterprise. It provides a wider range of tool connectivity options which include tools that rely on APIs that have multiple end points e.g. direct communication with Hadoop Namenode API.
 
     The site-to-site configuration uses IPsec site-to-site VPN, joining the datacloud and enterprise networks virtually, as if they both were within a private enterprise network. In this way, all of the hosts in the PDC network can reach all the hosts in the enterprise network, and vice versa.  Additionally, any [cloud sockets](#integration_with_datacloud) configured for the Cazena Gateway are also available.
+
+From the Cazena console, you can [manage cloud sockets](#manage_cloud_sockets), which establish port forwarding rules between the Cazena gateway and endpoints. Endpoints can be located in data lakes, data marts, on-premise locations, or the [AppCloud](#ovw_overview). For more information, see the sections on [managing](#manage_cloud_sockets) and [using](#integration_with_datacloud) cloud sockets.
+
+  The screen below shows the services that can be reached through ports on the Cazena gateway named __cz_gw_01__. The columns under __Cazena Gateway Port__ show the status of the port (up or down), the port number and whether the port is activated.
+
+![ Cazena Gateway on Console ](assets/documentation/cazena_gateway/cazena_gateway.png "Cazena Gateway on Console")
+
 
 ### Requirements
 To install a Cazena gateway, you will download an OVA file and then install it on a virtual machine in the enterprise data center. The requirements for the virtual machine are described here.

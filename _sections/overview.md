@@ -18,11 +18,13 @@ There is more information about other solutions in the [Solutions Gallery](https
 
 Each solution included the following components, in addition to data engines and cloud storage:
 
-* __Cazena Gateways__ provide a secure connection between the enterprise and the Cazena private datacloud (PDC). The gateway allows data to be moved securely into the datacloud, and also provides secure access for BI and analytics tools.
 
-* __Cloud Sockets__ expose Cazena services on your local network, providing access to web interfaces  and APIs. On-premises analytics and BI tools connect to the Cazena datacloud via cloud sockets.
+* [__Cloud Sockets__](#integration_with_datacloud) expose Cazena services on your local network, providing access to web interfaces  and APIs. On-premises analytics and BI tools connect to the Cazena datacloud via cloud sockets.
 
-* The __AppCloud__ allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud.
+* The [__AppCloud__](#ovw_overview) allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud.
+
+
+Some configurations also include [__Cazena Gateways__](#cgw_cazena_gateway), which provide a secure connection between the enterprise and the Cazena private datacloud (PDC). The gateway allows data to be moved securely into the datacloud, and also provides secure access for BI and analytics tools.
 
 
 This documentation covers tasks that can be done from the Cazena web console. These tasks are listed in the table of contents navigation on the left side of this screen.

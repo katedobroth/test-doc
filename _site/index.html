@@ -3,9 +3,13 @@
 <head>
 	
 		<meta name="description" content="Documentation for Cazena's Fully-Managed Big Data as a Service">
-	
+    <meta charset="utf-8">
+
+  
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<script src="assets/javascripts/clipboard.min.js"></script>
 
 	<script type="text/javascript" src="assets/javascripts/toc.js"></script>
 	<script type="text/javascript">
@@ -13,12 +17,11 @@
           $('#toc').toc();
       });
 	</script>
-	<meta charset="utf-8">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="assets/css/styles.css">
 	<link rel="stylesheet"
 				href="https://fonts.googleapis.com/css?family=Open+Sans:400,700">
-	<link rel="shortcut icon" href="assets/images/favicon.ico" />
+	<link rel="shortcut icon" href="assets/images/favicon.ico?" />
 	<title>Cazena Documentation</title>
 </head>
 <body data-spy="scroll" data-target="#affix-nav">
@@ -60,15 +63,14 @@
 
 <ul>
   <li>
-    <p><strong>Cazena Gateways</strong> provide a secure connection between the enterprise and the Cazena private datacloud (PDC). The gateway allows data to be moved securely into the datacloud, and also provides secure access for BI and analytics tools.</p>
+    <p><a href="#integration_with_datacloud"><strong>Cloud Sockets</strong></a> expose Cazena services on your local network, providing access to web interfaces  and APIs. On-premises analytics and BI tools connect to the Cazena datacloud via cloud sockets.</p>
   </li>
   <li>
-    <p><strong>Cloud Sockets</strong> expose Cazena services on your local network, providing access to web interfaces  and APIs. On-premises analytics and BI tools connect to the Cazena datacloud via cloud sockets.</p>
-  </li>
-  <li>
-    <p>The <strong>AppCloud</strong> allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud.</p>
+    <p>The <a href="#ovw_overview"><strong>AppCloud</strong></a> allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud.</p>
   </li>
 </ul>
+
+<p>Some configurations also include <a href="#cgw_cazena_gateway"><strong>Cazena Gateways</strong></a>, which provide a secure connection between the enterprise and the Cazena private datacloud (PDC). The gateway allows data to be moved securely into the datacloud, and also provides secure access for BI and analytics tools.</p>
 
 <p>This documentation covers tasks that can be done from the Cazena web console. These tasks are listed in the table of contents navigation on the left side of this screen.</p>
 
@@ -104,6 +106,7 @@
 <p class="list">In this section, we review examples of how to use cloud sockets to make the following kinds of connections:</p>
 
 <ul>
+  <li><a href="#kafka_strings">Kafka and Zookeeper</a></li>
   <li><a href="#rstudio_connection_pane">Connect to Hive or Impala with the RStudio Connections Pane</a></li>
   <li><a href="#rjdbc">Connect to Hive or Impala via RJDBC using RStudio</a></li>
   <li><a href="#beeline">Connect to Hive using beeline</a></li>
@@ -113,6 +116,90 @@
 </ul>
 
 <p>For examples of using cloud sockets for moving data, see the <a href="#move_data">Move Data</a> section.</p>
+
+<hr class="end-section" />
+
+<h2 id="kafka_strings">Kafka and Zookeeper</h2>
+
+<p>Depending on the Cazena configuration at your site, you may have access to a multinode Kafka cluster.</p>
+
+<ul>
+  <li>This type of cluster requires a site-to-site configuration</li>
+  <li>Endpoints are TLS and require Kerberos authentication</li>
+</ul>
+
+<h3 class="step" id="step-1-kerberos-setup">Step 1: Kerberos setup</h3>
+
+<ol>
+  <li>In the command line, create a file called <code class="highlighter-rouge">client.properties</code> with the the following:</li>
+</ol>
+
+<div class="code-wrapper">
+<pre class="indent copy-area" id="client-properties">
+sasl.kerberos.service.name = kafka
+sasl.mechanism = GSSAPI
+security.protocol = SASL_SSL
+sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
+        useTicketCache=true; 
+</pre>
+<button class="btn clipboard-btn" data-clipboard-target="#client-properties">Copy</button>
+</div>
+
+<ol>
+  <li>Run <code class="highlighter-rouge">kinit &lt;username&gt;</code> and provide your password when prompted.</li>
+</ol>
+
+<h3 class="step" id="step-2-get-broker--zookeeper-strings">Step 2: Get Broker / Zookeeper strings</h3>
+
+<ol>
+  <li>In the Cazena console, select the <strong>Cloud Sockets</strong> tab.</li>
+  <li>On the left side of the screen, click on one of the Kafka cloud sockets:
+    <ul>
+      <li><strong>Kafka Broker</strong> for producers or consumers</li>
+      <li><strong>Kafka Zookeeper</strong> for topics
+ <img src="assets/documentation/cloud_sockets/kafka_strings.png" alt=" Kafka Strings " title="Kafka Strings" /></li>
+    </ul>
+  </li>
+  <li>Use the strings on the right side of the screen to create commands as follows:</li>
+</ol>
+
+<h5 class="indent" id="producer">Producer</h5>
+
+<div class="code-wrapper">
+<pre class="indent copy-area" id="kafka-producer-string">kafka-console-producer --broker-list <span style="color:red"> BoostrapBrokerString </span> --topic testftb --producer.config <span style="color:red">client.properties</span>
+</pre>
+<button class="btn clipboard-btn" data-clipboard-target="#kafka-producer-string">Copy</button>
+</div>
+
+<ul class="indent">
+  <li>Replace <strong>BootstrapBrokerString</strong> with the string copied from the Kafka Broker cloud socket page.</li>
+  <li>Replace <strong>client.properties</strong> with the name of the file you created in step 1.</li>
+</ul>
+
+<h5 class="indent" id="consumer">Consumer</h5>
+
+<div class="code-wrapper">
+<pre class="indent copy-area" id="kafka-consumer-string">kafka-console-consumer --bootstrap-server <span style="color:red">BoostrapBrokerString</span> --topic testftb --from-beginning --consumer.config <span style="color:red">client.properties</span>
+</pre>
+<button class="btn clipboard-btn" data-clipboard-target="#kafka-consumer-string">Copy</button>
+</div>
+
+<ul class="indent">
+  <li>Replace <strong>BootstrapBrokerString</strong> with the string copied from the Kafka Broker cloud socket page.</li>
+  <li>Replace <strong>client.properties</strong> with the name of the file you created in step 1.</li>
+</ul>
+
+<h5 class="indent" id="topic">Topic</h5>
+
+<div class="code-wrapper">
+<pre class="indent copy-area" id="kafka-topic-string">kafka-topics --create --zookeeper <span style="color:red">ZookeeperConnectString</span> --replication-factor 1 --partitions 1 --topic testftb 
+</pre>
+<button class="btn clipboard-btn" data-clipboard-target="#kafka-topic-string">Copy</button>
+</div>
+
+<ul class="indent">
+  <li>Replace <strong>ZookeeperConnectString</strong> with the string copied from the Kafka Zookeeper cloud socket page.</li>
+</ul>
 
 <hr class="end-section" />
 
@@ -1404,17 +1491,11 @@ Successfully started job with id: 14
 
 <p>A Cazena Gateway manages secure connections between the datacloud and on-premises environments, allowing networking, VPN, data access, user access, analytics tools and manageability.</p>
 
-<p>From the Cazena console, you can <a href="#manage_cloud_sockets">manage cloud sockets</a>, which establish port forwarding rules between the Cazena gateway and endpoints. Endpoints can be located in data lakes, data marts, on-premise locations, or the <a href="#ovw_overview">AppCloud</a>. For more information, see the sections on <a href="#manage_cloud_sockets">managing</a> and <a href="#integration_with_datacloud">using</a> cloud sockets.</p>
-
-<p>The screen below shows the services that can be reached through ports on the Cazena gateway named <strong>cz_gw_01</strong>. The columns under <strong>Cazena Gateway Port</strong> show the status of the port (up or down), the port number and whether the port is activated.</p>
-
-<p><img src="assets/documentation/cazena_gateway/cazena_gateway.png" alt=" Cazena Gateway on Console " title="Cazena Gateway on Console" /></p>
-
-<p class="list">You can connect the Cazena gateway to the datacloud using either of these methods:</p>
+<p class="list">Cazena Gateways may be configured in either of the following ways:</p>
 
 <ul>
   <li>
-    <p><a href="#cgw_installation"><strong>Port forwarding</strong></a>: This is a simple configuration of the Cazena Gateway that requirements minimum networking configuration within the enterprise. It allows access to UIs as well as tool connectivity to APIs that have a single end point e.g. ODBC / JDBC.</p>
+    <p><a href="#cgw_installation"><strong>Port forwarding</strong></a>: This is a simple configuration of the Cazena Gateway that requirements minimal networking configuration within the enterprise. It allows access to UIs as well as tool connectivity to APIs that have a single end point e.g., ODBC / JDBC.</p>
 
     <p>The port forwarding configuration can use either IPsec or TLS VPN types. All traffic between the datacloud and the enterprise flows only through the <a href="#integration_with_datacloud">cloud sockets</a> configured for the Cazena Gateway.</p>
   </li>
@@ -1424,6 +1505,12 @@ Successfully started job with id: 14
     <p>The site-to-site configuration uses IPsec site-to-site VPN, joining the datacloud and enterprise networks virtually, as if they both were within a private enterprise network. In this way, all of the hosts in the PDC network can reach all the hosts in the enterprise network, and vice versa.  Additionally, any <a href="#integration_with_datacloud">cloud sockets</a> configured for the Cazena Gateway are also available.</p>
   </li>
 </ul>
+
+<p>From the Cazena console, you can <a href="#manage_cloud_sockets">manage cloud sockets</a>, which establish port forwarding rules between the Cazena gateway and endpoints. Endpoints can be located in data lakes, data marts, on-premise locations, or the <a href="#ovw_overview">AppCloud</a>. For more information, see the sections on <a href="#manage_cloud_sockets">managing</a> and <a href="#integration_with_datacloud">using</a> cloud sockets.</p>
+
+<p>The screen below shows the services that can be reached through ports on the Cazena gateway named <strong>cz_gw_01</strong>. The columns under <strong>Cazena Gateway Port</strong> show the status of the port (up or down), the port number and whether the port is activated.</p>
+
+<p><img src="assets/documentation/cazena_gateway/cazena_gateway.png" alt=" Cazena Gateway on Console " title="Cazena Gateway on Console" /></p>
 
 <h3 id="requirements">Requirements</h3>
 <p>To install a Cazena gateway, you will download an OVA file and then install it on a virtual machine in the enterprise data center. The requirements for the virtual machine are described here.</p>
@@ -3427,4 +3514,25 @@ Complete
 
 
 </body>
+
+<script>
+	$('.clipboard-btn').tooltip({
+		trigger: 'click',
+		placement: 'bottom'
+	});
+	function setTooltip(message) {
+		$('.clipboard-btn').tooltip('hide')
+						.attr('data-original-title', message)
+						.tooltip('show');
+	}
+	function hideTooltip() {
+		setTimeout(function() {
+			$('.clipboard-btn').tooltip('hide');
+			console.log('hiding')
+		}, 1000);
+	}
+    var btns = document.querySelectorAll('.clipboard-btn');
+    var clipboard = new ClipboardJS(btns);
+</script>
+
 </html>

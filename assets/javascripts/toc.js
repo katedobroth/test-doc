@@ -1,6 +1,8 @@
 // https://github.com/ghiculescu/jekyll-table-of-contents
 // Generates the Table of Content for the documentation
 (function($){
+    console.log('starting');
+
     $.fn.toc = function(options) {
         var defaults = {
                 noBackToTopLinks: true,
@@ -40,7 +42,9 @@
             show: function() { output.hide().html(html).show(settings.showSpeed); },
             slideDown: function() { output.hide().html(html).slideDown(settings.showSpeed); },
             fadeIn: function() { output.hide().html(html).fadeIn(settings.showSpeed); },
-            none: function() { output.html(html); }
+            none: function() { output.html(html);
+            console.log('headers');
+            }
         };
 
         var get_level = function(ele) { return parseInt(ele.nodeName.replace("H", ""), 10); }
