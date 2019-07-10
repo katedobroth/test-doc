@@ -40,7 +40,10 @@ If you are connecting to a service via a [Cazena Gateway](#cgw_cazena_gateway), 
 
 ## Dashboard {#dashboard}
 
-1. From the __Datacloud__ tab, click on the name of the data lake or data mart that you want to monitor.
+1. From the __Datacloud__ tab, click on the name of the data lake or data mart that you want to monitor.  
+
+    Note that dashboard metrics are not available for Kafka clusters.
+    {:.note}
 1. Select the __Dashboard__ tab.
 1. By default, the __Dashboard__ tab shows charts for the past hour. You can select a different timeframe at the top of the screen. 
 

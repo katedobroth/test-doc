@@ -49,7 +49,7 @@ For examples of using cloud sockets for moving data, see the [Move Data](#move_d
 
 Depending on the Cazena configuration at your site, you may have access to a multinode Kafka cluster.
 
-* This type of cluster requires a site-to-site configuration
+* This type of cluster requires a [site-to-site configuration](#cgw_cazena_gateway) for the Cazena gateway.
 * Endpoints are TLS and require Kerberos authentication
 
 ### Step 1: Kerberos setup
@@ -71,7 +71,7 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 2. Run `kinit <username>` and provide your password when prompted.
 
 
-### Step 2: Get Broker / Zookeeper strings
+### Step 2: Broker / Zookeeper strings
 {:.step}
 
 1. In the Cazena console, select the __Cloud Sockets__ tab.
@@ -91,7 +91,7 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 </div>
 
   * Replace __BootstrapBrokerString__ with the string copied from the Kafka Broker cloud socket page.
-  * Replace __client.properties__ with the name of the file you created in step 1.
+  * Replace __client.properties__ with the name of the file that you created in step 1.
   {:.indent}
 
 ##### Consumer
@@ -105,7 +105,7 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 </div>
 
   * Replace __BootstrapBrokerString__ with the string copied from the Kafka Broker cloud socket page.
-  * Replace __client.properties__ with the name of the file you created in step 1.
+  * Replace __client.properties__ with the name of the file that you created in step 1.
   {:.indent}
 
 

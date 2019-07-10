@@ -3,17 +3,11 @@
 
 You can set up cloud sockets with endpoints in any of these components:
 
-* __Data Lake or Data Mart__.
+* __Data Lake or Data Mart__: This type of custom cloud socket could be used, for example, to allow access to a tool such as Flume through a second Cazena gateway port.
 
-    Example: Allow access to a tool such as Flume through a second Cazena gateway port.
+* __Enterprise__: An enterprise cloud socket could be used, for example, to move data from an enterprise server into the datacloud using Sqoop.
 
-* __Enterprise__
-
-    Example: Set up a custom Enterprise cloud socket to move data from an enterprise server into the datacloud using Sqoop.
-
-* __AppCloud__
-
-    Example: Install Streamsets on an App Cloud node, and then create a custom cloud socket that allows access to that endpoint. The AppCloud allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud.
+* __AppCloud__:  The AppCloud allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud. An example use would be to install Streamsets on an App Cloud node, and then create a custom cloud socket that allows access to that endpoint. 
 
 ## Example: Enterprise Cloud Socket {#create_enterprise_socket}
 

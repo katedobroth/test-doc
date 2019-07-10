@@ -49,7 +49,7 @@ body {
 
   h5 {
     color: $primary-color;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 16px;
     margin-top: 2em;
   }
@@ -200,6 +200,7 @@ body {
         }
       }
     }
+
     .doc-title {
       padding-left: 10px;
     }
@@ -294,8 +295,9 @@ body {
   /* Specify column widths for tables */
 
   table {
-    width:100%;
+    width: 100%;
   }
+
   .table-10-90 {
     th:first-child {
       width: 10%;
@@ -386,6 +388,7 @@ body {
 
   .content {
     padding: 40px;
+
     img {
       border: 1px solid $light-gray-border;
       margin: 2em 0;
@@ -404,9 +407,10 @@ body {
     }
 
     pre {
-      padding: 25px 10px 10px;
+      padding: 10px;
       white-space: pre-wrap;
       word-break: break-all;
+
       &.show-whitespaces .ws-space-l {
         //For some reason, kramdown is inserting leading periods instead of spaces. Make them transparent.
         color: transparent;
@@ -419,6 +423,7 @@ body {
         font-size: 12px;
       }
     }
+
     .indent {
       margin-left: 30px;
     }
@@ -437,53 +442,60 @@ body {
       margin: 10px 0;
     }
   }
-}
-.icon-checkmark {
-  font-size: 22px;
-  color: green;
-}
 
-p.header {
-  margin-bottom: 0;
-}
-
-.code-wrapper {
-  position: relative;
-  button {
-    position: absolute;
-    background-color: $primary-color;
-    border-radius: 2px;
-    color: white;
-    top: 0;
-    right: 0;
-    padding: 2px 10px;
-    font-size: .8em;
-    &:hover {
-      box-shadow: rgba(0, 0, 0, 0.33) 1px 1px 5px;
-      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.11);
-      color: #fff;
-      background-color: #5379c4;
-
-    }
-    &:active,
-    &:focus {
-      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.11);
-      color: #fff;
-      background-color: #2d4b84;
-    }
+  .icon-checkmark {
+    font-size: 22px;
+    color: green;
   }
-  pre {
-    border-radius: 1px;
-    &.copy-area {
-    padding: 25px 10px 10px;
+
+  p.header {
+    margin-bottom: 0;
+  }
+
+  .code-wrapper {
+    position: relative;
+
+    button {
+      position: absolute;
+      background-color: $primary-color;
+      border-radius: 2px;
+      color: white;
+      top: 0;
+      right: 0;
+      padding: 2px 10px;
+      font-size: .8em;
+
+      &:hover {
+        box-shadow: rgba(0, 0, 0, 0.33) 1px 1px 5px;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.11);
+        color: #fff;
+        background-color: #5379c4;
+
+      }
+
+      &:active,
+      &:focus {
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.11);
+        color: #fff;
+        background-color: #2d4b84;
+      }
     }
-    code {
-      border: none;
-      color: $base-font-color;
-      display: block;
-      padding: 25px 10px 10px;
-      white-space: inherit;
-      word-break: inherit;
+
+    pre {
+      border-radius: 1px;
+
+      &.copy-area {
+        padding: 25px 10px 10px;
+      }
+
+      code {
+        border: none;
+        color: $base-font-color;
+        display: block;
+        padding: 25px 10px 10px;
+        white-space: inherit;
+        word-break: inherit;
+      }
     }
   }
 }

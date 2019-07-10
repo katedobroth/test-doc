@@ -2,27 +2,31 @@
 
 A Cazena Gateway manages secure connections between the datacloud and on-premises environments, allowing networking, VPN, data access, user access, analytics tools and manageability.
 
-Cazena Gateways may be configured in either of the following ways:
+Cazena Gateways may be configured in either of the following ways at your site:
 {:.list}
 
-* [__Port forwarding__](#cgw_installation): This is a simple configuration of the Cazena Gateway that requirements minimal networking configuration within the enterprise. It allows access to UIs as well as tool connectivity to APIs that have a single end point e.g., ODBC / JDBC.
+* __Port forwarding__: This is a simple configuration of the Cazena Gateway that requirements minimal networking configuration within the enterprise. It allows access to UIs as well as tool connectivity to APIs that have a single end point e.g., ODBC / JDBC.
 
-    The port forwarding configuration can use either IPsec or TLS VPN types. All traffic between the datacloud and the enterprise flows only through the [cloud sockets](#integration_with_datacloud) configured for the Cazena Gateway.
+    The port forwarding configuration uses an IPsec VPN. All traffic between the datacloud and the enterprise flows only through the [cloud sockets](#integration_with_datacloud) configured for the Cazena Gateway.
 
-
-* [__Site-to-Site__](#s2s_installation): This is a more complex configuration that requires networking configuration within the enterprise. It provides a wider range of tool connectivity options which include tools that rely on APIs that have multiple end points e.g. direct communication with Hadoop Namenode API.
+<div id="s2"></div>
+* __Site-to-Site__ : This is a more complex configuration that requires networking configuration within the enterprise. It provides a wider range of tool connectivity options, including tools that rely on APIs with multiple end points e.g., direct communication with Hadoop Namenode API.
 
     The site-to-site configuration uses IPsec site-to-site VPN, joining the datacloud and enterprise networks virtually, as if they both were within a private enterprise network. In this way, all of the hosts in the PDC network can reach all the hosts in the enterprise network, and vice versa.  Additionally, any [cloud sockets](#integration_with_datacloud) configured for the Cazena Gateway are also available.
 
+<strong style="color:red">In which configurations does this section still apply?</strong>
+
 From the Cazena console, you can [manage cloud sockets](#manage_cloud_sockets), which establish port forwarding rules between the Cazena gateway and endpoints. Endpoints can be located in data lakes, data marts, on-premise locations, or the [AppCloud](#ovw_overview). For more information, see the sections on [managing](#manage_cloud_sockets) and [using](#integration_with_datacloud) cloud sockets.
 
-  The screen below shows the services that can be reached through ports on the Cazena gateway named __cz_gw_01__. The columns under __Cazena Gateway Port__ show the status of the port (up or down), the port number and whether the port is activated.
+  The screen below shows the services that can be reached through ports on the Cazena gateway named __CZGW-01__. The columns under __Cazena Gateway Port__ show the status of the port (up or down), the port number and whether the port is activated.
 
 ![ Cazena Gateway on Console ](assets/documentation/cazena_gateway/cazena_gateway.png "Cazena Gateway on Console")
 
+## Install a New Cazena Gateway
+
+If your site is using Cazena gateways configured with port forwarding, you can install a new Cazena gateway.  You will download an OVA file and then install it on a virtual machine in the enterprise data center. 
 
 ### Requirements
-To install a Cazena gateway, you will download an OVA file and then install it on a virtual machine in the enterprise data center. The requirements for the virtual machine are described here.
 
 #### VMWare
 Currently the OVA is supported on VMware systems.
@@ -41,24 +45,17 @@ Currently the OVA is supported on VMware systems.
    * JDBC/IP connectivity to enterprise database servers
    * Outbound Internet connectivity on ports TCP 443 (TLS/SSL), UDP 500 (ISAKMP/IKE), UDP 4500 (IPsec NAT-T), UDP 123 (NTP)
 
-## Port Forwarding Configuration {#cgw_installation}
 
-__Note:__ Only system administrators may install Cazena gateways.
-{:.note}
-
-To install a Cazena gateway using port forwarding:
+### To install a Cazena gateway: {#cgw_installation}
 {:.list}
+The steps for installing a Cazena gateway are described in detail in the following sections.
 
-1. [Download the Cazena gateway .ova file](#ipsec_tls_download_ova).
-1. [Download JDBC files](#download_jdbc) (optional)
-1. [Gather information from the Cazena console,](#security_gateway) including the DNS name of the security gateway, the OpenVPN certificate (for TLS) and the pre-shared key (for IPSec).
+1. [Download and import the Cazena gateway .ova file](#ipsec_tls_download_ova).
 1. [Install the Cazena gateway.](#install_cgw)
 1. [Run `cgw-auto-start` to connect the gateway to your datacloud.](#ipsec_tls_cgw-auto-start)
 
-<br>
-These steps are described in detail in the following sections.
 
-### Step 1: Download the Cazena Gateway .ova file {#ipsec_tls_download_ova}
+### Step 1: Download and Import the Cazena Gateway .ova file {#ipsec_tls_download_ova}
 {:.step}
 
 1. Sign into the Cazena support site at <a href="https://support.cazena.com" target="_blank">support.cazena.com</a>
@@ -66,47 +63,19 @@ These steps are described in detail in the following sections.
 1. Click on the __Cazena Gateway__ link to download the .ova file.
 
 ##### If you are using vSphere/ESXi 6.5 {#esxi_65}
+{:.indent}
 
-VMware vSphere/ESXi 6.5 and later has deprecated its support for OVAs.  Untar the OVA file to extract the OVF and VMDK files. You will not need the MF file.
+ VMware vSphere/ESXi 6.5 and later has deprecated its support for OVAs.  Untar the OVA file to extract the OVF and VMDK files. You will not need the MF file.
+{:.indent}
 
     $ tar -xvf "CazenaGateway.ova"
     x CazenaGateway.ovf
     x CazenaGateway.mf
     x CazenaGateway-disk1.vmdk
+{:.indent}
 
 
-### Step 2: Download JDBC Files (optional) {#download_jdbc}
-{:.step}
-
-If you are connecting to Oracle or Netezza, you will need a database-specific JDBC driver. Currently, the Cazena Gateway has been qualified with the following JDBC drivers:
-{:.list}
-
-* Netezza 7.2.0, release ojdbc7-12.1.0.1.0-linux.x64.jar
-* Oracle 11gR2, release nzjdbc3.jar
-
-These files can be downloaded from the appropriate vendor.
-
-### Step 3: Gather Information from the Cazena Console {#security_gateway}
-{:.step}
-
-__Note:__ If you are unable to sign into the Cazena console, contact support@cazena.com for the information necessary for installing a Cazena gateway.
-{:.note}
-
-1. In the Cazena Console, select the __System__ tab.
-1. On the __Manage Gateways__ tab, click __Add a New Gateway__
-1. If you are using TLS, click on __OpenVPN config__ to download the certificate.
-1. Make a note of the __Security Gateway__ field.
-1. If you are using ipsec, you will also need the __Pre-Shared Key__.
-1. You can copy the commands with most of the fields filled in from this screen.
-
-![ New Gateway ](assets/documentation/cazena_gateway/new_gateway.png "New Gateway button")
-
-
-### Step 4: Install the Cazena Gateway {#install_cgw}
-{:.step}
-
-
-1. Import the CazenaGateway.ova file.
+ 4. Import the CazenaGateway.ova file.
 
 
     <table class="table-30-70 row-borders">
@@ -154,7 +123,12 @@ __Note:__ If you are unable to sign into the Cazena console, contact support@caz
       </tbody>
     </table>
 
-1. __Important:__ After the import has finished, open the VM's network settings and make sure the network adapter is set to 'bridged mode'. This will allow the CGW ethernet primary interface (eth0) to have an enterprise reachable IP address, so that it will be exposed to enterprise users.
+    __Important:__ After the import has finished, open the VM's network settings and make sure the network adapter is set to 'bridged mode'. This will allow the CGW ethernet primary interface (eth0) to have an enterprise reachable IP address, so that it will be exposed to enterprise users.
+    {:.note}
+
+
+### Step 2: Install the Cazena Gateway Certificate {#install_cgw}
+{:.step}
 
 
 1. Start the Cazena VM and sign into the gateway:
@@ -163,17 +137,21 @@ __Note:__ If you are unable to sign into the Cazena console, contact support@caz
 <br><br>
 
 
-1. __If you are using TLS__: Copy the certificate that you downloaded in the previous steps to the cazena user home directory. Do not unpack the file.
+1. Copy the Client Authentication Certificate that was emailed to you to the Cazena gateway.
 
-    __Example__: `$ scp cazena-openvpn.tar cazena@u.v.w.x:~`
+    __Option 1__: Use `scp` as in this example: `$ scp cazena.pem cazena@u.v.w.x:~ `
 
-1. If you are connecting to Oracle or Netezza, copy any needed JDBC driver(s) to the __Downloads__ directory
-
-    __Example__: `$ scp ~/Downloads/ojdbc7-12.1.0.1.0-linux.x64.jar cazena@v.x.y.z`
+    __Option 2__: Copy and paste the contents of the `cazena.pem` file into a new file on the Cazena gateway
 
 
+1. Install the certificate.
 
-### Step 5: Run `cgw-auto-start` to Connect the Cazena Gateway to Your Datacloud {#ipsec_tls_cgw-auto-start}
+    `$ cgw-install-cert cazena.pem` 
+
+
+
+
+### Step 3: Run `cgw-auto-start` to Connect the Cazena Gateway to Your Datacloud {#ipsec_tls_cgw-auto-start}
 {:.step}
 
 1. From a terminal window, use the IP address of the VM to connect to the Cazena gateway.
@@ -189,59 +167,46 @@ __Note:__ If you are unable to sign into the Cazena console, contact support@caz
 
 1. <a name="cgw-auto-start"/>Use `cgw-auto-start` to connect to the gateway.
 
-__Note__: You can copy these commands with some of the fields filled in from the screen that appears when you click __Add a New Gateway__.  See __[Step 3](#security_gateway)__.
-{:.note}
 
-
-
-  __TLS__:
-
-        cgw-auto-start -s [security-gateway-url] -t tls -u [cgw-user-username] -p [cgw-user-password] -n [cgw-name]
-
-  __ipsec__:
-
-      cgw-auto-start -s [security-gateway-dns-name] -t ipsec -u [cgw-user-username] -p [cgw-user-password] -n [cgw-name] -k [preshared-key]
+<div class="code-wrapper">
+<pre class="indent copy-area" id="cgw-auto-start-cmd">cgw-auto-start -t ipsec-crt -s <span style="color:red"> security-gateway-dns-name </span> -u <span style="color:red"> cgw-user-username </span> -p <span style="color:red">cgw-user-password </span> -k <span style="color:red">client-certificate-password</span> -n <span style="color:red">cgw-name</span> -w</pre>
+<button class="btn clipboard-btn" data-clipboard-target="#cgw-auto-start-cmd">Copy</button>
+</div>
 
 
   where:
 
-  * `[security-gateway-dns-name]` is the DNS name of the security gateway. (See __[Step 3](#security_gateway)__ ).
+  * `security-gateway-dns-name` is the DNS name of the security gateway, available in email from Cazena support or in the Cazena console. 
 
+  * `cgw-user-username` and `cgw-user-password` are the username and password of the dedicated gateway user.
 
-  * `[cgw-user-username]` and `[cgw-user-password]` are the username and password of the dedicated gateway user.
+  * `cgw-name` is a unique name for the Cazena gateway. The name may contain `A-Z`, `a-z`, `0-9` and `-`.
 
-  * `[cgw-name]` is a unique name for the Cazena gateway.
+  * `client-certificate-password` is the certificate password that was emailed to you.
 
-  * `[preshared-key]` is the preshared key.  (See __[Step 3](#security_gateway)__ ).
-
-  * (Optional): Use `-m` to set a different timeout from the default timeout of 30 seconds (e.g., `-m 120`). This timeout is used when downloading the Cazena gateway software. You may want to change it if you have to [troubleshoot](#cgw_troubleshooting) the Cazena gateway.
-
-
-
-  __Note__: The gateway name that you choose here will show on the __System__ tab. See the sections on [updating ports](#update_ports), creating [data stores](#data_stores) and [integration with the datacloud](#integration_with_datacloud).
-  {:.note}
+<br>
 
 #### Example
 
-     cgw-auto-start -s production.xxx.cazena.com -t tls -u cg_user -p my_password -n my_gateway
+    cgw-auto-start -t ipsec-crt -s portal.partner.cazena.com -u cazenauser -p password -n mygateway -k clientpassword -w
+ 
+The system will respond:
 
-1. The system will respond:
+    Starting up CGW auto restart
+    run cgw-auto-show or look in /var/log/cazena/cgw-auto.log to determine status
 
-        Starting up CGW auto restart
-        run cgw-auto-show or look in /var/log/cazena/cgw-auto.log to determine status
+  Inside of `/var/log/cazena/cgw-auto.log`, there are three lines giving the network address information, similar to this:
 
-      Inside of /var/log/cazena/cgw-auto.log, there are three lines giving the network address info, similar to this:
+  * PDC network: 10.128.80.0/21
+  * ENT address: 10.4.132.10
+  * ENT network: 10.4.132.0/24 10.4.133.0/24 10.4.130.0/23
 
-      * PDC network: 10.128.80.0/21
-      * ENT address: 10.4.132.10
-      * ENT network: 10.4.132.0/24 10.4.133.0/24 10.4.130.0/23
+  <br> For PDC DNS, the IP address of the IPA server is found in the file /etc/resolv.conf, similar to this:
 
-      <br> For PDC DNS, the IP address of the IPA server is found in the file /etc/resolv.conf, similar to this:
+  *   nameserver  10.128.80.48   # by strongswan
+<br><br>
 
-      *   nameserver  10.128.80.48   # by strongswan
-<br>
-
-2. Use `cgw-auto-show` to see the status:
+Use `cgw-auto-show` to see the status:
 
         $ cgw-auto-show
         Tunnel is up
@@ -250,195 +215,6 @@ __Note__: You can copy these commands with some of the fields filled in from the
 
 ---
 {:.end-section}
-
-## Site-to-Site Configuration {#s2s_installation}
-
-Before You Begin
-{:.step}
-
-
-The following can be obtained from Cazena support (support@cazena.com):
-{:.list}
-
-* PDC CIDR network address
-* An IPsec site-to-site Pre-Shared Key (PSK) exclusively for machine authentication
-* Dedicated Cazena user account for the site-to-site VPN connection
-* DNS name of the security gateway
-
-The following must be obtained from the enterprise network administrator:
-{:.list}
-
-* Enterprise CIDR network address(es) that cater for all user and source locations within the enterprise network
-
-* Enterprise IP address assigned to the CGW (must be within one of the Enterprise network addresses)
-
-<br>
-To install a Cazena gateway using IPSec site-to-site VPN, follow these steps:
-{:.list}
-
-1. [Download and install the Cazena gateway](#s2s_download_ova).
-1. [Run `cgw-auto-start`](#s2s_step2) to connect the gateway to your datacloud.
-1. [Modify the enterprise routing table](#routing_table) to add a static route for the PDC network.
-1. (Optional) Add a DNS forwarding entry to the enterprise DNS for forwarding `cazena.internal` requests to the IPA server.
-
-See the sections below for more details.
-
-### Step 1: Download and Install the Cazena Gateway .ova file {#s2s_download_ova}
-{:.step}
-
-1. Sign into the Cazena support site at <a href="https://support.cazena.com" target="_blank">support.cazena.com</a>
-1. Under __Cazena Support__, click on __Downloads__.
-1. Click on the __Cazena Gateway__ link to download the .ova file.
-
-##### If you are using vSphere/ESXi 6.5 {#esxi_65}
-
-VMware vSphere/ESXi 6.5 and later has deprecated its support for OVAs.  Untar the OVA file to extract the OVF and VMDK files. You will not need the MF file.
-
-    $ tar -xvf "CazenaGateway.ova"
-    x CazenaGateway.ovf
-    x CazenaGateway.mf
-    x CazenaGateway-disk1.vmdk
-
-
-1. Import the CazenaGateway.ova file.
-
-
-    <table class="table-30-70 row-borders">
-      <tbody>
-        <tr>
-          <th>Client</th>
-          <th>Instructions</th>
-        </tr>
-        <tr>
-          <td>VMWare Fusion</td>
-          <td>
-          <ol>
-              <li>Choose <strong>File > Import...</strong></li>
-               <li>Select the CGW OVA file.</li>
-           </ol>
-           </td>
-        </tr>
-        <tr>
-          <td>Virtual Machine Manager</td>
-          <td>
-          <ol>
-              <li>Choose <strong>Add > Import...</strong></li>
-               <li>Select the CGW OVA file.</li>
-           </ol>
-          </td>
-        </tr>
-        <tr>
-          <td>vSphere/ESXi Web client</td>
-          <td>
-            <ol>
-                <li>Choose <strong>Navigator -> Virtual Machines -> Create/Register VM...</strong></li>
-                <li>Select <strong>Deploy a virtual machine from an OVF or OVA file</strong></li>
-                <li>Enter a name</li>
-                <li>Select file(s)
-                    <ul>
-                    <li><em>5.0 to 6.0:</em> Add the OVA </li>
-                    <li><em>6.5 or later:</em> Add the OVF and VMDK files<br>
-                    (See <a href="#esxi_65">instructions</a> for untarring the OVA file.)
-                    </li>
-                    </ul>
-                 </li>
-            </ol>
-           </td>
-        </tr>
-      </tbody>
-    </table>
-
-1. __Important:__ After the import has finished, open the VM's network settings and make sure the network adapter is set to 'bridged mode'. This will allow the CGW ethernet primary interface (eth0) to have an enterprise reachable IP address, so that it will be exposed to enterprise users.
-
-
-1. Start the Cazena VM and sign into the gateway:
-    * username: `cazena`
-    * password: `cazena`
-<br><br>
-
-
-### Step 2: Run `cgw-auto-start` to Connect the Cazena Gateway to Your Datacloud {#s2s_step2}
-{:.step}
-
-
-1. From a terminal window, use the IP address of the VM to connect to the Cazena gateway.
-
-    __Example__:  `$ ssh cazena@w.x.y.z`
-
-1. Change the gateway's default password.
-
-   `$  sudo passwd`
-
-
-1. <a name="cgw-auto-start"/>Use `cgw-auto-start` to connect to the gateway:
-
-         cgw-auto-start -t ipsec-s2s -s [security-gateway-dns-name] -u [cgw-user-username] -p [cgw-user-password]  -n [cgw-name] -k [preshared-key] -e [enterprise-cidr-net-addresses]
-
-
-  where:
-
-  * `[security-gateway-dns-name]` is the DNS name of the security gateway. (Contact support@cazena.com for the DNS name).
-
-
-  * `[cgw-user-username]` and `[cgw-user-password]` are the username and password of the dedicated gateway user.
-
-  * `[cgw-name]` is a unique name for the Cazena gateway.
-
-  * `[preshared-key]` is the preshared key.
-
-      __Note:__ The preshared key for site-to-site is shown in the Cazena console, on the __System > VPN Configuration__ page. If you update the key, you will have to re-run `cgw-auto-start`.
-      {:.note}
-
-  * `[enterprise-cidr-net-addresses]` is one or more enterprise CIDR net addresses.
-
-    * You may specify multiple address, either with separate `-e` flags or as a comma separated list (e.g., `-e 10.4.133.0/24,10.4.130.0/23`).
-    * If an address is not specified, the address of the enterprise LAN network where the Cazena gateway resides will be used.
-
-For help with `cgw-auto-start` use `cgw-auto-start --help`.
-
-#### Example
-
-       cgw-auto-start -t ipsec-s2s -u cg_user -p my_password -s production.xxx.cazena.com -n my_gateway -k my-key -e 10.4.132.0/24 -e 10.4.133.0/24,10.4.130.0/23
-
-1. The system will respond:
-
-          Starting up CGW auto restart
-          run cgw-auto-show or look in /var/log/cazena/cgw-auto.log to determine status
-
-      Inside of /var/log/cazena/cgw-auto.log, there are three lines giving the network address info, similar to this:
-
-      * PDC network: 10.128.80.0/21
-      * ENT address: 10.4.132.10
-      * ENT network: 10.4.132.0/24 10.4.133.0/24 10.4.130.0/23
-
-      <br> For PDC DNS, the IP address of the IPA server is found in the file /etc/resolv.conf, similar to this:
-
-      *   nameserver  10.128.80.48   # by strongswan
-<br>
-2. Use `cgw-auto-show` to see the status:
-
-          $ cgw-auto-show
-          Tunnel is up
-          CGW DMC is up
-          CGW DMC version matches PDC version
-
-If the system responds differently to these commands, see the section on [troubleshooting.](#cgw_troubleshooting)
-
-### Step 3: Make changes in your network {#routing_table}
-{:.step}
-
-1. Modify the enterprise routing table to add a static route for the PDC network.
-
-    __Example:__ For a Linux network, add a route for the PDC network using the CGW’s enterprise network IP address as the gateway, e.g.:
-
-             sudo route add –net 10.128.80.0/21 gw 10.4.132.10
-
-
-1. (Optional) Add a DNS forwarding entry to the enterprise DNS for forwarding `cazena.internal` requests to Cazena's internal DNS.
-
-
-
-
 
 ## Troubleshooting {#cgw_troubleshooting}
 
@@ -488,23 +264,9 @@ Depending on what `cgw-auto-show` returns, refer to one of these sections:
 
 * Check with Cazena support to see if your site has a whitelist of allowed IP addresses. If so, the IP address of the Cazena gateway must be included in the whitelist.
 
-* Run one of the following commands (depending on the type of tunnel):
+* Run  `cgw-show-ipsec`.
 
-    * __For a TLS tunnel__:
-
-        <a name="cgw-show-tls"/>Run `cgw-show-tls`.
-
-        If the tunnel is up, you should see:
-
-            $ cgw-show-tls
-            tls tunnel up: connected to <DNS-NAME> (34.192.178.80:443) on Fri Nov 18 13:28:26 UTC 2016
-
-
-    * __For an ipsec tunnel__:
-
-        <a name="cgw-show-ipsec"/>Run  `cgw-show-ipsec`.
-
-        If the tunnel is up, you should see:
+  If the tunnel is up, you should see:
 
                 $ cgw-show-ipsec
 
@@ -545,7 +307,7 @@ If `cgw-auto-show` indicates that the tunnel is up but the CGW DMC is down:
     * UDP 500 (ISAKMP/IKE)
     * UDP 4500 (IPsec NAT-T)
 
-###Trouble with data movement {#troubleshoot_connectivity}
+### Trouble with data movement {#troubleshoot_connectivity}
 
 If you are having trouble moving data, first follow the steps in the previous section to ensure that the Cazena Gateway is operating correctly. Next, you can:
 
@@ -592,12 +354,12 @@ __For Netezza, Oracle or FTP/SFTP:__
 
 <br>
 
+
 #### Measure Latency and Throughput {#cgw_throughput_latency}
 
 If the tunnel and DMC are both up and the IP service connectivity is correct, then there could be an issue with latency or throughput performance. You can use `cgw-speed-test.py` to test both [latency](#speed-test-latency) and [throughput](#speed-test-throughput).
 
-Before You Begin
-{:.step}
+##### Before You Begin
 
 Connect to the Cazena gateway and get the DNS name for the security gateway.
 
