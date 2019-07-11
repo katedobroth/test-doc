@@ -82,27 +82,6 @@
 
 <p>The  <strong>Cloud Sockets</strong> tab displays the URLs, hostnames and ports needed to connect to various services exposed on the Cazena Gateway. This tab also displays the status (Good Health, Warning, or Critical) of preconfigured services. Click on any service on the left side of the screen to view connection details for that service.</p>
 
-<p>See the section on <a href="#manage_cloud_sockets">Managing Cloud Sockets</a> to learn how to configure custom cloud sockets.</p>
-
-<p><img src="assets/documentation/cloud_sockets/sample_cloud_socket.png" alt=" RStudio Cloud Socket " title="RStudio Cloud Socket" /></p>
-
-<p class="list">The details for a cloud socket contain two sections:</p>
-
-<h5 id="from-outside-the-datacloud">From outside the datacloud</h5>
-<p>Use the URL on the right side to connect to a service (e.g., RStudio) from outside of the datacloud. This will establish a secure connection to the service through the Cazena Gateway.</p>
-
-<p>If your site uses a site-to-site Cazena gateway configuration, the DNS link at the bottom of the screen will also work.</p>
-
-<p><img src="assets/documentation/cloud_sockets/rstudio_url.png" alt=" RStudio URL " title="RStudio IP Address:Port" /></p>
-
-<p><br />
-<br /></p>
-
-<h5 id="from-inside-the-datacloud">From inside the datacloud</h5>
-<p>Use the DNS address to connect to a service from an endpoint inside the datacloud. For example, once you had connected to RStudio, you could <a href="#hive">connect to Hive via RJDBC</a> using the DNS address.  (See the example below for details about <a href="#hadoop_jars">Hadoop Jars</a>.)</p>
-
-<p><img src="assets/documentation/cloud_sockets/hive_dns.png" alt=" Hive DNS:Port " title="Hive DNS:Port" /></p>
-
 <p class="list">In this section, we review examples of how to use cloud sockets to make the following kinds of connections:</p>
 
 <ul>
@@ -116,8 +95,6 @@
 </ul>
 
 <p>For examples of using cloud sockets for moving data, see the <a href="#move_data">Move Data</a> section.</p>
-
-<hr class="end-section" />
 
 <h2 id="kafka_strings">Kafka and Zookeeper</h2>
 
@@ -2176,7 +2153,7 @@ Complete
 <hr class="end-section" />
 
         </section>
-        
+
         <section id="users">
           
           

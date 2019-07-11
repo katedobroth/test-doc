@@ -2,32 +2,6 @@
 
 The  __Cloud Sockets__ tab displays the URLs, hostnames and ports needed to connect to various services exposed on the Cazena Gateway. This tab also displays the status (Good Health, Warning, or Critical) of preconfigured services. Click on any service on the left side of the screen to view connection details for that service.
 
-See the section on [Managing Cloud Sockets](#manage_cloud_sockets) to learn how to configure custom cloud sockets.
-
-![ RStudio Cloud Socket ](assets/documentation/cloud_sockets/sample_cloud_socket.png "RStudio Cloud Socket")
-
-
-
-The details for a cloud socket contain two sections:
-{:.list}
-
-##### From outside the datacloud
- Use the URL on the right side to connect to a service (e.g., RStudio) from outside of the datacloud. This will establish a secure connection to the service through the Cazena Gateway. 
-
- If your site uses a site-to-site Cazena gateway configuration, the DNS link at the bottom of the screen will also work.
-
-
-![ RStudio URL ](assets/documentation/cloud_sockets/rstudio_url.png "RStudio IP Address:Port")
-
-<br/>
-<br/>
-
-##### From inside the datacloud
- Use the DNS address to connect to a service from an endpoint inside the datacloud. For example, once you had connected to RStudio, you could [connect to Hive via RJDBC](#hive) using the DNS address.  (See the example below for details about [Hadoop Jars](#hadoop_jars).)
- 
-
-![ Hive DNS:Port ](assets/documentation/cloud_sockets/hive_dns.png "Hive DNS:Port")
-
 
 In this section, we review examples of how to use cloud sockets to make the following kinds of connections:
 {:.list}
@@ -42,8 +16,6 @@ In this section, we review examples of how to use cloud sockets to make the foll
 
 For examples of using cloud sockets for moving data, see the [Move Data](#move_data) section.
 
----
-{:.end-section}
 
 ## Kafka and Zookeeper {#kafka_strings}
 
