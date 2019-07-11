@@ -131,7 +131,7 @@
 <h3 class="step" id="step-1-kerberos-setup">Step 1: Kerberos setup</h3>
 
 <ol>
-  <li>In the command line, create a file called <code class="highlighter-rouge">client.properties</code> with the the following:</li>
+  <li>In the command line, create a file called <code class="highlighter-rouge">client.properties</code> with the following:</li>
 </ol>
 
 <div class="code-wrapper">
@@ -1491,34 +1491,33 @@ Successfully started job with id: 14
 
 <p>A Cazena Gateway manages secure connections between the datacloud and on-premises environments, allowing networking, VPN, data access, user access, analytics tools and manageability.</p>
 
-<p class="list">Cazena Gateways may be configured in either of the following ways at your site:</p>
+<p class="list">There are two types of configurations for Cazena Gateways:  <strong>Port Forwarding</strong> and <strong>Site-to-site</strong> . Your company may use either or both of these configurations.</p>
+
+<h4 id="site-to-site-cgw">Site-to-Site</h4>
+
+<p>Site-to-site requires networking configuration within the enterprise. It provides a wide range of tool connectivity options, including tools that rely on APIs with multiple end points e.g., direct communication with Hadoop Namenode API.</p>
+
+<p>The site-to-site configuration uses IPsec site-to-site VPN, joining the datacloud and enterprise networks virtually, as if they both were within a private enterprise network. In this way, all of the hosts in the PDC network can reach all the hosts in the enterprise network, and vice versa.  Additionally, any <a href="#integration_with_datacloud">cloud sockets</a> configured for the Cazena gateway are also available.</p>
+
+<p>Site-to-site configurations cannot be managed through the Cazena console. For assistance, contact support@cazena.com.</p>
+
+<h4 id="port-forwarding-cgw">Port forwarding</h4>
+
+<p>This is a simple configuration of the Cazena Gateway that requirements minimal networking configuration within the enterprise. It allows access to UIs as well as tool connectivity to APIs that have a single end point e.g., ODBC / JDBC.</p>
+
+<p>The port forwarding configuration uses an IPsec VPN. All traffic between the datacloud and the enterprise flows only through the <a href="#integration_with_datacloud">cloud sockets</a> configured for the Cazena Gateway.</p>
+
+<p>Cazena Gateways that use the port forwarding configuration can be managed using the Cazena console. The rest of this section describes the following:</p>
 
 <ul>
-  <li>
-    <p><strong>Port forwarding</strong>: This is a simple configuration of the Cazena Gateway that requirements minimal networking configuration within the enterprise. It allows access to UIs as well as tool connectivity to APIs that have a single end point e.g., ODBC / JDBC.</p>
-
-    <p>The port forwarding configuration uses an IPsec VPN. All traffic between the datacloud and the enterprise flows only through the <a href="#integration_with_datacloud">cloud sockets</a> configured for the Cazena Gateway.</p>
-  </li>
+  <li><a href="#install_new_gateway">Install a new Cazena gateway</a></li>
+  <li><a href="#manage_cloud_sockets">Create custom cloud sockets</a></li>
+  <li><a href="#update_ports">Activate and update ports</a></li>
+  <li><a href="#cgw_troubleshooting">Troubleshooting</a></li>
+  <li><a href="#cgw_delete">Stop and delete a Cazena gateway</a></li>
 </ul>
 
-<div id="s2"></div>
-<ul>
-  <li>
-    <p><strong>Site-to-Site</strong> : This is a more complex configuration that requires networking configuration within the enterprise. It provides a wider range of tool connectivity options, including tools that rely on APIs with multiple end points e.g., direct communication with Hadoop Namenode API.</p>
-
-    <p>The site-to-site configuration uses IPsec site-to-site VPN, joining the datacloud and enterprise networks virtually, as if they both were within a private enterprise network. In this way, all of the hosts in the PDC network can reach all the hosts in the enterprise network, and vice versa.  Additionally, any <a href="#integration_with_datacloud">cloud sockets</a> configured for the Cazena Gateway are also available.</p>
-  </li>
-</ul>
-
-<p><strong style="color:red">In which configurations does this section still apply?</strong></p>
-
-<p>From the Cazena console, you can <a href="#manage_cloud_sockets">manage cloud sockets</a>, which establish port forwarding rules between the Cazena gateway and endpoints. Endpoints can be located in data lakes, data marts, on-premise locations, or the <a href="#ovw_overview">AppCloud</a>. For more information, see the sections on <a href="#manage_cloud_sockets">managing</a> and <a href="#integration_with_datacloud">using</a> cloud sockets.</p>
-
-<p>The screen below shows the services that can be reached through ports on the Cazena gateway named <strong>CZGW-01</strong>. The columns under <strong>Cazena Gateway Port</strong> show the status of the port (up or down), the port number and whether the port is activated.</p>
-
-<p><img src="assets/documentation/cazena_gateway/cazena_gateway.png" alt=" Cazena Gateway on Console " title="Cazena Gateway on Console" /></p>
-
-<h2 id="install-a-new-cazena-gateway">Install a New Cazena Gateway</h2>
+<h2 id="install_new_gateway">Install a New Cazena Gateway</h2>
 
 <p>If your site is using Cazena gateways configured with port forwarding, you can install a new Cazena gateway.  You will download an OVA file and then install it on a virtual machine in the enterprise data center.</p>
 
@@ -1553,6 +1552,7 @@ Successfully started job with id: 14
   <li><a href="#ipsec_tls_download_ova">Download and import the Cazena gateway .ova file</a>.</li>
   <li><a href="#install_cgw">Install the Cazena gateway.</a></li>
   <li><a href="#ipsec_tls_cgw-auto-start">Run <code class="highlighter-rouge">cgw-auto-start</code> to connect the gateway to your datacloud.</a></li>
+  <li><a href="#dns_a_record">Create an A record in the enterprise DNS</a></li>
 </ol>
 
 <h3 id="ipsec_tls_download_ova" class="step">Step 1: Download and Import the Cazena Gateway .ova file</h3>
@@ -1639,9 +1639,10 @@ x CazenaGateway-disk1.vmdk
   <li>
     <p>Copy the Client Authentication Certificate that was emailed to you to the Cazena gateway.</p>
 
-    <p><strong>Option 1</strong>: Use <code class="highlighter-rouge">scp</code> as in this example: <code class="highlighter-rouge">$ scp cazena.pem cazena@u.v.w.x:~ </code></p>
-
-    <p><strong>Option 2</strong>: Copy and paste the contents of the <code class="highlighter-rouge">cazena.pem</code> file into a new file on the Cazena gateway</p>
+    <ul>
+      <li><strong>Option 1</strong>: Use <code class="highlighter-rouge">scp</code> as in this example: <code class="highlighter-rouge">$ scp cazena.pem cazena@u.v.w.x:~ </code></li>
+      <li><strong>Option 2</strong>: Copy and paste the contents of the <code class="highlighter-rouge">cazena.pem</code> file into a new file on the Cazena gateway</li>
+    </ul>
   </li>
   <li>
     <p>Install the certificate.</p>
@@ -1729,8 +1730,77 @@ run cgw-auto-show or look in /var/log/cazena/cgw-auto.log to determine status
     CGW DMC version matches PDC version
 </code></pre></div></div>
 
+<h3 id="dns_a_record" class="step">Step 4: Create an A Record in the Enterprise DNS</h3>
+
+<p>When the Cazena Gateway is installed, onsite administrators will assign a private IP address to the VM where the gateway resides.  An <strong>A record</strong> allows the enterprise to refer to the Cazena gateway using an FQDN rather than the IP address. Because all Cazena endpoints are TLS-enabled, this FQDN must match the public certificate that is used for your single-tenant deployment.</p>
+
+<p>The A record is a DNS entry that is added to the enterprise DNS. It will be of the form:</p>
+
+<pre class="indent"><span style="color:red"> gateway-name</span>.pvt.<span style="color:red">customer-hash</span>.cazena.com
+</pre>
+
+<p class="indent">where</p>
+
+<ul>
+  <li><code class="highlighter-rouge">gateway-name</code> is the name of your Cazena gateway, as specified in <code class="highlighter-rouge">cgw-auto-start</code></li>
+  <li><code class="highlighter-rouge">customer-hash</code> is the name of your PDC.</li>
+</ul>
+
+<p>Note that this A record will not prevent you from reaching <a href="https://www.cazena.com">www.cazena.com</a>. The A record is for the subzone <code class="highlighter-rouge">[gateway-name].pvt.[customer-hash].cazena.com</code>.</p>
+
 <hr class="end-section" />
 
+<h2 id="manage_cloud_sockets">Custom Cloud Sockets</h2>
+
+<p>You can set up cloud sockets with endpoints in any of these components:</p>
+
+<ul>
+  <li>
+    <p><strong>Data Lake or Data Mart</strong>: This type of custom cloud socket could be used, for example, to allow access to a tool such as Flume through a second Cazena gateway port.</p>
+  </li>
+  <li>
+    <p><strong>Enterprise</strong>: An enterprise cloud socket could be used, for example, to move data from an enterprise server into the datacloud using Sqoop.</p>
+  </li>
+  <li>
+    <p><strong>AppCloud</strong>:  The AppCloud allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud. An example use would be to install Streamsets on an App Cloud node, and then create a custom cloud socket that allows access to that endpoint.</p>
+  </li>
+</ul>
+
+<h3 id="create_enterprise_socket">Example: Enterprise Cloud Socket</h3>
+
+<p>This examples shows how to set up a custom Enterprise cloud socket, which might be used to move data from an enterprise server into the datacloud using Sqoop. Instructions for using Sqoop can be found in the <a href="#sqoop">Data Movement section</a>.</p>
+
+<ol>
+  <li>On <strong>System &gt; Manage Gateways</strong> , select <strong>Enterprise</strong> on the left side of the screen. If there are multiple Cazena Gateways, make your selection under the gateway that you want to use.</li>
+  <li>Click <strong>New Cloud Socket</strong>.</li>
+  <li>Enter a name and (optional) description for the cloud socket.</li>
+  <li>Select the the port number and protocol that you want to use for the Cazena Gateway. You may use the same port number with different protocols. For example, you could have two cloud sockets that both use port 11300, with one over TCP and one over UDP.</li>
+  <li>In the <strong>Endpoint</strong> section, enter the IP address and port for the enterprise server.</li>
+  <li><em>Optional:</em> You may enter an additional path to the location on the enterprise server.</li>
+  <li>Click <strong>Save</strong>.</li>
+</ol>
+
+<p class="image-no-outline"><img src="assets/documentation/cloud_sockets/ent_cloud_socket.png" alt=" Enterprise Cloud Socket " title="Enterprise Cloud Socket" /></p>
+
+<h2 id="update_ports">Activate and Update Ports</h2>
+
+<p>From the Cazena console, system administrators may specify the ports in the environment that will be used for each service on Cazena gateway(s).</p>
+
+<p class="list">To manage ports, click on the <strong>System</strong> tab. By default, you will see a list Cazena gateways on the left side of the screen. Under each gateway, you will see each of your data lakes and/or data marts, as well as an option to view <a href="#enterprise_cloud_socket">enterprise services</a> associated with that gateway.</p>
+
+<ol>
+  <li>Under any Cazena gateway in the list, click on the name of a data lake or data mart, or Enterprise Services.</li>
+  <li>
+    <p>Click on any port number on the right to change its default value.</p>
+
+    <p class="note"><strong>Note:</strong> Port numbers must be in the range 32768 - 60999.</p>
+  </li>
+  <li>Use the slider in the <strong>Active</strong> column to activate or deactivate any port.</li>
+</ol>
+
+<p><img src="assets/documentation/cazena_gateway/czgw_manage_ports.png" alt=" Activate and Update Ports " title="Activate and Update Ports" /></p>
+
+<hr class="end-section" />
 <h2 id="cgw_troubleshooting">Troubleshooting</h2>
 
 <p class="list">Follow these steps if you have run <code class="highlighter-rouge">cgw-auto-start</code> and either:</p>
@@ -2106,63 +2176,7 @@ Complete
 <hr class="end-section" />
 
         </section>
-
-        <section id="manage_cloud_sockets">
-          
-          <h1 id="manage_cloud_sockets">Manage Cloud Sockets</h1>
-
-<p>You can set up cloud sockets with endpoints in any of these components:</p>
-
-<ul>
-  <li>
-    <p><strong>Data Lake or Data Mart</strong>: This type of custom cloud socket could be used, for example, to allow access to a tool such as Flume through a second Cazena gateway port.</p>
-  </li>
-  <li>
-    <p><strong>Enterprise</strong>: An enterprise cloud socket could be used, for example, to move data from an enterprise server into the datacloud using Sqoop.</p>
-  </li>
-  <li>
-    <p><strong>AppCloud</strong>:  The AppCloud allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud. An example use would be to install Streamsets on an App Cloud node, and then create a custom cloud socket that allows access to that endpoint.</p>
-  </li>
-</ul>
-
-<h2 id="create_enterprise_socket">Example: Enterprise Cloud Socket</h2>
-
-<p>This examples shows how to set up a custom Enterprise cloud socket, which might be used to move data from an enterprise server into the datacloud using Sqoop. Instructions for using Sqoop can be found in the <a href="#sqoop">Data Movement section</a>.</p>
-
-<ol>
-  <li>On <strong>System &gt; Manage Gateways</strong> , select <strong>Enterprise</strong> on the left side of the screen. If there are multiple Cazena Gateways, make your selection under the gateway that you want to use.</li>
-  <li>Click <strong>New Cloud Socket</strong>.</li>
-  <li>Enter a name and (optional) description for the cloud socket.</li>
-  <li>Select the the port number and protocol that you want to use for the Cazena Gateway. You may use the same port number with different protocols. For example, you could have two cloud sockets that both use port 11300, with one over TCP and one over UDP.</li>
-  <li>In the <strong>Endpoint</strong> section, enter the IP address and port for the enterprise server.</li>
-  <li><em>Optional:</em> You may enter an additional path to the location on the enterprise server.</li>
-  <li>Click <strong>Save</strong>.</li>
-</ol>
-
-<p class="image-no-outline"><img src="assets/documentation/cloud_sockets/ent_cloud_socket.png" alt=" Enterprise Cloud Socket " title="Enterprise Cloud Socket" /></p>
-
-<h2 id="update_ports">Activate and Update Ports</h2>
-
-<p>From the Cazena console, system administrators may specify the ports in the environment that will be used for each service on Cazena gateway(s).</p>
-
-<p class="list">To manage ports, click on the <strong>System</strong> tab. By default, you will see a list Cazena gateways on the left side of the screen. Under each gateway, you will see each of your data lakes and/or data marts, as well as an option to view <a href="#enterprise_cloud_socket">enterprise services</a> associated with that gateway.</p>
-
-<ol>
-  <li>Under any Cazena gateway in the list, click on the name of a data lake or data mart, or Enterprise Services.</li>
-  <li>
-    <p>Click on any port number on the right to change its default value.</p>
-
-    <p class="note"><strong>Note:</strong> Port numbers must be in the range 32768 - 60999.</p>
-  </li>
-  <li>Use the slider in the <strong>Active</strong> column to activate or deactivate any port.</li>
-</ol>
-
-<p><img src="assets/documentation/cazena_gateway/czgw_manage_ports.png" alt=" Activate and Update Ports " title="Activate and Update Ports" /></p>
-
-<hr class="end-section" />
-
-        </section>
-
+        
         <section id="users">
           
           

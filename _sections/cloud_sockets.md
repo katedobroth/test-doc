@@ -55,7 +55,7 @@ Depending on the Cazena configuration at your site, you may have access to a mul
 ### Step 1: Kerberos setup
 {:.step}
 
-1. In the command line, create a file called `client.properties` with the the following:
+1. In the command line, create a file called `client.properties` with the following:
 
 <div class="code-wrapper">
 <pre class="indent copy-area" id="client-properties">
