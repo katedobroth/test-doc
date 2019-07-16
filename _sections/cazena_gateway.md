@@ -177,7 +177,7 @@ The steps for installing a Cazena gateway are described in detail in the followi
 
 
 <div class="code-wrapper">
-<pre class="indent copy-area" id="cgw-auto-start-cmd">cgw-auto-start -t ipsec-crt -s <span style="color:red"> security-gateway-dns-name </span> -u <span style="color:red"> cgw-user-username </span> -p <span style="color:red">cgw-user-password </span> -k <span style="color:red">client-certificate-password</span> -n <span style="color:red">cgw-name</span> -w</pre>
+<pre class="indent copy-area" id="cgw-auto-start-cmd">cgw-auto-start -t ipsec-crt -s <span style="color:red">security-gateway-dns-name</span> -u<span style="color:red"> cgw-user-username</span> -p <span style="color:red">cgw-user-password</span> -n <span style="color:red">cgw-name</span> -k <span style="color:red">client-certificate-password</span> -w</pre>
 <button class="btn clipboard-btn" data-clipboard-target="#cgw-auto-start-cmd">Copy</button>
 </div>
 
@@ -186,7 +186,7 @@ The steps for installing a Cazena gateway are described in detail in the followi
 
   * `security-gateway-dns-name` is the DNS name of the security gateway, available in email from Cazena support or in the Cazena console. 
 
-  * `cgw-user-username` and `cgw-user-password` are the username and password of the dedicated gateway user.
+  * `cgw-user-username` and `cgw-user-password` are the username and password of the dedicated gateway user. This may have been emailed to you by Cazena support.
 
   * `cgw-name` is a unique name for the Cazena gateway. The name may contain `A-Z`, `a-z`, `0-9` and `-`.
 
@@ -238,7 +238,8 @@ where
   * `gateway-name` is the name of your Cazena gateway, as specified in `cgw-auto-start`
   * `customer-hash` is the name of your PDC. 
 
-Note that this A record will not prevent you from reaching [www.cazena.com](https://www.cazena.com). The A record is for the subzone `[gateway-name].pvt.[customer-hash].cazena.com`.
+__Note__: This A record will not prevent you from reaching [www.cazena.com](https://www.cazena.com). The A record is for the subzone `[gateway-name].pvt.[customer-hash].cazena.com`.
+{:.note}
 
 ---
 {:.end-section}

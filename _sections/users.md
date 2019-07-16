@@ -5,13 +5,10 @@ When Cazena creates your Cazena datacloud, Cazena support will create a system a
 
 ## Create User Accounts {#create_users}
 
-Users with System Administrator privileges can manage users. 
-{:.note}
-
 Before You Start
 {:.step}
 
-Before you can create new user accounts, you must have a Cazena gateway running. In addition, the Cazena console must be enabled on that gateway:
+If your site is using a [port forwarding](#port-forwarding-cgw) configuration, you must have a Cazena gateway running before you can create new user accounts. In addition, the Cazena console must be enabled on that gateway:
 {:.list}
 
 1. Select __System__ > __Manage Gateways__. 

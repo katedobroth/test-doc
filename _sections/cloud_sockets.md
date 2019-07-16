@@ -19,15 +19,15 @@ For examples of using cloud sockets for moving data, see the [Move Data](#move_d
 
 ## Kafka and Zookeeper {#kafka_strings}
 
-Depending on the Cazena configuration at your site, you may have access to a multinode Kafka cluster.
+Depending on the Cazena configuration at your site, you may have access to a Kafka cluster.
 
 * This type of cluster requires a [site-to-site configuration](#cgw_cazena_gateway) for the Cazena gateway.
-* Endpoints are TLS and require Kerberos authentication
+* Endpoints are TLS and require Kerberos authentication.
 
 ### Step 1: Kerberos setup
 {:.step}
 
-1. In the command line, create a file called `client.properties` with the following:
+1. The Kafka service is Kerberos-enabled as well as TLS-enabled. You will need to obtain the appropriate credentials prior to any actions. The following is an example file that holds authentication details. In this example, the file is called `client.properties`.
 
 <div class="code-wrapper">
 <pre class="indent copy-area" id="client-properties">
@@ -40,14 +40,14 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 <button class="btn clipboard-btn" data-clipboard-target="#client-properties">Copy</button>
 </div>
 
-2. Run `kinit <username>` and provide your password when prompted.
+1. Obtain a Kerberos ticket. To do this interactively on the command line you can run `kinit <username>` and provide your password when prompted. 
 
 
 ### Step 2: Broker / Zookeeper strings
 {:.step}
 
 1. In the Cazena console, select the __Cloud Sockets__ tab.
-1. On the left side of the screen, click on one of the Kafka cloud sockets:
+1. On the left side of the screen, select one of the Kafka cloud sockets:
     * __Kafka Broker__ for producers or consumers
     * __Kafka Zookeeper__ for topics
     ![ Kafka Strings ](assets/documentation/cloud_sockets/kafka_strings.png "Kafka Strings")
@@ -57,13 +57,14 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 {:.indent}
 
 <div class="code-wrapper">
-<pre class="indent copy-area" id="kafka-producer-string">kafka-console-producer --broker-list <span style="color:red"> BoostrapBrokerString </span> --topic testftb --producer.config <span style="color:red">client.properties</span>
+<pre class="indent copy-area" id="kafka-producer-string">kafka-console-producer --broker-list <span style="color:red">BoostrapBrokerString</span> --topic <span style="color:red">yourtopic</span> --producer.config <span style="color:red">client.properties</span>
 </pre>
 <button class="btn clipboard-btn" data-clipboard-target="#kafka-producer-string">Copy</button>
 </div>
 
   * Replace __BootstrapBrokerString__ with the string copied from the Kafka Broker cloud socket page.
   * Replace __client.properties__ with the name of the file that you created in step 1.
+  * Replace __yourtopic__ with your kafka topic. 
   {:.indent}
 
 ##### Consumer
@@ -71,13 +72,15 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 
 
 <div class="code-wrapper">
-<pre class="indent copy-area" id="kafka-consumer-string">kafka-console-consumer --bootstrap-server <span style="color:red">BoostrapBrokerString</span> --topic testftb --from-beginning --consumer.config <span style="color:red">client.properties</span>
+<pre class="indent copy-area" id="kafka-consumer-string">kafka-console-consumer --bootstrap-server <span style="color:red">BoostrapBrokerString</span> --topic <span style="color:red">yourtopic</span> --from-beginning --consumer.config <span style="color:red">client.properties</span>
 </pre>
 <button class="btn clipboard-btn" data-clipboard-target="#kafka-consumer-string">Copy</button>
 </div>
 
   * Replace __BootstrapBrokerString__ with the string copied from the Kafka Broker cloud socket page.
   * Replace __client.properties__ with the name of the file that you created in step 1.
+  * Replace __yourtopic__ with your kafka topic. 
+
   {:.indent}
 
 
@@ -86,17 +89,26 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 
 
 <div class="code-wrapper">
-<pre class="indent copy-area" id="kafka-topic-string">kafka-topics --create --zookeeper <span style="color:red">ZookeeperConnectString</span> --replication-factor 1 --partitions 1 --topic testftb 
+<pre class="indent copy-area" id="kafka-topic-string">kafka-topics --create --zookeeper <span style="color:red">ZookeeperConnectString</span> --replication-factor 1 --partitions 1 --topic <span style="color:red">yourtopic</span> 
 </pre>
 <button class="btn clipboard-btn" data-clipboard-target="#kafka-topic-string">Copy</button>
 </div>
 
   * Replace __ZookeeperConnectString__ with the string copied from the Kafka Zookeeper cloud socket page.
+  * Replace __yourtopic__ with your kafka topic. 
   {:.indent}
 
 ---
 {:.end-section}
 
+## Oozie {#oozie_email}
+
+#### Email service
+Oozie workflows allow email actions to inform users of workflow status. To optimize the delivery of these emails, please supply Cazena support with:
+  * The details of your enterprise SMTP service
+  * A __From:__ email address. This allows status emails to originate with a known email address, so that emails are not filtered to spam folders.
+
+If the Enterprise SMTP is not used, then the Cazena service will default to a built-in SMTP service. This component is not designed for high volumes of email, and can therefore cannot guarantee delivery of large number of messages.
 
 ## Connect to Hive or Impala With the RStudio Connections Pane {#rstudio_connection_pane}
 

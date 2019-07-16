@@ -98,17 +98,17 @@
 
 <h2 id="kafka_strings">Kafka and Zookeeper</h2>
 
-<p>Depending on the Cazena configuration at your site, you may have access to a multinode Kafka cluster.</p>
+<p>Depending on the Cazena configuration at your site, you may have access to a Kafka cluster.</p>
 
 <ul>
   <li>This type of cluster requires a <a href="#cgw_cazena_gateway">site-to-site configuration</a> for the Cazena gateway.</li>
-  <li>Endpoints are TLS and require Kerberos authentication</li>
+  <li>Endpoints are TLS and require Kerberos authentication.</li>
 </ul>
 
 <h3 class="step" id="step-1-kerberos-setup">Step 1: Kerberos setup</h3>
 
 <ol>
-  <li>In the command line, create a file called <code class="highlighter-rouge">client.properties</code> with the following:</li>
+  <li>The Kafka service is Kerberos-enabled as well as TLS-enabled. You will need to obtain the appropriate credentials prior to any actions. The following is an example file that holds authentication details. In this example, the file is called <code class="highlighter-rouge">client.properties</code>.</li>
 </ol>
 
 <div class="code-wrapper">
@@ -123,14 +123,14 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 </div>
 
 <ol>
-  <li>Run <code class="highlighter-rouge">kinit &lt;username&gt;</code> and provide your password when prompted.</li>
+  <li>Obtain a Kerberos ticket. To do this interactively on the command line you can run <code class="highlighter-rouge">kinit &lt;username&gt;</code> and provide your password when prompted.</li>
 </ol>
 
 <h3 class="step" id="step-2-broker--zookeeper-strings">Step 2: Broker / Zookeeper strings</h3>
 
 <ol>
   <li>In the Cazena console, select the <strong>Cloud Sockets</strong> tab.</li>
-  <li>On the left side of the screen, click on one of the Kafka cloud sockets:
+  <li>On the left side of the screen, select one of the Kafka cloud sockets:
     <ul>
       <li><strong>Kafka Broker</strong> for producers or consumers</li>
       <li><strong>Kafka Zookeeper</strong> for topics
@@ -143,7 +143,7 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 <h5 class="indent" id="producer">Producer</h5>
 
 <div class="code-wrapper">
-<pre class="indent copy-area" id="kafka-producer-string">kafka-console-producer --broker-list <span style="color:red"> BoostrapBrokerString </span> --topic testftb --producer.config <span style="color:red">client.properties</span>
+<pre class="indent copy-area" id="kafka-producer-string">kafka-console-producer --broker-list <span style="color:red">BoostrapBrokerString</span> --topic <span style="color:red">yourtopic</span> --producer.config <span style="color:red">client.properties</span>
 </pre>
 <button class="btn clipboard-btn" data-clipboard-target="#kafka-producer-string">Copy</button>
 </div>
@@ -151,34 +151,48 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 <ul class="indent">
   <li>Replace <strong>BootstrapBrokerString</strong> with the string copied from the Kafka Broker cloud socket page.</li>
   <li>Replace <strong>client.properties</strong> with the name of the file that you created in step 1.</li>
+  <li>Replace <strong>yourtopic</strong> with your kafka topic.</li>
 </ul>
 
 <h5 class="indent" id="consumer">Consumer</h5>
 
 <div class="code-wrapper">
-<pre class="indent copy-area" id="kafka-consumer-string">kafka-console-consumer --bootstrap-server <span style="color:red">BoostrapBrokerString</span> --topic testftb --from-beginning --consumer.config <span style="color:red">client.properties</span>
+<pre class="indent copy-area" id="kafka-consumer-string">kafka-console-consumer --bootstrap-server <span style="color:red">BoostrapBrokerString</span> --topic <span style="color:red">yourtopic</span> --from-beginning --consumer.config <span style="color:red">client.properties</span>
 </pre>
 <button class="btn clipboard-btn" data-clipboard-target="#kafka-consumer-string">Copy</button>
 </div>
 
-<ul class="indent">
+<ul>
   <li>Replace <strong>BootstrapBrokerString</strong> with the string copied from the Kafka Broker cloud socket page.</li>
   <li>Replace <strong>client.properties</strong> with the name of the file that you created in step 1.</li>
+  <li>Replace <strong>yourtopic</strong> with your kafka topic.</li>
 </ul>
 
-<h5 class="indent" id="topic">Topic</h5>
+<h5 class="indent indent" id="topic">Topic</h5>
 
 <div class="code-wrapper">
-<pre class="indent copy-area" id="kafka-topic-string">kafka-topics --create --zookeeper <span style="color:red">ZookeeperConnectString</span> --replication-factor 1 --partitions 1 --topic testftb 
+<pre class="indent copy-area" id="kafka-topic-string">kafka-topics --create --zookeeper <span style="color:red">ZookeeperConnectString</span> --replication-factor 1 --partitions 1 --topic <span style="color:red">yourtopic</span> 
 </pre>
 <button class="btn clipboard-btn" data-clipboard-target="#kafka-topic-string">Copy</button>
 </div>
 
 <ul class="indent">
   <li>Replace <strong>ZookeeperConnectString</strong> with the string copied from the Kafka Zookeeper cloud socket page.</li>
+  <li>Replace <strong>yourtopic</strong> with your kafka topic.</li>
 </ul>
 
 <hr class="end-section" />
+
+<h2 id="oozie_email">Oozie</h2>
+
+<h4 id="email-service">Email service</h4>
+<p>Oozie workflows allow email actions to inform users of workflow status. To optimize the delivery of these emails, please supply Cazena support with:</p>
+<ul>
+  <li>The details of your enterprise SMTP service</li>
+  <li>A <strong>From:</strong> email address. This allows status emails to originate with a known email address, so that emails are not filtered to spam folders.</li>
+</ul>
+
+<p>If the Enterprise SMTP is not used, then the Cazena service will default to a built-in SMTP service. This component is not designed for high volumes of email, and can therefore cannot guarantee delivery of large number of messages.</p>
 
 <h2 id="rstudio_connection_pane">Connect to Hive or Impala With the RStudio Connections Pane</h2>
 
@@ -1650,7 +1664,7 @@ x CazenaGateway-disk1.vmdk
 </ol>
 
 <div class="code-wrapper">
-<pre class="indent copy-area" id="cgw-auto-start-cmd">cgw-auto-start -t ipsec-crt -s <span style="color:red"> security-gateway-dns-name </span> -u <span style="color:red"> cgw-user-username </span> -p <span style="color:red">cgw-user-password </span> -k <span style="color:red">client-certificate-password</span> -n <span style="color:red">cgw-name</span> -w</pre>
+<pre class="indent copy-area" id="cgw-auto-start-cmd">cgw-auto-start -t ipsec-crt -s <span style="color:red">security-gateway-dns-name</span> -u<span style="color:red"> cgw-user-username</span> -p <span style="color:red">cgw-user-password</span> -n <span style="color:red">cgw-name</span> -k <span style="color:red">client-certificate-password</span> -w</pre>
 <button class="btn clipboard-btn" data-clipboard-target="#cgw-auto-start-cmd">Copy</button>
 </div>
 
@@ -1661,7 +1675,7 @@ x CazenaGateway-disk1.vmdk
     <p><code class="highlighter-rouge">security-gateway-dns-name</code> is the DNS name of the security gateway, available in email from Cazena support or in the Cazena console.</p>
   </li>
   <li>
-    <p><code class="highlighter-rouge">cgw-user-username</code> and <code class="highlighter-rouge">cgw-user-password</code> are the username and password of the dedicated gateway user.</p>
+    <p><code class="highlighter-rouge">cgw-user-username</code> and <code class="highlighter-rouge">cgw-user-password</code> are the username and password of the dedicated gateway user. This may have been emailed to you by Cazena support.</p>
   </li>
   <li>
     <p><code class="highlighter-rouge">cgw-name</code> is a unique name for the Cazena gateway. The name may contain <code class="highlighter-rouge">A-Z</code>, <code class="highlighter-rouge">a-z</code>, <code class="highlighter-rouge">0-9</code> and <code class="highlighter-rouge">-</code>.</p>
@@ -1723,7 +1737,7 @@ run cgw-auto-show or look in /var/log/cazena/cgw-auto.log to determine status
   <li><code class="highlighter-rouge">customer-hash</code> is the name of your PDC.</li>
 </ul>
 
-<p>Note that this A record will not prevent you from reaching <a href="https://www.cazena.com">www.cazena.com</a>. The A record is for the subzone <code class="highlighter-rouge">[gateway-name].pvt.[customer-hash].cazena.com</code>.</p>
+<p class="note"><strong>Note</strong>: This A record will not prevent you from reaching <a href="https://www.cazena.com">www.cazena.com</a>. The A record is for the subzone <code class="highlighter-rouge">[gateway-name].pvt.[customer-hash].cazena.com</code>.</p>
 
 <hr class="end-section" />
 
@@ -2163,11 +2177,9 @@ Complete
 
 <h2 id="create_users">Create User Accounts</h2>
 
-<p class="note">Users with System Administrator privileges can manage users.</p>
-
 <p class="step">Before You Start</p>
 
-<p class="list">Before you can create new user accounts, you must have a Cazena gateway running. In addition, the Cazena console must be enabled on that gateway:</p>
+<p class="list">If your site is using a <a href="#port-forwarding-cgw">port forwarding</a> configuration, you must have a Cazena gateway running before you can create new user accounts. In addition, the Cazena console must be enabled on that gateway:</p>
 
 <ol>
   <li>Select <strong>System</strong> &gt; <strong>Manage Gateways</strong>.</li>
