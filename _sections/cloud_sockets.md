@@ -1,4 +1,4 @@
-# Connect to the Datacloud Via Cloud Sockets {#integration_with_datacloud}
+# Connect to the Datacloud Via Cloud Sockets {#cloud_sockets}
 
 The  __Cloud Sockets__ tab displays the URLs, hostnames and ports needed to connect to various services exposed on the Cazena Gateway. This tab also displays the status (Good Health, Warning, or Critical) of preconfigured services. Click on any service on the left side of the screen to view connection details for that service.
 

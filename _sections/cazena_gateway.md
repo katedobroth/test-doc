@@ -1,27 +1,34 @@
 # Cazena Gateways {#cgw_cazena_gateway}
 
-A Cazena Gateway manages secure connections between the datacloud and on-premises environments, allowing networking, VPN, data access, user access, analytics tools and manageability.
+## Overview {#cgw-overview}
 
-There are two types of configurations for Cazena Gateways:  __Port Forwarding__ and __Site-to-site__ . Your company may use either or both of these configurations. 
-{:.list}
+There are two ways to securely connect to the Cazena service. Both methods allows Cazena customers to access the private [cloud sockets](#cloud_sockets) in the Cazena service within their private corporate networks. 
+
 
 #### Site-to-Site {#site-to-site-cgw}
 
-Site-to-site requires networking configuration within the enterprise. It provides a wide range of tool connectivity options, including tools that rely on APIs with multiple end points e.g., direct communication with Hadoop Namenode API.
+A site-to-site connection establishes an IPSec connection between your enterprise and the Cazena service. 
 
-The site-to-site configuration uses IPsec site-to-site VPN, joining the datacloud and enterprise networks virtually, as if they both were within a private enterprise network. In this way, all of the hosts in the PDC network can reach all the hosts in the enterprise network, and vice versa.  Additionally, any [cloud sockets](#integration_with_datacloud) configured for the Cazena gateway are also available.
+Cazena supports BGP, which allows HA connections to the Cazena Service. The Cazena service will be provisioned in a CIDR range, which will be confirmed to not overlap with any existing CIDRs used for the enterprise network. This configuration allows full access to services exposed by the Cazena service. A subset of services are only available with site-to site configurations, including:
+{:.list}
 
-Site-to-site configurations cannot be managed through the Cazena console. For assistance, contact support@cazena.com.
+* Kafka
+* Cazena Internal DNS
+
+After the site-to-site connection has been established, a DNS forwarding rule must be added to your enterprise DNS to allow resolution of Cazena FQDNs.
+
+Cazena support will provide you with the correct rule sets, depending on whether you have a routing or policy-based firewall. If your enterprise does not support BGP, Cazena can support static routes. However, this will prevent a HA connection, resulting in longer outages during maintenance periods.
 
 
-#### Port forwarding {#port-forwarding-cgw}
+#### Cazena Gateway {#port-forwarding-cgw}
  
-This is a simple configuration of the Cazena Gateway that requirements minimal networking configuration within the enterprise. It allows access to UIs as well as tool connectivity to APIs that have a single end point e.g., ODBC / JDBC.
+The Cazena Gateway is a software device that is packaged as a OVA, which is typically deployed within your DMZ. It manages secure connections between the datacloud and on-premises environments, allowing access to [cloud sockets](#cloud_sockets) via a port forwarding mechanism.
 
-The port forwarding configuration uses an IPsec VPN. All traffic between the datacloud and the enterprise flows only through the [cloud sockets](#integration_with_datacloud) configured for the Cazena Gateway.
+This is a simpler networking configuration than site-to-site connections, and requires minimal networking configuration within the enterprise. There are a few Cazena services that are not available with this connection, including Kafka and Cazena Internal DNS.
+This is a simpler networking configuration than site-to-site connections, and requires minimal networking configuration within the enterprise. There are a few Cazena services that are not available with this connection, including Kafka and Cazena Internal DNS.
 
 Cazena Gateways that use the port forwarding configuration can be managed using the Cazena console. The rest of this section describes the following:
-
+ 
 * [Install a new Cazena gateway](#install_new_gateway)
 * [Create custom cloud sockets](#manage_cloud_sockets)
 * [Activate and update ports](#update_ports)
@@ -225,18 +232,20 @@ Use `cgw-auto-show` to see the status:
 ### Step 4: Create an A Record in the Enterprise DNS {#dns_a_record}
 {:.step}
 
-When the Cazena Gateway is installed, onsite administrators will assign a private IP address to the VM where the gateway resides.  An __A record__ allows the enterprise to refer to the Cazena gateway using an FQDN rather than the IP address. Because all Cazena endpoints are TLS-enabled, this FQDN must match the public certificate that is used for your single-tenant deployment.
+When the Cazena Gateway is installed, onsite administrators will assign a private IP address to the VM. Because all Cazena endpoints are TLS-enabled, accessing [cloud sockets](#cloud_sockets) with the IP address will result in security errors. For this reason, all access must use a FQDN that matches the public certificate used for your single-tenant deployment. You must add an __A record__ to your enterprise DNS, to allow the enterprise to refer to the Cazena gateway using an FQDN rather than the IP address. 
 
-The A record is a DNS entry that is added to the enterprise DNS. It will be of the form:
+The A record is a DNS entry of the form:
  
 <pre class="indent"><span style="color:red"> gateway-name</span>.pvt.<span style="color:red">customer-hash</span>.cazena.com
 </pre>
 
 where
-{:.indent}
+{:.indent, .list}
 
   * `gateway-name` is the name of your Cazena gateway, as specified in `cgw-auto-start`
   * `customer-hash` is the name of your PDC. 
+
+<br>
 
 __Note__: This A record will not prevent you from reaching [www.cazena.com](https://www.cazena.com). The A record is for the subzone `[gateway-name].pvt.[customer-hash].cazena.com`.
 {:.note}

@@ -44,33 +44,21 @@
 
 <h2 id="cazenas-fully-managed-big-data-as-a-service">Cazena’s Fully-Managed Big Data as a Service</h2>
 
-<p>Cazena is a Fully-Managed Big Data as a Service that enables enterprises to securely migrate, store and analyze their data in the cloud. Cazena manages the creation, configuration, security setup, and management of cloud infrastructure to create a single-tenant datacloud. Cazena then continually monitors and manages this platform ensuring that it is secure and optimized for your current set of workloads.</p>
+<p>Cazena’s Fully-Managed Big Data as a Service enables enterprises to securely migrate, store and analyze their data in the cloud. Cazena manages the creation, configuration, security setup, and management of cloud infrastructure to create a single-tenant datacloud. Cazena then continually monitors and manages this platform ensuring that it is secure and optimized for your current set of workloads.</p>
 
-<p>Cazena’s two flagship solutions are:</p>
-
-<ul>
-  <li>
-    <p><a href="https://www.cazena.com/solutions/data-lake">Data Lake as a Service</a></p>
-  </li>
-  <li>
-    <p><a href="https://www.cazena.com/solutions/data-science">Data Science Sandbox as a Service</a></p>
-  </li>
-</ul>
-
-<p>There is more information about other solutions in the <a href="https://www.cazena.com/solutions">Solutions Gallery</a> on Cazena’s website.</p>
-
-<p>Each solution included the following components, in addition to data engines and cloud storage:</p>
+<p>In addition to data engines and cloud storage, Cazena’s solution includes the following components:</p>
 
 <ul>
   <li>
-    <p><a href="#integration_with_datacloud"><strong>Cloud Sockets</strong></a> expose Cazena services on your local network, providing access to web interfaces  and APIs. On-premises analytics and BI tools connect to the Cazena datacloud via cloud sockets.</p>
+    <p><a href="#cgw_cazena_gateway"><strong>Cazena Gateways</strong></a> provide a secure connection between the enterprise and the Cazena private datacloud (PDC).</p>
+  </li>
+  <li>
+    <p><a href="#cloud_sockets"><strong>Cloud Sockets</strong></a> expose Cazena services on your local network, providing access to web interfaces  and APIs. On-premises analytics and BI tools connect to the Cazena datacloud via cloud sockets.</p>
   </li>
   <li>
     <p>The <strong>AppCloud</strong> allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud.</p>
   </li>
 </ul>
-
-<p><a href="#cgw_cazena_gateway"><strong>Cazena Gateways</strong></a> provide a secure connection between the enterprise and the Cazena private datacloud (PDC). The gateway allows data to be moved securely into the datacloud, and also provides secure access for BI and analytics tools.</p>
 
 <p>This documentation covers tasks that can be done from the Cazena web console. These tasks are listed in the table of contents navigation on the left side of this screen.</p>
 
@@ -78,7 +66,7 @@
 
         <section id="cloud_sockets">
           
-          <h1 id="integration_with_datacloud">Connect to the Datacloud Via Cloud Sockets</h1>
+          <h1 id="cloud_sockets">Connect to the Datacloud Via Cloud Sockets</h1>
 
 <p>The  <strong>Cloud Sockets</strong> tab displays the URLs, hostnames and ports needed to connect to various services exposed on the Cazena Gateway. This tab also displays the status (Good Health, Warning, or Critical) of preconfigured services. Click on any service on the left side of the screen to view connection details for that service.</p>
 
@@ -1480,23 +1468,31 @@ Successfully started job with id: 14
           
           <h1 id="cgw_cazena_gateway">Cazena Gateways</h1>
 
-<p>A Cazena Gateway manages secure connections between the datacloud and on-premises environments, allowing networking, VPN, data access, user access, analytics tools and manageability.</p>
+<h2 id="cgw-overview">Overview</h2>
 
-<p class="list">There are two types of configurations for Cazena Gateways:  <strong>Port Forwarding</strong> and <strong>Site-to-site</strong> . Your company may use either or both of these configurations.</p>
+<p>There are two ways to securely connect to the Cazena service. Both methods allows Cazena customers to access the private <a href="#cloud_sockets">cloud sockets</a> in the Cazena service within their private corporate networks.</p>
 
 <h4 id="site-to-site-cgw">Site-to-Site</h4>
 
-<p>Site-to-site requires networking configuration within the enterprise. It provides a wide range of tool connectivity options, including tools that rely on APIs with multiple end points e.g., direct communication with Hadoop Namenode API.</p>
+<p>A site-to-site connection establishes an IPSec connection between your enterprise and the Cazena service.</p>
 
-<p>The site-to-site configuration uses IPsec site-to-site VPN, joining the datacloud and enterprise networks virtually, as if they both were within a private enterprise network. In this way, all of the hosts in the PDC network can reach all the hosts in the enterprise network, and vice versa.  Additionally, any <a href="#integration_with_datacloud">cloud sockets</a> configured for the Cazena gateway are also available.</p>
+<p class="list">Cazena supports BGP, which allows HA connections to the Cazena Service. The Cazena service will be provisioned in a CIDR range, which will be confirmed to not overlap with any existing CIDRs used for the enterprise network. This configuration allows full access to services exposed by the Cazena service. A subset of services are only available with site-to site configurations, including:</p>
 
-<p>Site-to-site configurations cannot be managed through the Cazena console. For assistance, contact support@cazena.com.</p>
+<ul>
+  <li>Kafka</li>
+  <li>Cazena Internal DNS</li>
+</ul>
 
-<h4 id="port-forwarding-cgw">Port forwarding</h4>
+<p>After the site-to-site connection has been established, a DNS forwarding rule must be added to your enterprise DNS to allow resolution of Cazena FQDNs.</p>
 
-<p>This is a simple configuration of the Cazena Gateway that requirements minimal networking configuration within the enterprise. It allows access to UIs as well as tool connectivity to APIs that have a single end point e.g., ODBC / JDBC.</p>
+<p>Cazena support will provide you with the correct rule sets, depending on whether you have a routing or policy-based firewall. If your enterprise does not support BGP, Cazena can support static routes. However, this will prevent a HA connection, resulting in longer outages during maintenance periods.</p>
 
-<p>The port forwarding configuration uses an IPsec VPN. All traffic between the datacloud and the enterprise flows only through the <a href="#integration_with_datacloud">cloud sockets</a> configured for the Cazena Gateway.</p>
+<h4 id="port-forwarding-cgw">Cazena Gateway</h4>
+
+<p>The Cazena Gateway is a software device that is packaged as a OVA, which is typically deployed within your DMZ. It manages secure connections between the datacloud and on-premises environments, allowing access to <a href="#cloud_sockets">cloud sockets</a> via a port forwarding mechanism.</p>
+
+<p>This is a simpler networking configuration than site-to-site connections, and requires minimal networking configuration within the enterprise. There are a few Cazena services that are not available with this connection, including Kafka and Cazena Internal DNS.
+This is a simpler networking configuration than site-to-site connections, and requires minimal networking configuration within the enterprise. There are a few Cazena services that are not available with this connection, including Kafka and Cazena Internal DNS.</p>
 
 <p>Cazena Gateways that use the port forwarding configuration can be managed using the Cazena console. The rest of this section describes the following:</p>
 
@@ -1723,19 +1719,21 @@ run cgw-auto-show or look in /var/log/cazena/cgw-auto.log to determine status
 
 <h3 id="dns_a_record" class="step">Step 4: Create an A Record in the Enterprise DNS</h3>
 
-<p>When the Cazena Gateway is installed, onsite administrators will assign a private IP address to the VM where the gateway resides.  An <strong>A record</strong> allows the enterprise to refer to the Cazena gateway using an FQDN rather than the IP address. Because all Cazena endpoints are TLS-enabled, this FQDN must match the public certificate that is used for your single-tenant deployment.</p>
+<p>When the Cazena Gateway is installed, onsite administrators will assign a private IP address to the VM. Because all Cazena endpoints are TLS-enabled, accessing <a href="#cloud_sockets">cloud sockets</a> with the IP address will result in security errors. For this reason, all access must use a FQDN that matches the public certificate used for your single-tenant deployment. You must add an <strong>A record</strong> to your enterprise DNS, to allow the enterprise to refer to the Cazena gateway using an FQDN rather than the IP address.</p>
 
-<p>The A record is a DNS entry that is added to the enterprise DNS. It will be of the form:</p>
+<p>The A record is a DNS entry of the form:</p>
 
 <pre class="indent"><span style="color:red"> gateway-name</span>.pvt.<span style="color:red">customer-hash</span>.cazena.com
 </pre>
 
-<p class="indent">where</p>
+<p class="indent, list">where</p>
 
 <ul>
   <li><code class="highlighter-rouge">gateway-name</code> is the name of your Cazena gateway, as specified in <code class="highlighter-rouge">cgw-auto-start</code></li>
   <li><code class="highlighter-rouge">customer-hash</code> is the name of your PDC.</li>
 </ul>
+
+<p><br /></p>
 
 <p class="note"><strong>Note</strong>: This A record will not prevent you from reaching <a href="https://www.cazena.com">www.cazena.com</a>. The A record is for the subzone <code class="highlighter-rouge">[gateway-name].pvt.[customer-hash].cazena.com</code>.</p>
 
