@@ -190,8 +190,8 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 
 <ol>
   <li>Select the <strong>Cloud Sockets</strong> tab.</li>
-  <li>On the left side of the screen, click on <strong>RStudio Server</strong>.</li>
-  <li>Click on the URL that appears on the right side of the screen. If your company has more than one Cazena gateway, you may see more than one link; you can use any of them.</li>
+  <li>On the left side of the screen, click on <strong>RStudio Server</strong>. You may use the text filter at the top of the list to help you find the service.</li>
+  <li>Click on the URL that appears on the right side of the screen. Depending on the configuration at your site, there may be more than one link; you can use any of them.</li>
   <li>
     <p>RStudio will open in a new tab. Sign in using your Cazena credentials.</p>
 
@@ -209,7 +209,7 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 
 <ol>
   <li>In the Cazena console, on the <strong>Cloud Sockets</strong> tab, select <strong>Hive</strong> (or Impala) on the left side of the screen.</li>
-  <li>Copy the DNS address and port from the right side of the screen, then paste them into the Connection Pane in RStudio.</li>
+  <li>Copy the DNS address and port from the top of of the screen, then paste them into the Connection Pane in RStudio.</li>
   <li>Add <code class="highlighter-rouge">,SSL=1</code> to the connection string, before the final parentheses.</li>
 </ol>
 
@@ -280,7 +280,7 @@ HIVE_HOME=/opt/cloudera/parcels/CDH/lib/hive
 </code></pre></div>    </div>
 
     <p>For example:</p>
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &gt; c &lt;- dbConnect(hd,'jdbc:hive2://hive-ysewsr7iqy8qm6eb.qa0213aws2.pvt.cazena-sqa.com:10000/my_database; ssl=true;','my_username', 'my_password') 
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &gt; c &lt;- dbConnect(hd,'jdbc:hive2://hive-ai2ywz3kliv408jx.pvt.qa0930aws1.cazena-sqa.com:10000/my_database; ssl=true;','my_username', 'my_password') 
     
 </code></pre></div>    </div>
   </li>
