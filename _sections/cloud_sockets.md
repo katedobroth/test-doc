@@ -1,4 +1,4 @@
-# Connect to the Datacloud Via Cloud Sockets {#cloud_sockets}
+# Connect to Datacloud Services Via Cloud Sockets {#cloud_sockets}
 
 The  __Cloud Sockets__ tab displays the URLs, hostnames and ports needed to connect to various services exposed on the Cazena Gateway. This tab also displays the status (Good Health, Warning, or Critical) of preconfigured services. Click on any service on the left side of the screen to view connection details for that service.
 
@@ -50,10 +50,12 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 1. On the left side of the screen, select one of the Kafka cloud sockets:
     * __Kafka Broker__ for producers or consumers
     * __Kafka Zookeeper__ for topics
-    ![ Kafka Strings ](assets/documentation/cloud_sockets/kafka_strings.png "Kafka Strings")
 1. Use the strings on the right side of the screen to create commands as follows:
 
 ##### Producer
+{:.indent}
+
+![ Kafka Broker String ](assets/documentation/cloud_sockets/kafka_broker.png "Kafka Broker String")
 {:.indent}
 
 <div class="code-wrapper">
@@ -87,6 +89,7 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 ##### Topic
 {:.indent}
 
+![ Kafka Broker String ](assets/documentation/cloud_sockets/kafka_zookeeper.png "Kafka Zookeeper String")
 
 <div class="code-wrapper">
 <pre class="indent copy-area" id="kafka-topic-string">kafka-topics --create --zookeeper <span style="color:red">ZookeeperConnectString</span> --replication-factor 1 --partitions 1 --topic <span style="color:red">yourtopic</span> 
@@ -196,7 +199,7 @@ This example shows how you would set up RStudio to connect to Hive via RJDBC.
 {:.step}
         
 1. On the __Cloud Sockets__ tab, select __Hive__ on the left side of the screen.
-1. Under __From inside the datacloud__, copy the DNS address and port.
+1. Copy the DNS address and port.
 
     ![ Hive IP:Port ](assets/documentation/cloud_sockets/hive_cloud_socket.png "Hive IP:Port ")
     {:.indent}
@@ -242,7 +245,7 @@ Step 1: Copy the Hostname and Port for Impala
 {:.step}
 
 1. On the __Cloud Sockets__ tab, select __Impala__ on the left side of the screen.
-1. Under __From inside the datacloud__, copy the DNS address and port.
+1. Copy the DNS address and port.
 
     ![ Impala Cloud Socket ](assets/documentation/cloud_sockets/impala_cloud_socket.png "Impala Cloud Socket ")
     {:.indent}

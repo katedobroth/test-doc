@@ -66,7 +66,7 @@
 
         <section id="cloud_sockets">
           
-          <h1 id="cloud_sockets">Connect to the Datacloud Via Cloud Sockets</h1>
+          <h1 id="cloud_sockets">Connect to Datacloud Services Via Cloud Sockets</h1>
 
 <p>The  <strong>Cloud Sockets</strong> tab displays the URLs, hostnames and ports needed to connect to various services exposed on the Cazena Gateway. This tab also displays the status (Good Health, Warning, or Critical) of preconfigured services. Click on any service on the left side of the screen to view connection details for that service.</p>
 
@@ -121,14 +121,15 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
   <li>On the left side of the screen, select one of the Kafka cloud sockets:
     <ul>
       <li><strong>Kafka Broker</strong> for producers or consumers</li>
-      <li><strong>Kafka Zookeeper</strong> for topics
- <img src="assets/documentation/cloud_sockets/kafka_strings.png" alt=" Kafka Strings " title="Kafka Strings" /></li>
+      <li><strong>Kafka Zookeeper</strong> for topics</li>
     </ul>
   </li>
   <li>Use the strings on the right side of the screen to create commands as follows:</li>
 </ol>
 
 <h5 class="indent" id="producer">Producer</h5>
+
+<p class="indent"><img src="assets/documentation/cloud_sockets/kafka_broker.png" alt=" Kafka Broker String " title="Kafka Broker String" /></p>
 
 <div class="code-wrapper">
 <pre class="indent copy-area" id="kafka-producer-string">kafka-console-producer --broker-list <span style="color:red">BoostrapBrokerString</span> --topic <span style="color:red">yourtopic</span> --producer.config <span style="color:red">client.properties</span>
@@ -157,6 +158,8 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 </ul>
 
 <h5 class="indent indent" id="topic">Topic</h5>
+
+<p><img src="assets/documentation/cloud_sockets/kafka_zookeeper.png" alt=" Kafka Broker String " title="Kafka Zookeeper String" /></p>
 
 <div class="code-wrapper">
 <pre class="indent copy-area" id="kafka-topic-string">kafka-topics --create --zookeeper <span style="color:red">ZookeeperConnectString</span> --replication-factor 1 --partitions 1 --topic <span style="color:red">yourtopic</span> 
@@ -269,7 +272,7 @@ HIVE_HOME=/opt/cloudera/parcels/CDH/lib/hive
 <ol>
   <li>On the <strong>Cloud Sockets</strong> tab, select <strong>Hive</strong> on the left side of the screen.</li>
   <li>
-    <p>Under <strong>From inside the datacloud</strong>, copy the DNS address and port.</p>
+    <p>Copy the DNS address and port.</p>
 
     <p class="indent"><img src="assets/documentation/cloud_sockets/hive_cloud_socket.png" alt=" Hive IP:Port " title="Hive IP:Port " /></p>
   </li>
@@ -315,7 +318,7 @@ HIVE_HOME=/opt/cloudera/parcels/CDH/lib/hive
 <ol>
   <li>On the <strong>Cloud Sockets</strong> tab, select <strong>Impala</strong> on the left side of the screen.</li>
   <li>
-    <p>Under <strong>From inside the datacloud</strong>, copy the DNS address and port.</p>
+    <p>Copy the DNS address and port.</p>
 
     <p class="indent"><img src="assets/documentation/cloud_sockets/impala_cloud_socket.png" alt=" Impala Cloud Socket " title="Impala Cloud Socket " /></p>
   </li>
@@ -490,6 +493,1025 @@ HIVE_HOME=/opt/cloudera/parcels/CDH/lib/hive
 <p><img src="assets/documentation/object_store/s3_variables.png" alt=" AWS Keys and Token " title="AWS Keys and Token " /></p>
 
 <p class="note"><strong>Note</strong>: Keys and tokens will expire after 12 hours.</p>
+
+        </section>
+
+        <section id="cazena_gateway">
+          
+          <h1 id="cgw_cazena_gateway">Cazena Gateways</h1>
+
+<h2 id="cgw-overview">Overview</h2>
+
+<p>There are two ways to securely connect to the Cazena service. Both methods allows Cazena customers to access the private <a href="#cloud_sockets">cloud sockets</a> in the Cazena service within their private corporate networks.</p>
+
+<h4 id="site-to-site-cgw">Site-to-Site</h4>
+
+<p>A site-to-site connection establishes an IPSec connection between your enterprise and the Cazena service.</p>
+
+<p class="list">Cazena supports BGP, which allows HA connections to the Cazena Service. The Cazena service will be provisioned in a CIDR range, which will be confirmed to not overlap with any existing CIDRs used for the enterprise network. This configuration allows full access to services exposed by the Cazena service. A subset of services are only available with site-to site configurations, including:</p>
+
+<ul>
+  <li>Kafka</li>
+  <li>Cazena Internal DNS</li>
+</ul>
+
+<p>After the site-to-site connection has been established, a DNS forwarding rule must be added to your enterprise DNS to allow resolution of Cazena FQDNs.</p>
+
+<p>Cazena support will provide you with the correct rule sets, depending on whether you have a routing or policy-based firewall. If your enterprise does not support BGP, Cazena can support static routes. However, this will prevent a HA connection, resulting in longer outages during maintenance periods.</p>
+
+<h4 id="port-forwarding-cgw">Cazena Gateway</h4>
+
+<p>The Cazena Gateway is a software device that is packaged as a OVA, which is typically deployed within your DMZ. It manages secure connections between the datacloud and on-premises environments, allowing access to <a href="#cloud_sockets">cloud sockets</a> via a port forwarding mechanism.</p>
+
+<p>This is a simpler networking configuration than site-to-site connections, and requires minimal networking configuration within the enterprise. There are a few Cazena services that are not available with this connection, including Kafka and Cazena Internal DNS.
+This is a simpler networking configuration than site-to-site connections, and requires minimal networking configuration within the enterprise. There are a few Cazena services that are not available with this connection, including Kafka and Cazena Internal DNS.</p>
+
+<p>Cazena Gateways that use the port forwarding configuration can be managed using the Cazena console. The rest of this section describes the following:</p>
+
+<ul>
+  <li><a href="#install_new_gateway">Install a new Cazena gateway</a></li>
+  <li><a href="#manage_cloud_sockets">Create custom cloud sockets</a></li>
+  <li><a href="#update_ports">Activate and update ports</a></li>
+  <li><a href="#cgw_troubleshooting">Troubleshooting</a></li>
+  <li><a href="#cgw_delete">Stop and delete a Cazena gateway</a></li>
+</ul>
+
+<h2 id="install_new_gateway">Install a New Cazena Gateway</h2>
+
+<p>If your site is using Cazena gateways configured with port forwarding, you can install a new Cazena gateway.  You will download an OVA file and then install it on a virtual machine in the enterprise data center.</p>
+
+<h3 id="requirements">Requirements</h3>
+
+<h4 id="vmware">VMWare</h4>
+<p class="list">Currently the OVA is supported on VMware systems.</p>
+
+<ul>
+  <li>VMware Fusion/Player 4.0 or later</li>
+  <li>Workstation 8.0 or later</li>
+  <li>vSphere/ESXi 5.0 to 6.0. VMware vSphere/ESXi 6.5 has deprecated its support for OVAs. If you use vSphere/ESXi 6.5, you will have to manually untar the file. <a href="#esxi_65">Instructions</a> are in the next section.</li>
+</ul>
+
+<h4 id="hardware">Hardware</h4>
+<ul>
+  <li>4 virtual CPU cores</li>
+  <li>2.0 GB free memory (4.0 GB recommended)</li>
+  <li>25 GB free disk space</li>
+</ul>
+
+<h4 id="connectivity">Connectivity</h4>
+<ul>
+  <li>JDBC/IP connectivity to enterprise database servers</li>
+  <li>Outbound Internet connectivity on ports TCP 443 (TLS/SSL), UDP 500 (ISAKMP/IKE), UDP 4500 (IPsec NAT-T), UDP 123 (NTP)</li>
+</ul>
+
+<h3 id="cgw_installation" class="list">To install a Cazena gateway:</h3>
+<p>The steps for installing a Cazena gateway are described in detail in the following sections.</p>
+
+<ol>
+  <li><a href="#ipsec_tls_download_ova">Download and import the Cazena gateway .ova file</a>.</li>
+  <li><a href="#install_cgw">Install the Cazena gateway.</a></li>
+  <li><a href="#ipsec_tls_cgw-auto-start">Run <code class="highlighter-rouge">cgw-auto-start</code> to connect the gateway to your datacloud.</a></li>
+  <li><a href="#dns_a_record">Create an A record in the enterprise DNS</a></li>
+</ol>
+
+<h3 id="ipsec_tls_download_ova" class="step">Step 1: Download and Import the Cazena Gateway .ova file</h3>
+
+<ol>
+  <li>Sign into the Cazena support site at <a href="https://support.cazena.com" target="_blank">support.cazena.com</a></li>
+  <li>Under <strong>Cazena Support</strong>, click on <strong>Downloads</strong>.</li>
+  <li>Click on the <strong>Cazena Gateway</strong> link to download the .ova file.</li>
+</ol>
+
+<h5 id="esxi_65" class="indent">If you are using vSphere/ESXi 6.5</h5>
+
+<p class="indent">VMware vSphere/ESXi 6.5 and later has deprecated its support for OVAs.  Untar the OVA file to extract the OVF and VMDK files. You will not need the MF file.</p>
+
+<div class="indent highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ tar -xvf "CazenaGateway.ova"
+x CazenaGateway.ovf
+x CazenaGateway.mf
+x CazenaGateway-disk1.vmdk
+</code></pre></div></div>
+
+<ol>
+  <li>
+    <p>Import the CazenaGateway.ova file.</p>
+
+    <table class="table-30-70 row-borders">
+  <tbody>
+    <tr>
+      <th>Client</th>
+      <th>Instructions</th>
+    </tr>
+    <tr>
+      <td>VMWare Fusion</td>
+      <td>
+      <ol>
+          <li>Choose <strong>File &gt; Import...</strong></li>
+           <li>Select the CGW OVA file.</li>
+       </ol>
+       </td>
+    </tr>
+    <tr>
+      <td>Virtual Machine Manager</td>
+      <td>
+      <ol>
+          <li>Choose <strong>Add &gt; Import...</strong></li>
+           <li>Select the CGW OVA file.</li>
+       </ol>
+      </td>
+    </tr>
+    <tr>
+      <td>vSphere/ESXi Web client</td>
+      <td>
+        <ol>
+            <li>Choose <strong>Navigator -&gt; Virtual Machines -&gt; Create/Register VM...</strong></li>
+            <li>Select <strong>Deploy a virtual machine from an OVF or OVA file</strong></li>
+            <li>Enter a name</li>
+            <li>Select file(s)
+                <ul>
+                <li><em>5.0 to 6.0:</em> Add the OVA </li>
+                <li><em>6.5 or later:</em> Add the OVF and VMDK files<br />
+                (See <a href="#esxi_65">instructions</a> for untarring the OVA file.)
+                </li>
+                </ul>
+             </li>
+        </ol>
+       </td>
+    </tr>
+  </tbody>
+</table>
+
+    <p class="note"><strong>Important:</strong> After the import has finished, open the VM’s network settings and make sure the network adapter is set to ‘bridged mode’. This will allow the CGW ethernet primary interface (eth0) to have an enterprise reachable IP address, so that it will be exposed to enterprise users.</p>
+  </li>
+</ol>
+
+<h3 id="install_cgw" class="step">Step 2: Install the Cazena Gateway Certificate</h3>
+
+<ol>
+  <li>Start the Cazena VM and sign into the gateway:
+    <ul>
+      <li>username: <code class="highlighter-rouge">cazena</code></li>
+      <li>password: <code class="highlighter-rouge">cazena</code>
+<br /><br /></li>
+    </ul>
+  </li>
+  <li>
+    <p>Copy the Client Authentication Certificate that was emailed to you to the Cazena gateway.</p>
+
+    <ul>
+      <li><strong>Option 1</strong>: Use <code class="highlighter-rouge">scp</code> as in this example: <code class="highlighter-rouge">$ scp cazena.pem cazena@u.v.w.x:~ </code></li>
+      <li><strong>Option 2</strong>: Copy and paste the contents of the <code class="highlighter-rouge">cazena.pem</code> file into a new file on the Cazena gateway</li>
+    </ul>
+  </li>
+  <li>
+    <p>Install the certificate.</p>
+
+    <p><code class="highlighter-rouge">$ cgw-install-cert cazena.pem</code></p>
+  </li>
+</ol>
+
+<h3 id="ipsec_tls_cgw-auto-start" class="step">Step 3: Run <code class="highlighter-rouge">cgw-auto-start</code> to Connect the Cazena Gateway to Your Datacloud</h3>
+
+<ol>
+  <li>
+    <p>From a terminal window, use the IP address of the VM to connect to the Cazena gateway.</p>
+
+    <p><strong>Example</strong>:  <code class="highlighter-rouge">$ ssh cazena@w.x.y.z</code></p>
+  </li>
+  <li>
+    <p>Change the gateway’s default password.</p>
+
+    <p><code class="highlighter-rouge">$  sudo passwd</code></p>
+  </li>
+  <li>
+    <p>If you haven’t already, set up a <strong>dedicated</strong> user account with system administrator privileges for the Cazena gateway. (See <a href="#users">Instructions for setting up a user account</a>.)</p>
+  </li>
+  <li>
+    <p><a name="cgw-auto-start"></a>Use <code class="highlighter-rouge">cgw-auto-start</code> to connect to the gateway.</p>
+  </li>
+</ol>
+
+<div class="code-wrapper">
+<pre class="indent copy-area" id="cgw-auto-start-cmd">cgw-auto-start -t ipsec-crt -s <span style="color:red">security-gateway-dns-name</span> -u<span style="color:red"> cgw-user-username</span> -p <span style="color:red">cgw-user-password</span> -n <span style="color:red">cgw-name</span> -k <span style="color:red">client-certificate-password</span> -w</pre>
+<button class="btn clipboard-btn" data-clipboard-target="#cgw-auto-start-cmd">Copy</button>
+</div>
+
+<p>where:</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">security-gateway-dns-name</code> is the DNS name of the security gateway, available in email from Cazena support or in the Cazena console.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">cgw-user-username</code> and <code class="highlighter-rouge">cgw-user-password</code> are the username and password of the dedicated gateway user. This may have been emailed to you by Cazena support.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">cgw-name</code> is a unique name for the Cazena gateway. The name may contain <code class="highlighter-rouge">A-Z</code>, <code class="highlighter-rouge">a-z</code>, <code class="highlighter-rouge">0-9</code> and <code class="highlighter-rouge">-</code>.</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">client-certificate-password</code> is the certificate password that was emailed to you.</p>
+  </li>
+</ul>
+
+<p><br /></p>
+
+<h4 id="example">Example</h4>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cgw-auto-start -t ipsec-crt -s portal.partner.cazena.com -u cazenauser -p password -n mygateway -k clientpassword -w
+</code></pre></div></div>
+
+<p>The system will respond:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Starting up CGW auto restart
+run cgw-auto-show or look in /var/log/cazena/cgw-auto.log to determine status
+</code></pre></div></div>
+
+<p>Inside of <code class="highlighter-rouge">/var/log/cazena/cgw-auto.log</code>, there are three lines giving the network address information, similar to this:</p>
+
+<ul>
+  <li>PDC network: 10.128.80.0/21</li>
+  <li>ENT address: 10.4.132.10</li>
+  <li>ENT network: 10.4.132.0/24 10.4.133.0/24 10.4.130.0/23</li>
+</ul>
+
+<p><br /> For PDC DNS, the IP address of the IPA server is found in the file /etc/resolv.conf, similar to this:</p>
+
+<ul>
+  <li>nameserver  10.128.80.48   # by strongswan
+<br /><br /></li>
+</ul>
+
+<p>Use <code class="highlighter-rouge">cgw-auto-show</code> to see the status:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    $ cgw-auto-show
+    Tunnel is up
+    CGW DMC is up
+    CGW DMC version matches PDC version
+</code></pre></div></div>
+
+<h3 id="dns_a_record" class="step">Step 4: Create an A Record in the Enterprise DNS</h3>
+
+<p>When the Cazena Gateway is installed, onsite administrators will assign a private IP address to the VM. Because all Cazena endpoints are TLS-enabled, accessing <a href="#cloud_sockets">cloud sockets</a> with the IP address will result in security errors. For this reason, all access must use a FQDN that matches the public certificate used for your single-tenant deployment. You must add an <strong>A record</strong> to your enterprise DNS, to allow the enterprise to refer to the Cazena gateway using an FQDN rather than the IP address.</p>
+
+<p>The A record is a DNS entry of the form:</p>
+
+<pre class="indent"><span style="color:red"> gateway-name</span>.pvt.<span style="color:red">customer-hash</span>.cazena.com
+</pre>
+
+<p class="indent, list">where</p>
+
+<ul>
+  <li><code class="highlighter-rouge">gateway-name</code> is the name of your Cazena gateway, as specified in <code class="highlighter-rouge">cgw-auto-start</code></li>
+  <li><code class="highlighter-rouge">customer-hash</code> is the name of your PDC.</li>
+</ul>
+
+<p><br /></p>
+
+<p class="note"><strong>Note</strong>: This A record will not prevent you from reaching <a href="https://www.cazena.com">www.cazena.com</a>. The A record is for the subzone <code class="highlighter-rouge">[gateway-name].pvt.[customer-hash].cazena.com</code>.</p>
+
+<hr class="end-section" />
+
+<h2 id="manage_cloud_sockets">Custom Cloud Sockets</h2>
+
+<p>You can set up cloud sockets with endpoints in any of these components:</p>
+
+<ul>
+  <li>
+    <p><strong>Data Lake or Data Mart</strong>: This type of custom cloud socket could be used, for example, to allow access to a tool such as Flume through a second Cazena gateway port.</p>
+  </li>
+  <li>
+    <p><strong>Enterprise</strong>: An enterprise cloud socket could be used, for example, to move data from an enterprise server into the datacloud using Sqoop.</p>
+  </li>
+  <li>
+    <p><strong>AppCloud</strong>:  The AppCloud allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud. An example use would be to install Streamsets on an App Cloud node, and then create a custom cloud socket that allows access to that endpoint.</p>
+  </li>
+</ul>
+
+<h3 id="create_enterprise_socket">Example: Enterprise Cloud Socket</h3>
+
+<p>This examples shows how to set up a custom Enterprise cloud socket, which might be used to move data from an enterprise server into the datacloud using Sqoop. Instructions for using Sqoop can be found in the <a href="#sqoop">Data Movement section</a>.</p>
+
+<ol>
+  <li>On <strong>System &gt; Manage Gateways</strong> , select <strong>Enterprise</strong> on the left side of the screen. If there are multiple Cazena Gateways, make your selection under the gateway that you want to use.</li>
+  <li>Click <strong>New Cloud Socket</strong>.</li>
+  <li>Enter a name and (optional) description for the cloud socket.</li>
+  <li>Select the the port number and protocol that you want to use for the Cazena Gateway. You may use the same port number with different protocols. For example, you could have two cloud sockets that both use port 11300, with one over TCP and one over UDP.</li>
+  <li>In the <strong>Endpoint</strong> section, enter the IP address and port for the enterprise server.</li>
+  <li><em>Optional:</em> You may enter an additional path to the location on the enterprise server.</li>
+  <li>Click <strong>Save</strong>.</li>
+</ol>
+
+<p class="image-no-outline"><img src="assets/documentation/cloud_sockets/ent_cloud_socket.png" alt=" Enterprise Cloud Socket " title="Enterprise Cloud Socket" /></p>
+
+<h2 id="update_ports">Activate and Update Ports</h2>
+
+<p>From the Cazena console, system administrators may specify the ports in the environment that will be used for each service on Cazena gateway(s).</p>
+
+<p class="list">To manage ports, click on the <strong>System</strong> tab. By default, you will see a list Cazena gateways on the left side of the screen. Under each gateway, you will see each of your data lakes and/or data marts, as well as an option to view <a href="#enterprise_cloud_socket">enterprise services</a> associated with that gateway.</p>
+
+<ol>
+  <li>Under any Cazena gateway in the list, click on the name of a data lake or data mart, or Enterprise Services.</li>
+  <li>
+    <p>Click on any port number on the right to change its default value.</p>
+
+    <p class="note"><strong>Note:</strong> Port numbers must be in the range 32768 - 60999.</p>
+  </li>
+  <li>Use the slider in the <strong>Active</strong> column to activate or deactivate any port.</li>
+</ol>
+
+<p><img src="assets/documentation/cazena_gateway/czgw_manage_ports.png" alt=" Activate and Update Ports " title="Activate and Update Ports" /></p>
+
+<hr class="end-section" />
+<h2 id="cgw_troubleshooting">Troubleshooting</h2>
+
+<p class="list">Follow these steps if you have run <code class="highlighter-rouge">cgw-auto-start</code> and either:</p>
+
+<ul>
+  <li>The Cazena gateway doesn’t appear in the Cazena console.</li>
+  <li>You are having trouble moving data.</li>
+</ul>
+
+<h3 id="check-that-the-cazena-gateway-is-operating-correctly">Check that the Cazena Gateway is Operating Correctly</h3>
+
+<p>First, run <code class="highlighter-rouge">cgw-auto-show</code>:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    $ cgw-auto-show 
+    --Status--
+    Tunnel is up
+    Tunnel was started at Mon Jun 11 10:20:40 UTC 2018
+    Tunnel has been up for 7h:0m:42s
+    CGW DMC is up
+    CGW DMC version matches PDC version
+    CGW was started at Mon Jun 11 10:20:41 UTC 2018
+    CGW has been up for 7h:0m:41s
+
+    --Configuration--
+    Tunnel type is ipsec
+    Server is cazena-cz123.eastus2.cloudapp.azure.com
+    User is cz_user
+    CGW name is cazena-gw1
+</code></pre></div></div>
+
+<p>Depending on what <code class="highlighter-rouge">cgw-auto-show</code> returns, refer to one of these sections:</p>
+
+<ul>
+  <li><a href="#cgw_troubleshoot_tunnel">Tunnel is down</a></li>
+  <li><a href="#cgw_troubleshoot_cgw_dmc">CGW DMC is down</a></li>
+  <li>Both the tunnel and CGW DMC are up, but you are having <a href="#troubleshoot_connectivity">trouble moving data</a>.</li>
+</ul>
+
+<h3 id="cgw_troubleshoot_tunnel">If the Tunnel is Down</h3>
+
+<ul>
+  <li>
+    <p>Double-check your  <a href="#cgw-auto-start"> cgw-auto-start </a> command.</p>
+
+    <ul>
+      <li>Make sure that you are using the correct user name/password.</li>
+      <li>Check that the name/password are not being used by someone else.</li>
+      <li>Make sure that the secgw name and preshared key (if used) are correct.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>    If necessary, re-run <a href="#cgw-auto-start">cgw-auto-start</a>.</p>
+
+<ul>
+  <li>
+    <p>Check with Cazena support to see if your site has a whitelist of allowed IP addresses. If so, the IP address of the Cazena gateway must be included in the whitelist.</p>
+  </li>
+  <li>
+    <p>Run  <code class="highlighter-rouge">cgw-show-ipsec</code>.</p>
+
+    <p>If the tunnel is up, you should see:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>          $ cgw-show-ipsec
+
+          Redirecting to /bin/systemctl status strongswan.service
+          ipsec daemon running
+          Security Associations (2 up, 0 connecting):
+                dm-psk[9]: ESTABLISHED 4 minutes ago, 10.1.3.80[dm-user]...40.70.186.53[rw-psk]
+                dm-psk{24}:  INSTALLED, TUNNEL, reqid 1, ESP in UDP SPIs: c111a8c9_i c1b8fff2_o
+                dm-psk{24}:   10.255.252.2/32 === 10.128.8.0/21
+                dm-psk[8]: ESTABLISHED 50 minutes ago, 10.1.3.80[dm-user]...40.70.186.53[rw-psk]
+                dm-psk{22}:  INSTALLED, TUNNEL, reqid 1, ESP in UDP SPIs: c0b0c6ba_i caa3ea03_o
+                dm-psk{22}:   10.255.252.2/32 === 10.128.8.0/21
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="cgw_troubleshoot_cgw_dmc">If CGW DMC is Down</h3>
+
+<p>If <code class="highlighter-rouge">cgw-auto-show</code> indicates that the tunnel is up but the CGW DMC is down:</p>
+
+<ol>
+  <li>
+    <p>Check the log files.  Open <code class="highlighter-rouge">/var/log/cazena/&lt;gateway-name&gt;.log</code>, replacing <code class="highlighter-rouge">&lt;gateway-name&gt;</code> with the name of your gateway.</p>
+
+    <dl>
+      <dt>If you see <code class="highlighter-rouge">Operation timed out after</code></dt>
+      <dd>The CGW DMC software may not have not downloaded successfully. Try increasing the timeout value using the <code class="highlighter-rouge">-m</code> option of the <a href="#cgw-auto-start"> cgw-auto-start </a> command.</dd>
+      <dt>If you see WARN or ERROR messages:</dt>
+      <dd>This indicates that CGW DMC is having internal issues. The range of potential issues here are too numerous to list out.  Contact support/engineering for help.</dd>
+    </dl>
+  </li>
+  <li>
+    <p>Check that the CGW has the necessary port connectivity by running <code class="highlighter-rouge">cgw-reachable</code>.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cgw-reachable [DNS-NAME]
+ Checking cloud services reachability... 
+   Security Gateway TLS reachable: TRUE 
+   AWS S3 reachable: TRUE 
+   Azure storage reachable: TRUE 
+</code></pre></div>    </div>
+
+    <p>If any of these targets returns FALSE, confirm that the customer firewall is allowing the following ports outbound access from the Cazena gateway.</p>
+
+    <ul>
+      <li>TCP 443 (TLS/SSL)</li>
+      <li>UDP 500 (ISAKMP/IKE)</li>
+      <li>UDP 4500 (IPsec NAT-T)</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="troubleshoot_connectivity">Trouble with data movement</h3>
+
+<p>If you are having trouble moving data, first follow the steps in the previous section to ensure that the Cazena Gateway is operating correctly. Next, you can:</p>
+
+<ul>
+  <li><a href="#cgw_pdc_connection">Check connectivity between the gateway and the datacloud</a></li>
+  <li><a href="#cgw_enterprise_connection">Check connections to enterprise services</a></li>
+  <li><a href="#cgw_throughput_latency">Measure latency and throughput</a></li>
+</ul>
+
+<h4 id="cgw_pdc_connection">Check Connectivity Between the Cazena Gateway and the Datacloud</h4>
+<ol>
+  <li>
+    <p>Run <code class="highlighter-rouge">cgw-show-ipservices</code> to see whether the CGW is allowing access to the required ports/services within the PDC; for example:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> [cazena@cgw ~]$  cgw-show-ipservices
+ IpService ID: pdc-kibana (PDC-DNAT rule #4, PDC-FWRD rule #4)
+ target     prot opt source               destination
+ DNAT       tcp  --  0.0.0.0/0            10.4.131.136         tcp dpt:11494 /* id: pdc-kibana, name: kibana */ to:10.128.16.37:5601
+ ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0            ctstate NEW,ESTABLISHED ctproto 6 ctorigdst 10.4.131.136 ctorigdstport 11494 /* id: pdc-kibana, name: kibana */
+
+ etc
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<p>You can also look on the <strong>System</strong> tab of the Cazena Console to see whether Cazena gateway ports are active.
+<img src="assets/documentation/cazena_gateway/czgw_manage_ports.png" alt=" Activate and Update Ports " title="Activate and Update Ports" /></p>
+
+<h4 id="cgw_enterprise_connection">Check Connections to Enterprise Services</h4>
+
+<p class="list"><strong>For Netezza or Oracle:</strong></p>
+
+<ul>
+  <li>Make sure that the needed drivers are present in /home/cazena and are read/executable.
+    <ul>
+      <li><strong>Netezza</strong>: nzjdbc3-7.2.0.0-cazena.jar</li>
+      <li><strong>Oracle</strong>: ojdbc7-12.1.0.1.0-linux.x64.jar</li>
+    </ul>
+  </li>
+</ul>
+
+<p class="list"><strong>For Netezza, Oracle or FTP/SFTP:</strong></p>
+
+<ul>
+  <li>Make sure the servers can be reached.
+    <ol>
+      <li>If you do not have nmap, install it using <code class="highlighter-rouge">sudo yum install nmap</code>.</li>
+      <li>The following commands should show that the ports are open:
+        <ul>
+          <li><strong>Netezza</strong>:  <code class="highlighter-rouge">nmap -p 5480 &lt;NZ IP Address&gt; -Pn</code></li>
+          <li><strong>Oracle</strong>: <code class="highlighter-rouge">nmap -p 1521&lt;Oracle IP Address&gt; –Pn</code></li>
+          <li><strong>FTP</strong>: <code class="highlighter-rouge">nmap -p 21 &lt;FTP Server IP&gt; –Pn</code></li>
+          <li><strong>SFTP</strong>: <code class="highlighter-rouge">nmap -p 22 &lt;SFTP Server IP&gt; –Pn</code></li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+  <li>Check that the <a href="#data_stores">data store</a> contains a valid username and password that can access the database/schema/directory.</li>
+</ul>
+
+<p><br /></p>
+
+<h4 id="cgw_throughput_latency">Measure Latency and Throughput</h4>
+
+<p>If the tunnel and DMC are both up and the IP service connectivity is correct, then there could be an issue with latency or throughput performance. You can use <code class="highlighter-rouge">cgw-speed-test.py</code> to test both <a href="#speed-test-latency">latency</a> and <a href="#speed-test-throughput">throughput</a>.</p>
+
+<h5 id="before-you-begin">Before You Begin</h5>
+
+<p>Connect to the Cazena gateway and get the DNS name for the security gateway.</p>
+
+<ol>
+  <li>
+    <p>From a terminal window, use the IP address of the VM to connect to the Cazena gateway.</p>
+
+    <p><strong>Example</strong>:  <code class="highlighter-rouge">$ ssh cazena@w.x.y.z</code></p>
+  </li>
+  <li>
+    <p>Run <code class="highlighter-rouge">cgw-auto-show</code> to see the DNS name for your security gateway. The server name is in the section titled <strong>Configuration</strong>.</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> --Configuration--
+ Tunnel type is ipsec
+ Server is cz123.eastus2.cloudapp.azure.com
+ User is dm-user
+ CGW name is AUTO-CGW
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h5 id="cli-arguments">CLI Arguments</h5>
+
+<p>The command line arguments for <code class="highlighter-rouge">cgw-speed-test.py</code> can be displayed by using the -h option:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    $ scripts/cgw-speed-test.py -h
+
+    cgw-test-speed.py -s &lt;secgw name&gt; -c &lt;aws, azure&gt; -l -d -t &lt;duration&gt;
+       -s  secgw name used for VPN connection
+       -c  cloud type (aws/azure)
+       -l  latency tests
+       -d  download tests
+       -t  maximum time to run each test in seconds
+</code></pre></div></div>
+
+<p><br /></p>
+
+<p><code class="highlighter-rouge">-s</code>   Required. Specify the DNS name or the IP address of the PDC’s security gateway.</p>
+
+<p><code class="highlighter-rouge">-c</code>   Optional; default is both platforms. Specify the cloud platform, either <code class="highlighter-rouge">azure</code> or <code class="highlighter-rouge">aws</code>.</p>
+
+<p><code class="highlighter-rouge">-l</code>   Optional. Run the latency tests.</p>
+
+<p><code class="highlighter-rouge">-d</code>   Optional. Run the download tests.</p>
+
+<p>      <strong>Note:</strong> If neither <code class="highlighter-rouge">-l</code> or <code class="highlighter-rouge">-d</code> are specified, both types of tests will be run.</p>
+
+<p class="list"><code class="highlighter-rouge">-t</code>   Optional; default value is 30.</p>
+<ul>
+  <li>
+    <p>For latency: The number of tests executed (e.g. 30 TCP handshakes) to determine minimum/maximum/average round trip times.</p>
+  </li>
+  <li>
+    <p>For throughput: The maximum time boundary in seconds for the test to complete.</p>
+  </li>
+</ul>
+
+<h5 id="speed-test-latency">Network Latency</h5>
+
+<p class="list">The network latency test in <code class="highlighter-rouge">cge-speed-test.py</code> uses the <code class="highlighter-rouge">nping</code> utility for network packet generation, response analysis and response time measurement.  All tests use TCP for latency measurement. <code class="highlighter-rouge">nping</code> does a full TCP handshake, including both setup and teardown.  Latency tests are performed from the CGW to three PDC network interfaces:</p>
+
+<ul>
+  <li><strong>SGW’s public interface</strong>: The script tests routes through the public Internet to the PDC’s SSL port (443). Be sure that the port is open on the PDC.  If it is not open, N/A is returned for timing values.</li>
+  <li><strong>SGW’s private interface</strong>: The script tests routes through the VPN. Be sure that the VPN is connected and that the SSH port (22) is open.</li>
+  <li><strong>IPA’s private interface</strong>: The script tests routes through the VPN. Be sure that the VPN is connected and that the SSH port (22) is open.</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Sample latency test</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ scripts/cgw-speed-test.py -s cz123.cazena.com -c aws -l -t 3
+
+------- Parameters --------
+name is cz123.cazena.com
+cloud is aws
+tunnel is True
+latency test is True
+download test is False
+max duration is 3
+-----------------------------
+
+Beginning Latency Tests:
+  SecGW Public IP latency: Max: 2.138ms  Min: 2.058ms  Avg: 2.096ms
+  SecGW Private IP latency: Max: 2.485ms  Min: 1.860ms  Avg: 2.144ms
+  IPA Private IP latency: Max: 2.785ms  Min: 2.188ms  Avg: 2.505ms
+Complete
+</code></pre></div></div>
+
+<h5 id="speed-test-throughput">Network Throughput</h5>
+
+<p>The network throughput test in <code class="highlighter-rouge">cgi-speed-test.py</code> uses the <code class="highlighter-rouge">wget</code> utility to download files to the Cazena gateway from three sources:</p>
+
+<ul>
+  <li>Data Mover in the PDC</li>
+  <li>AWS S3 storage</li>
+  <li>Azure blob storage</li>
+</ul>
+
+<p><br /></p>
+
+<p><strong>Sample throughput test</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ scripts/cgw-speed-test.py -s ken0608n6247dev.cazena-dev.com  -d -t 3
+
+------- Parameters --------
+name is ken0608n6247dev.cazena-dev.com
+cloud is both
+tunnel is True
+latency test is False
+download test is True
+max duration is 3
+-----------------------------
+
+Beginning Download Tests:
+  Azure Blob Store speed: 20.17 MBps, 161.33 Mbps; size: 60.50 MB
+  AWS S3 speed: 35.69 MBps, 285.55 Mbps; size: 107.08 MB
+  CGW Software speed: 35.79 MBps, 286.33 Mbps; size: 107.37 MB
+Complete
+</code></pre></div></div>
+
+<p><br />
+<strong>Measure latency and throughput from an external Linux or Mac system:</strong></p>
+
+<p>You can use <code class="highlighter-rouge">nping</code> and <code class="highlighter-rouge">wget</code> to measure latency and throughput through the Cazena gateway.</p>
+
+<ol>
+  <li>
+    <p>On the <strong>Cloud Sockets</strong> tab, select <strong>Cazena Console</strong> on the left side of the screen.</p>
+
+    <p><img src="assets/documentation/cazena_gateway/cgw_ip_port.png" alt=" Cazena Gateway IP and port " title="Cazena Gateway IP and port" /></p>
+  </li>
+  <li>
+    <p>Use <strong>IP Address:Port</strong> to run these commands:</p>
+
+    <ul class="list-unstyled">
+      <li><code class="highlighter-rouge">nping &lt;IP address&gt; -p &lt;PORT&gt;</code></li>
+      <li><code class="highlighter-rouge">wget -O /dev/null http://&lt;IP address&gt;:&lt;PORT&gt; /CazenaGateway.ova</code>
+ *</li>
+    </ul>
+
+    <p><br />
+<strong>Example:</strong></p>
+
+    <ul class="list-unstyled">
+      <li><code class="highlighter-rouge">nping 	192.131.12.2 -p 11092</code></li>
+      <li><code class="highlighter-rouge">wget -O /dev/null http://192.131.12.2:11092/CazenaGateway.ova</code></li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="cgw_delete">Stop and Delete a Cazena Gateway</h2>
+
+<p><strong>To stop a Cazena gateway:</strong></p>
+
+<ol>
+  <li>
+    <p>From a terminal window, use the IP address of the VM to connect to the Cazena gateway.</p>
+
+    <p><strong>Example</strong>:  <code class="highlighter-rouge">$ ssh cazena@w.x.y.z</code></p>
+  </li>
+  <li>
+    <p>Use <code class="highlighter-rouge">cgw-auto-stop</code> to stop the gateway:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $ cgw-auto-stop
+ Shutting down CGW auto restart
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>Use <code class="highlighter-rouge">cgw-auto-show</code> to see the status. If the Cazena gateway has stopped, you will see:</p>
+
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $ cgw-auto-show
+ Tunnel is down
+ CGW DMC is down
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>You may use <a href="#cgw-auto-start"> cgw-auto-start </a> to restart the gateway.</p>
+  </li>
+</ol>
+
+<p><strong>To delete a Cazena gateway from the console:</strong></p>
+
+<ol>
+  <li>On the <strong>System</strong> tab, look at the list of Cazena gateways. A trash can icon will appear next to the name of any stopped gateways. Click the icon and confirm that you want to delete the gateway.</li>
+</ol>
+
+<p class="note"><strong>Note</strong>: If you delete a Cazena gateway, all <a href="#create_enterprise_socket">enterprise cloud sockets</a> and <a href="#data_stores">data stores</a> associated with that gateway will also be deleted.</p>
+
+<p><img src="assets/documentation/cazena_gateway/delete_gateway.png" alt=" Delete a stopped Cazena Gateway " title="Delete a stopped Cazena Gateway" /></p>
+
+<hr class="end-section" />
+
+        </section>
+
+        <section id="users">
+          
+          
+<h1 id="users_and_groups">Users and Groups</h1>
+
+<p>Cazena support will create a system administrator account. The administrator will receive a welcome email that contains the IP address of the datacloud, a username and instructions for creating a password.</p>
+
+<h2 id="create_users">Create User Accounts</h2>
+
+<p class="step">Before You Start</p>
+
+<p class="list">If your site is using a <a href="#port-forwarding-cgw">port forwarding</a> configuration, you must have a Cazena gateway running before you can create new user accounts. In addition, the Cazena console must be enabled on that gateway:</p>
+
+<ol>
+  <li>Select <strong>System</strong> &gt; <strong>Manage Gateways</strong>.</li>
+  <li>On the left side of the screen, select <strong>Cazena Datacloud</strong> under any running gateway.</li>
+  <li>On the right side of the screen, be sure that <strong>Cazena Console</strong> is active and that the status icon is green, indicating that the port is up .</li>
+</ol>
+
+<p><img src="assets/documentation/users/enable_cazena_console.png" alt=" Enable Cazena Console " title="Enable Cazena Console" /></p>
+
+<p class="step">To add a new user:</p>
+
+<ol>
+  <li>From the <strong>Users</strong> tab,  click <strong>New User</strong>.</li>
+  <li>Enter the username and email address for the user.</li>
+  <li>Select a <a href="#user_roles">role</a> for the user, then click <strong>Create</strong>.</li>
+</ol>
+
+<p><img src="assets/documentation/users/users_tab.png" alt=" Users Tab " title="Users Tab" /></p>
+
+<p>The new user will be sent a welcome email with an initial password and instructions for connecting to the console.</p>
+
+<h3 id="user_roles">User Roles</h3>
+<p>For every service that is created, Cazena support will designate an owner, or superuser. The privileges and permissions given to the superuser will depend on the type of data lake or data mart. Contact support@cazena.com for details.</p>
+
+<p>Privileges for the different Cazena user roles are as follows:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Feature</th>
+      <th style="text-align: center">System Admin</th>
+      <th style="text-align: center">Application Support</th>
+      <th style="text-align: center">Data Analyst</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Service Page</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td>Transfers</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td>Move Data</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Modify Datasets</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Add User</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Delete User</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Modify User</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Dashboard Page</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td>Workloads Page</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td>System Page</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td>Edit Cloud Sockets</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>View Cloud Sockets</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td>Create/Edit Data Store</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Delete Data Store</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Access to Admin Tools Menu</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Access to Log Server Console</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="create-groups">Create Groups</h2>
+
+<p>Cazena uses IPA authentication with Sentry for role-based authorization to data. You can create IPA groups in the Cazena console to help you manage access to data in a Cazena data lake. When you create and manage groups in the console, the groups will automatically be imported into Hue.</p>
+
+<h3 id="create_groups">Create Groups</h3>
+<p class="list">To create a group using the Cazena console:</p>
+
+<ol>
+  <li>Under the <strong>Users</strong> tab, select the <strong>Groups</strong> tab.</li>
+  <li>Click <strong>New Group</strong>.</li>
+  <li>Enter a name and short description for the group, then click <strong>Save</strong>.</li>
+  <li>After the group is created, the group will be selected on the left side of the screen. To add members, select the <strong>Non_Members</strong> tab.</li>
+</ol>
+
+<p><img src="assets/documentation/users/new_group.png" alt=" New Group " title="New Group" /></p>
+
+<ol>
+  <li>Use the toggle switches to add new members to the group.</li>
+</ol>
+
+<p><img src="assets/documentation/users/add_users.png" alt=" Add Users " title="Add Users" /></p>
+
+
+        </section>
+
+        <section id="monitor_system">
+          
+          <h1 id="monitor-workloads-and-system-performance">Monitor Workloads and System Performance</h1>
+
+<p>The Cazena console provides tools for monitoring workloads, data movement progress, and system performance.</p>
+
+<h6 class="list" id="service-status">Service Status</h6>
+
+<ul>
+  <li>The <a href="#cloud_sockets_tab"><strong>Cloud Sockets</strong></a> tab shows the status of services (e.g., RStudio, Hue).</li>
+</ul>
+
+<h6 class="list" id="data-movement-progress-and-status-of-workloads">Data Movement Progress and Status of Workloads</h6>
+
+<ul>
+  <li>The <a href="#workloads_tab"><strong>Workloads</strong></a> tab displays information on individual jobs, which may include queries or data movements.
+    <ul>
+      <li>Depending on the type of data movement, you may be able to view detailed information on the <a href="#data_movement_progress">progress of data movements</a>.</li>
+      <li>You can <a href="#cancel_workload">stop or cancel data movements</a> from the workloads tab.</li>
+    </ul>
+  </li>
+</ul>
+
+<h6 class="list" id="object-store">Object Store</h6>
+
+<ul>
+  <li>Depending on the configuration of your environment, you can view information about your <a href="#adls">ADLS</a> or <a href="#aws_object_store">AWS</a> object store .</li>
+</ul>
+
+<h6 class="list" id="system-performance">System Performance</h6>
+
+<ul>
+  <li>The front page of the <a href="#datacloud_overview"><strong>Datacloud</strong></a> tab shows high level metrics for the past hour, as well as statuses for each data lake and data mart.</li>
+  <li>Within each data lake or data mart, the <a href="#dashboard"><strong>Dashboard</strong></a> tab provides an overview of performance over a period of time.</li>
+</ul>
+
+<h2 id="cloud_sockets_tab">Cloud Sockets</h2>
+
+<p>The <strong>Cloud Sockets</strong> tab shows the status (Good Health, Warning or Critical) of preconfigured services such as RStudio and Hue.</p>
+
+<p><img src="assets/documentation/monitor_system/service_status.png" alt=" Service status on Cloud Sockets tab " title=" Service status on Cloud Sockets tab" /></p>
+
+<p>If you are connecting to a service via a <a href="#cgw_cazena_gateway">Cazena Gateway</a>, you can also look on the <strong>System &gt; Manage Gateways</strong> tab to see the status of a Cazena gateway port for the service that you want.
+<img src="assets/documentation/cazena_gateway/czgw_manage_ports.png" alt=" Cazena Gateway Port Status " title="Cazena Gateway Port Status" /></p>
+
+<h2 id="dashboard">Dashboard</h2>
+
+<ol>
+  <li>
+    <p>From the <strong>Datacloud</strong> tab, click on the name of the data lake or data mart that you want to monitor.</p>
+
+    <p class="note">Note that dashboard metrics are not available for Kafka clusters.</p>
+  </li>
+  <li>Select the <strong>Dashboard</strong> tab.</li>
+  <li>By default, the <strong>Dashboard</strong> tab shows charts for the past hour. You can select a different timeframe at the top of the screen.</li>
+</ol>
+
+<p><img src="assets/documentation/monitor_system/dashboard.png" alt="  Dashboard " title=" Dashboard " /></p>
+
+<h3 id="data_lake_metrics">Metrics for Data Lakes</h3>
+
+<p>For data lakes, the dashboard displays graphs for these metrics over the selected timeframe:</p>
+
+<ul>
+  <li>CPU usage</li>
+  <li>Disk usage over the selected timeframe</li>
+  <li>Memory usage</li>
+  <li>Network received</li>
+</ul>
+
+<h3 id="data_mart_metrics">Metrics for Data Marts</h3>
+
+<p>For data marts, the dashboard displays graphs for these metrics over the selected timeframe:</p>
+
+<ul>
+  <li>CPU usage</li>
+  <li>Disk usage</li>
+  <li>Read and write throughput
+    <ul>
+      <li>This includes data going over the network to be imported to or exported from the cloud in a data movement operation as well as data being read from the cloud (For example:  by BI tools for analytic reporting or by an enterprise FTP/SFTP export request.</li>
+    </ul>
+  </li>
+  <li>Network received and transmitted</li>
+  <li>Read and write latency</li>
+  <li>Read and write IOPS</li>
+  <li>Number of database connections</li>
+  <li>Health status (healthy or unhealthy)</li>
+  <li>Maintenance mode (off or on)</li>
+</ul>
+
+<h2 id="workloads_tab">Workload Status</h2>
+
+<p>Within each data lake or data mart, the <strong>Workloads</strong> tab provides details about the activity that has occurred within a given timeframe. By default, workloads for the past hour are displayed.</p>
+
+<ul>
+  <li>You can select a different time frame in the upper right corner.</li>
+  <li>Use the filter buttons at the top of the screen to filter the list by workload type (queries or data movements) or status (e.g., completed, failed, etc)
+    <ul>
+      <li><strong>Queries</strong> might include SQL DML, SQL DDL as well as non SQL workloads.</li>
+      <li><strong>Data Movements</strong> includes background operations involved in the movement of data at various phases, such as compression of data or selecting sample data</li>
+    </ul>
+  </li>
+  <li>Use the text search fields to view only the records that contain a particular text string.</li>
+  <li>To sort the table, click on any column header.</li>
+</ul>
+
+<p><img src="assets/documentation/monitor_system/workload_filters.png" alt=" Workload Filters " title="Workload Filters" /></p>
+
+<h2 id="data_movement_progress">Data Movement Progress</h2>
+
+<p>Depending on the type of data movement, you may be able to view details on the progress of each table in a data movement.</p>
+
+<p>In this example, the workload list is filtered to show only data movements that are currently running. To see details about a particular data movement, click on the link in the PID column.</p>
+
+<p><img src="assets/documentation/monitor_system/data_movements.png" alt=" Data Movement Filters " title="Data Movement Filters" /></p>
+
+<p>Details on a selected data movement will contain a list of tables that are to be moved. Each table shows a status (e.g., Running, Complete, Pending).</p>
+
+<p><img src="assets/documentation/monitor_system/workload_details.png" alt=" Data Movement Details " title="Data Movement Details" /></p>
+
+<p>Depending on the type of data movement, you may be able to see details about the progress of individual tables. If there is a chevron on the left side of a row, click the row to open it for more details.</p>
+
+<p><img src="assets/documentation/monitor_system/dm_table_progress.png" alt=" Data Movement Table Progress " title="Data Movement Progress" /></p>
+
+<p>You can also see performance metrics from the data movement’s time of execution.</p>
+
+<p><img src="assets/documentation/monitor_system/dm_charts.png" alt=" Data Movement Charts " title="Data Movement Charts" /></p>
+
+<h2 id="cancel_workload">Cancel Jobs</h2>
+
+<p class="list">To cancel any data movement job in progress:</p>
+
+<ol>
+  <li>Use the filter buttons at the top of the screen to select only <strong>Active</strong> workloads.</li>
+  <li>Click the <strong>Stop</strong> button, and then confirm the cancellation.</li>
+</ol>
+
+<p><img src="assets/documentation/monitor_system/cancel_task.png" alt=" Cancel Task " title="Cancel Task" /></p>
+
+<p>After the job has been stopped it will appear in the list with the stopped icon: <span class="icon-stopped"></span></p>
+
+<p class="note"><strong>Note</strong>: Workloads that do not have a task ID are background tasks. Although they can affect performance, they cannot be cancelled. You will only see the <strong>Stop</strong> button for tasks that you are allowed to cancel.</p>
 
         </section>
 
@@ -1464,1064 +2486,6 @@ Successfully started job with id: 14
 
         </section>
 
-        <section id="cazena_gateway">
-          
-          <h1 id="cgw_cazena_gateway">Cazena Gateways</h1>
-
-<h2 id="cgw-overview">Overview</h2>
-
-<p>There are two ways to securely connect to the Cazena service. Both methods allows Cazena customers to access the private <a href="#cloud_sockets">cloud sockets</a> in the Cazena service within their private corporate networks.</p>
-
-<h4 id="site-to-site-cgw">Site-to-Site</h4>
-
-<p>A site-to-site connection establishes an IPSec connection between your enterprise and the Cazena service.</p>
-
-<p class="list">Cazena supports BGP, which allows HA connections to the Cazena Service. The Cazena service will be provisioned in a CIDR range, which will be confirmed to not overlap with any existing CIDRs used for the enterprise network. This configuration allows full access to services exposed by the Cazena service. A subset of services are only available with site-to site configurations, including:</p>
-
-<ul>
-  <li>Kafka</li>
-  <li>Cazena Internal DNS</li>
-</ul>
-
-<p>After the site-to-site connection has been established, a DNS forwarding rule must be added to your enterprise DNS to allow resolution of Cazena FQDNs.</p>
-
-<p>Cazena support will provide you with the correct rule sets, depending on whether you have a routing or policy-based firewall. If your enterprise does not support BGP, Cazena can support static routes. However, this will prevent a HA connection, resulting in longer outages during maintenance periods.</p>
-
-<h4 id="port-forwarding-cgw">Cazena Gateway</h4>
-
-<p>The Cazena Gateway is a software device that is packaged as a OVA, which is typically deployed within your DMZ. It manages secure connections between the datacloud and on-premises environments, allowing access to <a href="#cloud_sockets">cloud sockets</a> via a port forwarding mechanism.</p>
-
-<p>This is a simpler networking configuration than site-to-site connections, and requires minimal networking configuration within the enterprise. There are a few Cazena services that are not available with this connection, including Kafka and Cazena Internal DNS.
-This is a simpler networking configuration than site-to-site connections, and requires minimal networking configuration within the enterprise. There are a few Cazena services that are not available with this connection, including Kafka and Cazena Internal DNS.</p>
-
-<p>Cazena Gateways that use the port forwarding configuration can be managed using the Cazena console. The rest of this section describes the following:</p>
-
-<ul>
-  <li><a href="#install_new_gateway">Install a new Cazena gateway</a></li>
-  <li><a href="#manage_cloud_sockets">Create custom cloud sockets</a></li>
-  <li><a href="#update_ports">Activate and update ports</a></li>
-  <li><a href="#cgw_troubleshooting">Troubleshooting</a></li>
-  <li><a href="#cgw_delete">Stop and delete a Cazena gateway</a></li>
-</ul>
-
-<h2 id="install_new_gateway">Install a New Cazena Gateway</h2>
-
-<p>If your site is using Cazena gateways configured with port forwarding, you can install a new Cazena gateway.  You will download an OVA file and then install it on a virtual machine in the enterprise data center.</p>
-
-<h3 id="requirements">Requirements</h3>
-
-<h4 id="vmware">VMWare</h4>
-<p class="list">Currently the OVA is supported on VMware systems.</p>
-
-<ul>
-  <li>VMware Fusion/Player 4.0 or later</li>
-  <li>Workstation 8.0 or later</li>
-  <li>vSphere/ESXi 5.0 to 6.0. VMware vSphere/ESXi 6.5 has deprecated its support for OVAs. If you use vSphere/ESXi 6.5, you will have to manually untar the file. <a href="#esxi_65">Instructions</a> are in the next section.</li>
-</ul>
-
-<h4 id="hardware">Hardware</h4>
-<ul>
-  <li>4 virtual CPU cores</li>
-  <li>2.0 GB free memory (4.0 GB recommended)</li>
-  <li>25 GB free disk space</li>
-</ul>
-
-<h4 id="connectivity">Connectivity</h4>
-<ul>
-  <li>JDBC/IP connectivity to enterprise database servers</li>
-  <li>Outbound Internet connectivity on ports TCP 443 (TLS/SSL), UDP 500 (ISAKMP/IKE), UDP 4500 (IPsec NAT-T), UDP 123 (NTP)</li>
-</ul>
-
-<h3 id="cgw_installation" class="list">To install a Cazena gateway:</h3>
-<p>The steps for installing a Cazena gateway are described in detail in the following sections.</p>
-
-<ol>
-  <li><a href="#ipsec_tls_download_ova">Download and import the Cazena gateway .ova file</a>.</li>
-  <li><a href="#install_cgw">Install the Cazena gateway.</a></li>
-  <li><a href="#ipsec_tls_cgw-auto-start">Run <code class="highlighter-rouge">cgw-auto-start</code> to connect the gateway to your datacloud.</a></li>
-  <li><a href="#dns_a_record">Create an A record in the enterprise DNS</a></li>
-</ol>
-
-<h3 id="ipsec_tls_download_ova" class="step">Step 1: Download and Import the Cazena Gateway .ova file</h3>
-
-<ol>
-  <li>Sign into the Cazena support site at <a href="https://support.cazena.com" target="_blank">support.cazena.com</a></li>
-  <li>Under <strong>Cazena Support</strong>, click on <strong>Downloads</strong>.</li>
-  <li>Click on the <strong>Cazena Gateway</strong> link to download the .ova file.</li>
-</ol>
-
-<h5 id="esxi_65" class="indent">If you are using vSphere/ESXi 6.5</h5>
-
-<p class="indent">VMware vSphere/ESXi 6.5 and later has deprecated its support for OVAs.  Untar the OVA file to extract the OVF and VMDK files. You will not need the MF file.</p>
-
-<div class="indent highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ tar -xvf "CazenaGateway.ova"
-x CazenaGateway.ovf
-x CazenaGateway.mf
-x CazenaGateway-disk1.vmdk
-</code></pre></div></div>
-
-<ol>
-  <li>
-    <p>Import the CazenaGateway.ova file.</p>
-
-    <table class="table-30-70 row-borders">
-  <tbody>
-    <tr>
-      <th>Client</th>
-      <th>Instructions</th>
-    </tr>
-    <tr>
-      <td>VMWare Fusion</td>
-      <td>
-      <ol>
-          <li>Choose <strong>File &gt; Import...</strong></li>
-           <li>Select the CGW OVA file.</li>
-       </ol>
-       </td>
-    </tr>
-    <tr>
-      <td>Virtual Machine Manager</td>
-      <td>
-      <ol>
-          <li>Choose <strong>Add &gt; Import...</strong></li>
-           <li>Select the CGW OVA file.</li>
-       </ol>
-      </td>
-    </tr>
-    <tr>
-      <td>vSphere/ESXi Web client</td>
-      <td>
-        <ol>
-            <li>Choose <strong>Navigator -&gt; Virtual Machines -&gt; Create/Register VM...</strong></li>
-            <li>Select <strong>Deploy a virtual machine from an OVF or OVA file</strong></li>
-            <li>Enter a name</li>
-            <li>Select file(s)
-                <ul>
-                <li><em>5.0 to 6.0:</em> Add the OVA </li>
-                <li><em>6.5 or later:</em> Add the OVF and VMDK files<br />
-                (See <a href="#esxi_65">instructions</a> for untarring the OVA file.)
-                </li>
-                </ul>
-             </li>
-        </ol>
-       </td>
-    </tr>
-  </tbody>
-</table>
-
-    <p class="note"><strong>Important:</strong> After the import has finished, open the VM’s network settings and make sure the network adapter is set to ‘bridged mode’. This will allow the CGW ethernet primary interface (eth0) to have an enterprise reachable IP address, so that it will be exposed to enterprise users.</p>
-  </li>
-</ol>
-
-<h3 id="install_cgw" class="step">Step 2: Install the Cazena Gateway Certificate</h3>
-
-<ol>
-  <li>Start the Cazena VM and sign into the gateway:
-    <ul>
-      <li>username: <code class="highlighter-rouge">cazena</code></li>
-      <li>password: <code class="highlighter-rouge">cazena</code>
-<br /><br /></li>
-    </ul>
-  </li>
-  <li>
-    <p>Copy the Client Authentication Certificate that was emailed to you to the Cazena gateway.</p>
-
-    <ul>
-      <li><strong>Option 1</strong>: Use <code class="highlighter-rouge">scp</code> as in this example: <code class="highlighter-rouge">$ scp cazena.pem cazena@u.v.w.x:~ </code></li>
-      <li><strong>Option 2</strong>: Copy and paste the contents of the <code class="highlighter-rouge">cazena.pem</code> file into a new file on the Cazena gateway</li>
-    </ul>
-  </li>
-  <li>
-    <p>Install the certificate.</p>
-
-    <p><code class="highlighter-rouge">$ cgw-install-cert cazena.pem</code></p>
-  </li>
-</ol>
-
-<h3 id="ipsec_tls_cgw-auto-start" class="step">Step 3: Run <code class="highlighter-rouge">cgw-auto-start</code> to Connect the Cazena Gateway to Your Datacloud</h3>
-
-<ol>
-  <li>
-    <p>From a terminal window, use the IP address of the VM to connect to the Cazena gateway.</p>
-
-    <p><strong>Example</strong>:  <code class="highlighter-rouge">$ ssh cazena@w.x.y.z</code></p>
-  </li>
-  <li>
-    <p>Change the gateway’s default password.</p>
-
-    <p><code class="highlighter-rouge">$  sudo passwd</code></p>
-  </li>
-  <li>
-    <p>If you haven’t already, set up a <strong>dedicated</strong> user account with system administrator privileges for the Cazena gateway. (See <a href="#users">Instructions for setting up a user account</a>.)</p>
-  </li>
-  <li>
-    <p><a name="cgw-auto-start"></a>Use <code class="highlighter-rouge">cgw-auto-start</code> to connect to the gateway.</p>
-  </li>
-</ol>
-
-<div class="code-wrapper">
-<pre class="indent copy-area" id="cgw-auto-start-cmd">cgw-auto-start -t ipsec-crt -s <span style="color:red">security-gateway-dns-name</span> -u<span style="color:red"> cgw-user-username</span> -p <span style="color:red">cgw-user-password</span> -n <span style="color:red">cgw-name</span> -k <span style="color:red">client-certificate-password</span> -w</pre>
-<button class="btn clipboard-btn" data-clipboard-target="#cgw-auto-start-cmd">Copy</button>
-</div>
-
-<p>where:</p>
-
-<ul>
-  <li>
-    <p><code class="highlighter-rouge">security-gateway-dns-name</code> is the DNS name of the security gateway, available in email from Cazena support or in the Cazena console.</p>
-  </li>
-  <li>
-    <p><code class="highlighter-rouge">cgw-user-username</code> and <code class="highlighter-rouge">cgw-user-password</code> are the username and password of the dedicated gateway user. This may have been emailed to you by Cazena support.</p>
-  </li>
-  <li>
-    <p><code class="highlighter-rouge">cgw-name</code> is a unique name for the Cazena gateway. The name may contain <code class="highlighter-rouge">A-Z</code>, <code class="highlighter-rouge">a-z</code>, <code class="highlighter-rouge">0-9</code> and <code class="highlighter-rouge">-</code>.</p>
-  </li>
-  <li>
-    <p><code class="highlighter-rouge">client-certificate-password</code> is the certificate password that was emailed to you.</p>
-  </li>
-</ul>
-
-<p><br /></p>
-
-<h4 id="example">Example</h4>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cgw-auto-start -t ipsec-crt -s portal.partner.cazena.com -u cazenauser -p password -n mygateway -k clientpassword -w
-</code></pre></div></div>
-
-<p>The system will respond:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Starting up CGW auto restart
-run cgw-auto-show or look in /var/log/cazena/cgw-auto.log to determine status
-</code></pre></div></div>
-
-<p>Inside of <code class="highlighter-rouge">/var/log/cazena/cgw-auto.log</code>, there are three lines giving the network address information, similar to this:</p>
-
-<ul>
-  <li>PDC network: 10.128.80.0/21</li>
-  <li>ENT address: 10.4.132.10</li>
-  <li>ENT network: 10.4.132.0/24 10.4.133.0/24 10.4.130.0/23</li>
-</ul>
-
-<p><br /> For PDC DNS, the IP address of the IPA server is found in the file /etc/resolv.conf, similar to this:</p>
-
-<ul>
-  <li>nameserver  10.128.80.48   # by strongswan
-<br /><br /></li>
-</ul>
-
-<p>Use <code class="highlighter-rouge">cgw-auto-show</code> to see the status:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    $ cgw-auto-show
-    Tunnel is up
-    CGW DMC is up
-    CGW DMC version matches PDC version
-</code></pre></div></div>
-
-<h3 id="dns_a_record" class="step">Step 4: Create an A Record in the Enterprise DNS</h3>
-
-<p>When the Cazena Gateway is installed, onsite administrators will assign a private IP address to the VM. Because all Cazena endpoints are TLS-enabled, accessing <a href="#cloud_sockets">cloud sockets</a> with the IP address will result in security errors. For this reason, all access must use a FQDN that matches the public certificate used for your single-tenant deployment. You must add an <strong>A record</strong> to your enterprise DNS, to allow the enterprise to refer to the Cazena gateway using an FQDN rather than the IP address.</p>
-
-<p>The A record is a DNS entry of the form:</p>
-
-<pre class="indent"><span style="color:red"> gateway-name</span>.pvt.<span style="color:red">customer-hash</span>.cazena.com
-</pre>
-
-<p class="indent, list">where</p>
-
-<ul>
-  <li><code class="highlighter-rouge">gateway-name</code> is the name of your Cazena gateway, as specified in <code class="highlighter-rouge">cgw-auto-start</code></li>
-  <li><code class="highlighter-rouge">customer-hash</code> is the name of your PDC.</li>
-</ul>
-
-<p><br /></p>
-
-<p class="note"><strong>Note</strong>: This A record will not prevent you from reaching <a href="https://www.cazena.com">www.cazena.com</a>. The A record is for the subzone <code class="highlighter-rouge">[gateway-name].pvt.[customer-hash].cazena.com</code>.</p>
-
-<hr class="end-section" />
-
-<h2 id="manage_cloud_sockets">Custom Cloud Sockets</h2>
-
-<p>You can set up cloud sockets with endpoints in any of these components:</p>
-
-<ul>
-  <li>
-    <p><strong>Data Lake or Data Mart</strong>: This type of custom cloud socket could be used, for example, to allow access to a tool such as Flume through a second Cazena gateway port.</p>
-  </li>
-  <li>
-    <p><strong>Enterprise</strong>: An enterprise cloud socket could be used, for example, to move data from an enterprise server into the datacloud using Sqoop.</p>
-  </li>
-  <li>
-    <p><strong>AppCloud</strong>:  The AppCloud allows you to deploy any tool (e.g., analytics, machine learning, or proprietary algorithms), with secure access to data in the cloud. An example use would be to install Streamsets on an App Cloud node, and then create a custom cloud socket that allows access to that endpoint.</p>
-  </li>
-</ul>
-
-<h3 id="create_enterprise_socket">Example: Enterprise Cloud Socket</h3>
-
-<p>This examples shows how to set up a custom Enterprise cloud socket, which might be used to move data from an enterprise server into the datacloud using Sqoop. Instructions for using Sqoop can be found in the <a href="#sqoop">Data Movement section</a>.</p>
-
-<ol>
-  <li>On <strong>System &gt; Manage Gateways</strong> , select <strong>Enterprise</strong> on the left side of the screen. If there are multiple Cazena Gateways, make your selection under the gateway that you want to use.</li>
-  <li>Click <strong>New Cloud Socket</strong>.</li>
-  <li>Enter a name and (optional) description for the cloud socket.</li>
-  <li>Select the the port number and protocol that you want to use for the Cazena Gateway. You may use the same port number with different protocols. For example, you could have two cloud sockets that both use port 11300, with one over TCP and one over UDP.</li>
-  <li>In the <strong>Endpoint</strong> section, enter the IP address and port for the enterprise server.</li>
-  <li><em>Optional:</em> You may enter an additional path to the location on the enterprise server.</li>
-  <li>Click <strong>Save</strong>.</li>
-</ol>
-
-<p class="image-no-outline"><img src="assets/documentation/cloud_sockets/ent_cloud_socket.png" alt=" Enterprise Cloud Socket " title="Enterprise Cloud Socket" /></p>
-
-<h2 id="update_ports">Activate and Update Ports</h2>
-
-<p>From the Cazena console, system administrators may specify the ports in the environment that will be used for each service on Cazena gateway(s).</p>
-
-<p class="list">To manage ports, click on the <strong>System</strong> tab. By default, you will see a list Cazena gateways on the left side of the screen. Under each gateway, you will see each of your data lakes and/or data marts, as well as an option to view <a href="#enterprise_cloud_socket">enterprise services</a> associated with that gateway.</p>
-
-<ol>
-  <li>Under any Cazena gateway in the list, click on the name of a data lake or data mart, or Enterprise Services.</li>
-  <li>
-    <p>Click on any port number on the right to change its default value.</p>
-
-    <p class="note"><strong>Note:</strong> Port numbers must be in the range 32768 - 60999.</p>
-  </li>
-  <li>Use the slider in the <strong>Active</strong> column to activate or deactivate any port.</li>
-</ol>
-
-<p><img src="assets/documentation/cazena_gateway/czgw_manage_ports.png" alt=" Activate and Update Ports " title="Activate and Update Ports" /></p>
-
-<hr class="end-section" />
-<h2 id="cgw_troubleshooting">Troubleshooting</h2>
-
-<p class="list">Follow these steps if you have run <code class="highlighter-rouge">cgw-auto-start</code> and either:</p>
-
-<ul>
-  <li>The Cazena gateway doesn’t appear in the Cazena console.</li>
-  <li>You are having trouble moving data.</li>
-</ul>
-
-<h3 id="check-that-the-cazena-gateway-is-operating-correctly">Check that the Cazena Gateway is Operating Correctly</h3>
-
-<p>First, run <code class="highlighter-rouge">cgw-auto-show</code>:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    $ cgw-auto-show 
-    --Status--
-    Tunnel is up
-    Tunnel was started at Mon Jun 11 10:20:40 UTC 2018
-    Tunnel has been up for 7h:0m:42s
-    CGW DMC is up
-    CGW DMC version matches PDC version
-    CGW was started at Mon Jun 11 10:20:41 UTC 2018
-    CGW has been up for 7h:0m:41s
-
-    --Configuration--
-    Tunnel type is ipsec
-    Server is cazena-cz123.eastus2.cloudapp.azure.com
-    User is cz_user
-    CGW name is cazena-gw1
-</code></pre></div></div>
-
-<p>Depending on what <code class="highlighter-rouge">cgw-auto-show</code> returns, refer to one of these sections:</p>
-
-<ul>
-  <li><a href="#cgw_troubleshoot_tunnel">Tunnel is down</a></li>
-  <li><a href="#cgw_troubleshoot_cgw_dmc">CGW DMC is down</a></li>
-  <li>Both the tunnel and CGW DMC are up, but you are having <a href="#troubleshoot_connectivity">trouble moving data</a>.</li>
-</ul>
-
-<h3 id="cgw_troubleshoot_tunnel">If the Tunnel is Down</h3>
-
-<ul>
-  <li>
-    <p>Double-check your  <a href="#cgw-auto-start"> cgw-auto-start </a> command.</p>
-
-    <ul>
-      <li>Make sure that you are using the correct user name/password.</li>
-      <li>Check that the name/password are not being used by someone else.</li>
-      <li>Make sure that the secgw name and preshared key (if used) are correct.</li>
-    </ul>
-  </li>
-</ul>
-
-<p>    If necessary, re-run <a href="#cgw-auto-start">cgw-auto-start</a>.</p>
-
-<ul>
-  <li>
-    <p>Check with Cazena support to see if your site has a whitelist of allowed IP addresses. If so, the IP address of the Cazena gateway must be included in the whitelist.</p>
-  </li>
-  <li>
-    <p>Run  <code class="highlighter-rouge">cgw-show-ipsec</code>.</p>
-
-    <p>If the tunnel is up, you should see:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>          $ cgw-show-ipsec
-
-          Redirecting to /bin/systemctl status strongswan.service
-          ipsec daemon running
-          Security Associations (2 up, 0 connecting):
-                dm-psk[9]: ESTABLISHED 4 minutes ago, 10.1.3.80[dm-user]...40.70.186.53[rw-psk]
-                dm-psk{24}:  INSTALLED, TUNNEL, reqid 1, ESP in UDP SPIs: c111a8c9_i c1b8fff2_o
-                dm-psk{24}:   10.255.252.2/32 === 10.128.8.0/21
-                dm-psk[8]: ESTABLISHED 50 minutes ago, 10.1.3.80[dm-user]...40.70.186.53[rw-psk]
-                dm-psk{22}:  INSTALLED, TUNNEL, reqid 1, ESP in UDP SPIs: c0b0c6ba_i caa3ea03_o
-                dm-psk{22}:   10.255.252.2/32 === 10.128.8.0/21
-</code></pre></div>    </div>
-  </li>
-</ul>
-
-<h3 id="cgw_troubleshoot_cgw_dmc">If CGW DMC is Down</h3>
-
-<p>If <code class="highlighter-rouge">cgw-auto-show</code> indicates that the tunnel is up but the CGW DMC is down:</p>
-
-<ol>
-  <li>
-    <p>Check the log files.  Open <code class="highlighter-rouge">/var/log/cazena/&lt;gateway-name&gt;.log</code>, replacing <code class="highlighter-rouge">&lt;gateway-name&gt;</code> with the name of your gateway.</p>
-
-    <dl>
-      <dt>If you see <code class="highlighter-rouge">Operation timed out after</code></dt>
-      <dd>The CGW DMC software may not have not downloaded successfully. Try increasing the timeout value using the <code class="highlighter-rouge">-m</code> option of the <a href="#cgw-auto-start"> cgw-auto-start </a> command.</dd>
-      <dt>If you see WARN or ERROR messages:</dt>
-      <dd>This indicates that CGW DMC is having internal issues. The range of potential issues here are too numerous to list out.  Contact support/engineering for help.</dd>
-    </dl>
-  </li>
-  <li>
-    <p>Check that the CGW has the necessary port connectivity by running <code class="highlighter-rouge">cgw-reachable</code>.</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cgw-reachable [DNS-NAME]
- Checking cloud services reachability... 
-   Security Gateway TLS reachable: TRUE 
-   AWS S3 reachable: TRUE 
-   Azure storage reachable: TRUE 
-</code></pre></div>    </div>
-
-    <p>If any of these targets returns FALSE, confirm that the customer firewall is allowing the following ports outbound access from the Cazena gateway.</p>
-
-    <ul>
-      <li>TCP 443 (TLS/SSL)</li>
-      <li>UDP 500 (ISAKMP/IKE)</li>
-      <li>UDP 4500 (IPsec NAT-T)</li>
-    </ul>
-  </li>
-</ol>
-
-<h3 id="troubleshoot_connectivity">Trouble with data movement</h3>
-
-<p>If you are having trouble moving data, first follow the steps in the previous section to ensure that the Cazena Gateway is operating correctly. Next, you can:</p>
-
-<ul>
-  <li><a href="#cgw_pdc_connection">Check connectivity between the gateway and the datacloud</a></li>
-  <li><a href="#cgw_enterprise_connection">Check connections to enterprise services</a></li>
-  <li><a href="#cgw_throughput_latency">Measure latency and throughput</a></li>
-</ul>
-
-<h4 id="cgw_pdc_connection">Check Connectivity Between the Cazena Gateway and the Datacloud</h4>
-<ol>
-  <li>
-    <p>Run <code class="highlighter-rouge">cgw-show-ipservices</code> to see whether the CGW is allowing access to the required ports/services within the PDC; for example:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> [cazena@cgw ~]$  cgw-show-ipservices
- IpService ID: pdc-kibana (PDC-DNAT rule #4, PDC-FWRD rule #4)
- target     prot opt source               destination
- DNAT       tcp  --  0.0.0.0/0            10.4.131.136         tcp dpt:11494 /* id: pdc-kibana, name: kibana */ to:10.128.16.37:5601
- ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0            ctstate NEW,ESTABLISHED ctproto 6 ctorigdst 10.4.131.136 ctorigdstport 11494 /* id: pdc-kibana, name: kibana */
-
- etc
-</code></pre></div>    </div>
-  </li>
-</ol>
-
-<p>You can also look on the <strong>System</strong> tab of the Cazena Console to see whether Cazena gateway ports are active.
-<img src="assets/documentation/cazena_gateway/czgw_manage_ports.png" alt=" Activate and Update Ports " title="Activate and Update Ports" /></p>
-
-<h4 id="cgw_enterprise_connection">Check Connections to Enterprise Services</h4>
-
-<p class="list"><strong>For Netezza or Oracle:</strong></p>
-
-<ul>
-  <li>Make sure that the needed drivers are present in /home/cazena and are read/executable.
-    <ul>
-      <li><strong>Netezza</strong>: nzjdbc3-7.2.0.0-cazena.jar</li>
-      <li><strong>Oracle</strong>: ojdbc7-12.1.0.1.0-linux.x64.jar</li>
-    </ul>
-  </li>
-</ul>
-
-<p class="list"><strong>For Netezza, Oracle or FTP/SFTP:</strong></p>
-
-<ul>
-  <li>Make sure the servers can be reached.
-    <ol>
-      <li>If you do not have nmap, install it using <code class="highlighter-rouge">sudo yum install nmap</code>.</li>
-      <li>The following commands should show that the ports are open:
-        <ul>
-          <li><strong>Netezza</strong>:  <code class="highlighter-rouge">nmap -p 5480 &lt;NZ IP Address&gt; -Pn</code></li>
-          <li><strong>Oracle</strong>: <code class="highlighter-rouge">nmap -p 1521&lt;Oracle IP Address&gt; –Pn</code></li>
-          <li><strong>FTP</strong>: <code class="highlighter-rouge">nmap -p 21 &lt;FTP Server IP&gt; –Pn</code></li>
-          <li><strong>SFTP</strong>: <code class="highlighter-rouge">nmap -p 22 &lt;SFTP Server IP&gt; –Pn</code></li>
-        </ul>
-      </li>
-    </ol>
-  </li>
-  <li>Check that the <a href="#data_stores">data store</a> contains a valid username and password that can access the database/schema/directory.</li>
-</ul>
-
-<p><br /></p>
-
-<h4 id="cgw_throughput_latency">Measure Latency and Throughput</h4>
-
-<p>If the tunnel and DMC are both up and the IP service connectivity is correct, then there could be an issue with latency or throughput performance. You can use <code class="highlighter-rouge">cgw-speed-test.py</code> to test both <a href="#speed-test-latency">latency</a> and <a href="#speed-test-throughput">throughput</a>.</p>
-
-<h5 id="before-you-begin">Before You Begin</h5>
-
-<p>Connect to the Cazena gateway and get the DNS name for the security gateway.</p>
-
-<ol>
-  <li>
-    <p>From a terminal window, use the IP address of the VM to connect to the Cazena gateway.</p>
-
-    <p><strong>Example</strong>:  <code class="highlighter-rouge">$ ssh cazena@w.x.y.z</code></p>
-  </li>
-  <li>
-    <p>Run <code class="highlighter-rouge">cgw-auto-show</code> to see the DNS name for your security gateway. The server name is in the section titled <strong>Configuration</strong>.</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> --Configuration--
- Tunnel type is ipsec
- Server is cz123.eastus2.cloudapp.azure.com
- User is dm-user
- CGW name is AUTO-CGW
-</code></pre></div>    </div>
-  </li>
-</ol>
-
-<h5 id="cli-arguments">CLI Arguments</h5>
-
-<p>The command line arguments for <code class="highlighter-rouge">cgw-speed-test.py</code> can be displayed by using the -h option:</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    $ scripts/cgw-speed-test.py -h
-
-    cgw-test-speed.py -s &lt;secgw name&gt; -c &lt;aws, azure&gt; -l -d -t &lt;duration&gt;
-       -s  secgw name used for VPN connection
-       -c  cloud type (aws/azure)
-       -l  latency tests
-       -d  download tests
-       -t  maximum time to run each test in seconds
-</code></pre></div></div>
-
-<p><br /></p>
-
-<p><code class="highlighter-rouge">-s</code>   Required. Specify the DNS name or the IP address of the PDC’s security gateway.</p>
-
-<p><code class="highlighter-rouge">-c</code>   Optional; default is both platforms. Specify the cloud platform, either <code class="highlighter-rouge">azure</code> or <code class="highlighter-rouge">aws</code>.</p>
-
-<p><code class="highlighter-rouge">-l</code>   Optional. Run the latency tests.</p>
-
-<p><code class="highlighter-rouge">-d</code>   Optional. Run the download tests.</p>
-
-<p>      <strong>Note:</strong> If neither <code class="highlighter-rouge">-l</code> or <code class="highlighter-rouge">-d</code> are specified, both types of tests will be run.</p>
-
-<p class="list"><code class="highlighter-rouge">-t</code>   Optional; default value is 30.</p>
-<ul>
-  <li>
-    <p>For latency: The number of tests executed (e.g. 30 TCP handshakes) to determine minimum/maximum/average round trip times.</p>
-  </li>
-  <li>
-    <p>For throughput: The maximum time boundary in seconds for the test to complete.</p>
-  </li>
-</ul>
-
-<h5 id="speed-test-latency">Network Latency</h5>
-
-<p class="list">The network latency test in <code class="highlighter-rouge">cge-speed-test.py</code> uses the <code class="highlighter-rouge">nping</code> utility for network packet generation, response analysis and response time measurement.  All tests use TCP for latency measurement. <code class="highlighter-rouge">nping</code> does a full TCP handshake, including both setup and teardown.  Latency tests are performed from the CGW to three PDC network interfaces:</p>
-
-<ul>
-  <li><strong>SGW’s public interface</strong>: The script tests routes through the public Internet to the PDC’s SSL port (443). Be sure that the port is open on the PDC.  If it is not open, N/A is returned for timing values.</li>
-  <li><strong>SGW’s private interface</strong>: The script tests routes through the VPN. Be sure that the VPN is connected and that the SSH port (22) is open.</li>
-  <li><strong>IPA’s private interface</strong>: The script tests routes through the VPN. Be sure that the VPN is connected and that the SSH port (22) is open.</li>
-</ul>
-
-<p><br /></p>
-
-<p><strong>Sample latency test</strong></p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ scripts/cgw-speed-test.py -s cz123.cazena.com -c aws -l -t 3
-
-------- Parameters --------
-name is cz123.cazena.com
-cloud is aws
-tunnel is True
-latency test is True
-download test is False
-max duration is 3
------------------------------
-
-Beginning Latency Tests:
-  SecGW Public IP latency: Max: 2.138ms  Min: 2.058ms  Avg: 2.096ms
-  SecGW Private IP latency: Max: 2.485ms  Min: 1.860ms  Avg: 2.144ms
-  IPA Private IP latency: Max: 2.785ms  Min: 2.188ms  Avg: 2.505ms
-Complete
-</code></pre></div></div>
-
-<h5 id="speed-test-throughput">Network Throughput</h5>
-
-<p>The network throughput test in <code class="highlighter-rouge">cgi-speed-test.py</code> uses the <code class="highlighter-rouge">wget</code> utility to download files to the Cazena gateway from three sources:</p>
-
-<ul>
-  <li>Data Mover in the PDC</li>
-  <li>AWS S3 storage</li>
-  <li>Azure blob storage</li>
-</ul>
-
-<p><br /></p>
-
-<p><strong>Sample throughput test</strong></p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ scripts/cgw-speed-test.py -s ken0608n6247dev.cazena-dev.com  -d -t 3
-
-------- Parameters --------
-name is ken0608n6247dev.cazena-dev.com
-cloud is both
-tunnel is True
-latency test is False
-download test is True
-max duration is 3
------------------------------
-
-Beginning Download Tests:
-  Azure Blob Store speed: 20.17 MBps, 161.33 Mbps; size: 60.50 MB
-  AWS S3 speed: 35.69 MBps, 285.55 Mbps; size: 107.08 MB
-  CGW Software speed: 35.79 MBps, 286.33 Mbps; size: 107.37 MB
-Complete
-</code></pre></div></div>
-
-<p><br />
-<strong>Measure latency and throughput from an external Linux or Mac system:</strong></p>
-
-<p>You can use <code class="highlighter-rouge">nping</code> and <code class="highlighter-rouge">wget</code> to measure latency and throughput through the Cazena gateway.</p>
-
-<ol>
-  <li>
-    <p>On the <strong>Cloud Sockets</strong> tab, select <strong>Cazena Console</strong> on the left side of the screen.</p>
-
-    <p><img src="assets/documentation/cazena_gateway/cgw_ip_port.png" alt=" Cazena Gateway IP and port " title="Cazena Gateway IP and port" /></p>
-  </li>
-  <li>
-    <p>Use <strong>IP Address:Port</strong> to run these commands:</p>
-
-    <ul class="list-unstyled">
-      <li><code class="highlighter-rouge">nping &lt;IP address&gt; -p &lt;PORT&gt;</code></li>
-      <li><code class="highlighter-rouge">wget -O /dev/null http://&lt;IP address&gt;:&lt;PORT&gt; /CazenaGateway.ova</code>
- *</li>
-    </ul>
-
-    <p><br />
-<strong>Example:</strong></p>
-
-    <ul class="list-unstyled">
-      <li><code class="highlighter-rouge">nping 	192.131.12.2 -p 11092</code></li>
-      <li><code class="highlighter-rouge">wget -O /dev/null http://192.131.12.2:11092/CazenaGateway.ova</code></li>
-    </ul>
-  </li>
-</ol>
-
-<h2 id="cgw_delete">Stop and Delete a Cazena Gateway</h2>
-
-<p><strong>To stop a Cazena gateway:</strong></p>
-
-<ol>
-  <li>
-    <p>From a terminal window, use the IP address of the VM to connect to the Cazena gateway.</p>
-
-    <p><strong>Example</strong>:  <code class="highlighter-rouge">$ ssh cazena@w.x.y.z</code></p>
-  </li>
-  <li>
-    <p>Use <code class="highlighter-rouge">cgw-auto-stop</code> to stop the gateway:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $ cgw-auto-stop
- Shutting down CGW auto restart
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>Use <code class="highlighter-rouge">cgw-auto-show</code> to see the status. If the Cazena gateway has stopped, you will see:</p>
-
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> $ cgw-auto-show
- Tunnel is down
- CGW DMC is down
-</code></pre></div>    </div>
-  </li>
-  <li>
-    <p>You may use <a href="#cgw-auto-start"> cgw-auto-start </a> to restart the gateway.</p>
-  </li>
-</ol>
-
-<p><strong>To delete a Cazena gateway from the console:</strong></p>
-
-<ol>
-  <li>On the <strong>System</strong> tab, look at the list of Cazena gateways. A trash can icon will appear next to the name of any stopped gateways. Click the icon and confirm that you want to delete the gateway.</li>
-</ol>
-
-<p class="note"><strong>Note</strong>: If you delete a Cazena gateway, all <a href="#create_enterprise_socket">enterprise cloud sockets</a> and <a href="#data_stores">data stores</a> associated with that gateway will also be deleted.</p>
-
-<p><img src="assets/documentation/cazena_gateway/delete_gateway.png" alt=" Delete a stopped Cazena Gateway " title="Delete a stopped Cazena Gateway" /></p>
-
-<hr class="end-section" />
-
-        </section>
-
-        <section id="users">
-          
-          
-<h1 id="users_and_groups">Users and Groups</h1>
-
-<p>When Cazena creates your Cazena datacloud, Cazena support will create a system administrator account. The administrator will receive a welcome email that contains the IP address of the datacloud, a username and instructions for creating a password.</p>
-
-<h2 id="create_users">Create User Accounts</h2>
-
-<p class="step">Before You Start</p>
-
-<p class="list">If your site is using a <a href="#port-forwarding-cgw">port forwarding</a> configuration, you must have a Cazena gateway running before you can create new user accounts. In addition, the Cazena console must be enabled on that gateway:</p>
-
-<ol>
-  <li>Select <strong>System</strong> &gt; <strong>Manage Gateways</strong>.</li>
-  <li>On the left side of the screen, select <strong>Cazena Datacloud</strong> under any running gateway.</li>
-  <li>On the right side of the screen, be sure that <strong>Cazena Console</strong> is active and that the status icon is green, indicating that the port is up .</li>
-</ol>
-
-<p><img src="assets/documentation/users/enable_cazena_console.png" alt=" Enable Cazena Console " title="Enable Cazena Console" /></p>
-
-<p class="step">To add a new user:</p>
-
-<ol>
-  <li>From the <strong>Users</strong> tab,  click <strong>New User</strong>.</li>
-  <li>Enter the username and email address for the user.</li>
-  <li>Select a <a href="#user_roles">role</a> for the user, and click <strong>Create</strong>.</li>
-</ol>
-
-<p><img src="assets/documentation/users/users_tab.png" alt=" Users Tab " title="Users Tab" /></p>
-
-<p>The new user will be sent a welcome email with an initial password and instructions for connecting to the console.</p>
-
-<h3 id="user_roles">User Roles</h3>
-<p>For every service that is created, Cazena support will designate an owner, or superuser. The privileges and permissions given to the superuser will depend on the type of data lake or data mart. Contact support@cazena.com for details.</p>
-
-<p>Privileges for the different Cazena user roles are as follows:</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>Feature</th>
-      <th style="text-align: center">System Admin</th>
-      <th style="text-align: center">Application Support</th>
-      <th style="text-align: center">Data Analyst</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Service Page</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-    </tr>
-    <tr>
-      <td>Transfers</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-    </tr>
-    <tr>
-      <td>Move Data</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>Modify Datasets</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>Add User</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>Delete User</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>Modify User</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>Dashboard Page</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-    </tr>
-    <tr>
-      <td>Workloads Page</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-    </tr>
-    <tr>
-      <td>System Page</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-    </tr>
-    <tr>
-      <td>Edit Cloud Sockets</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>View Cloud Sockets</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-    </tr>
-    <tr>
-      <td>Create/Edit Data Store</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>Delete Data Store</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>Access to Admin Tools Menu</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>Access to Log Server Console</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center"> </td>
-    </tr>
-  </tbody>
-</table>
-
-<h2 id="using-groups-to-control-access-to-data">Using Groups to Control Access to Data</h2>
-
-<p>Cazena uses IPA authentication with Sentry for role-based authorization to data. You can create IPA groups in the Cazena console to help you manage access to data in a Cazena data lake. At a high level, the steps are as follows:</p>
-
-<ol>
-  <li>First, create <a href="#users">create_users</a> and <a href="#create_groups">groups</a> in the Cazena console.</li>
-  <li>Next, <a href="#import_groups_into_hue">import Cazena groups into Hue</a>. By importing groups into Hue, you can ensure that groups and roles will persist across the entire data lake. Persistence cannot be assured with groups that are created directly in Hue.</li>
-  <li>Use the Hue interface to manage data access for the imported groups.</li>
-</ol>
-
-<p>This section will review the how to create groups in the Cazena console and then import them into Hue.</p>
-
-<h3 id="create_groups">Create Groups</h3>
-<p class="list">To create a group using the Cazena console:</p>
-
-<ol>
-  <li>In the <strong>Users</strong> tab, select the <strong>Groups</strong> tab.</li>
-  <li>Click <strong>New Group</strong>.</li>
-  <li>Enter a name and short description for the group.</li>
-  <li>Select members for the group. You may have to scroll in the list to see all users in your organization.</li>
-  <li>Click <strong>Save</strong>.</li>
-</ol>
-
-<p><img src="assets/documentation/users/create_group.png" alt=" Create Group " title="Create Group" /></p>
-
-<h3 id="import_groups_into_hue">Import Groups into Hue</h3>
-
-<h4 id="sign-into-hue">Sign into Hue</h4>
-
-<ol>
-  <li>Under <strong>Cloud Sockets</strong>, select <strong>Hue Server</strong> on the left side of the screen.</li>
-  <li>The right side of the screen will show connection details for Hue. Click on the link under <strong>IP Address:Port</strong>.</li>
-  <li>Sign into Hue using the same credentials that you use for the Cazena console.</li>
-</ol>
-
-<p><img src="assets/documentation/users/hue_connection_details.png" alt=" Hue Connection Details " title="Hue Connection Details" /></p>
-
-<h4 id="after-you-have-signed-into-hue">After you have signed into Hue:</h4>
-
-<ol>
-  <li>Go to the Hue User Admin page. Consult the Hue documentation for more details.</li>
-</ol>
-
-<p class="note"><strong>Note:</strong>  You must be a Hue superuser to access the User Admin page. If you cannot access the page, contact support@cazena.com.</p>
-
-<ol>
-  <li>Select the <strong>Groups</strong> tab, then <strong>Add/Sync LDAP group</strong>.</li>
-</ol>
-
-<p><img src="assets/documentation/users/hue_add_groups.png" alt=" Add LDAP Users " title="Add LDAP Users" /></p>
-
-<ol>
-  <li>Type in the name of the groups you created in the Cazena console.</li>
-  <li>Select <strong>Import new members</strong>.</li>
-  <li>Click <strong>Add/Sync Group</strong>.</li>
-</ol>
-
-<p><img src="assets/documentation/users/create_hue_group.png" alt=" Hue Group Options " title="Hue Group Options" /></p>
-
-<p class="note"><strong>Note</strong>: If you add additional users to this group from the Cazena console, you will have to repeat this process for those users to be added to the Hue group.</p>
-
-        </section>
-
-        <section id="monitor_system">
-          
-          <h1 id="monitor-workloads-and-system-performance">Monitor Workloads and System Performance</h1>
-
-<p>The Cazena console provides tools for monitoring workloads, data movement progress, and system performance.</p>
-
-<h6 class="list" id="service-status">Service Status</h6>
-
-<ul>
-  <li>The <a href="#cloud_sockets_tab"><strong>Cloud Sockets</strong></a> tab shows the status of services (e.g., RStudio, Hue).</li>
-</ul>
-
-<h6 class="list" id="data-movement-progress-and-status-of-workloads">Data Movement Progress and Status of Workloads</h6>
-
-<ul>
-  <li>The <a href="#workloads_tab"><strong>Workloads</strong></a> tab displays information on individual jobs, which may include queries or data movements.
-    <ul>
-      <li>Depending on the type of data movement, you may be able to view detailed information on the <a href="#data_movement_progress">progress of data movements</a>.</li>
-      <li>You can <a href="#cancel_workload">stop or cancel data movements</a> from the workloads tab.</li>
-    </ul>
-  </li>
-</ul>
-
-<h6 class="list" id="object-store">Object Store</h6>
-
-<ul>
-  <li>Depending on the configuration of your environment, you can view information about your <a href="#adls">ADLS</a> or <a href="#aws_object_store">AWS</a> object store .</li>
-</ul>
-
-<h6 class="list" id="system-performance">System Performance</h6>
-
-<ul>
-  <li>The front page of the <a href="#datacloud_overview"><strong>Datacloud</strong></a> tab shows high level metrics for the past hour, as well as statuses for each data lake and data mart.</li>
-  <li>Within each data lake or data mart, the <a href="#dashboard"><strong>Dashboard</strong></a> tab provides an overview of performance over a period of time.</li>
-</ul>
-
-<h2 id="cloud_sockets_tab">Cloud Sockets</h2>
-
-<p>The <strong>Cloud Sockets</strong> tab shows the status (Good Health, Warning or Critical) of preconfigured services such as RStudio and Hue.</p>
-
-<p><img src="assets/documentation/monitor_system/service_status.png" alt=" Service status on Cloud Sockets tab " title=" Service status on Cloud Sockets tab" /></p>
-
-<p>If you are connecting to a service via a <a href="#cgw_cazena_gateway">Cazena Gateway</a>, you can also look on the <strong>System &gt; Manage Gateways</strong> tab to see the status of a Cazena gateway port for the service that you want.
-<img src="assets/documentation/cazena_gateway/czgw_manage_ports.png" alt=" Cazena Gateway Port Status " title="Cazena Gateway Port Status" /></p>
-
-<h2 id="dashboard">Dashboard</h2>
-
-<ol>
-  <li>
-    <p>From the <strong>Datacloud</strong> tab, click on the name of the data lake or data mart that you want to monitor.</p>
-
-    <p class="note">Note that dashboard metrics are not available for Kafka clusters.</p>
-  </li>
-  <li>Select the <strong>Dashboard</strong> tab.</li>
-  <li>By default, the <strong>Dashboard</strong> tab shows charts for the past hour. You can select a different timeframe at the top of the screen.</li>
-</ol>
-
-<p><img src="assets/documentation/monitor_system/dashboard.png" alt="  Dashboard " title=" Dashboard " /></p>
-
-<h3 id="data_lake_metrics">Metrics for Data Lakes</h3>
-
-<p>For data lakes, the dashboard displays graphs for these metrics over the selected timeframe:</p>
-
-<ul>
-  <li>CPU usage</li>
-  <li>Disk usage over the selected timeframe</li>
-  <li>Memory usage</li>
-  <li>Network received</li>
-</ul>
-
-<h3 id="data_mart_metrics">Metrics for Data Marts</h3>
-
-<p>For data marts, the dashboard displays graphs for these metrics over the selected timeframe:</p>
-
-<ul>
-  <li>CPU usage</li>
-  <li>Disk usage</li>
-  <li>Read and write throughput
-    <ul>
-      <li>This includes data going over the network to be imported to or exported from the cloud in a data movement operation as well as data being read from the cloud (For example:  by BI tools for analytic reporting or by an enterprise FTP/SFTP export request.</li>
-    </ul>
-  </li>
-  <li>Network received and transmitted</li>
-  <li>Read and write latency</li>
-  <li>Read and write IOPS</li>
-  <li>Number of database connections</li>
-  <li>Health status (healthy or unhealthy)</li>
-  <li>Maintenance mode (off or on)</li>
-</ul>
-
-<h2 id="workloads_tab">Workload Status</h2>
-
-<p>Within each data lake or data mart, the <strong>Workloads</strong> tab provides details about the activity that has occurred within a given timeframe. By default, workloads for the past hour are displayed.</p>
-
-<ul>
-  <li>You can select a different time frame in the upper right corner.</li>
-  <li>Use the filter buttons at the top of the screen to filter the list by workload type (queries or data movements) or status (e.g., completed, failed, etc)
-    <ul>
-      <li><strong>Queries</strong> might include SQL DML, SQL DDL as well as non SQL workloads.</li>
-      <li><strong>Data Movements</strong> includes background operations involved in the movement of data at various phases, such as compression of data or selecting sample data</li>
-    </ul>
-  </li>
-  <li>Use the text search fields to view only the records that contain a particular text string.</li>
-  <li>To sort the table, click on any column header.</li>
-</ul>
-
-<p><img src="assets/documentation/monitor_system/workload_filters.png" alt=" Workload Filters " title="Workload Filters" /></p>
-
-<h2 id="data_movement_progress">Data Movement Progress</h2>
-
-<p>Depending on the type of data movement, you may be able to view details on the progress of each table in a data movement.</p>
-
-<p>In this example, the workload list is filtered to show only data movements that are currently running. To see details about a particular data movement, click on the link in the PID column.</p>
-
-<p><img src="assets/documentation/monitor_system/data_movements.png" alt=" Data Movement Filters " title="Data Movement Filters" /></p>
-
-<p>Details on a selected data movement will contain a list of tables that are to be moved. Each table shows a status (e.g., Running, Complete, Pending).</p>
-
-<p><img src="assets/documentation/monitor_system/workload_details.png" alt=" Data Movement Details " title="Data Movement Details" /></p>
-
-<p>Depending on the type of data movement, you may be able to see details about the progress of individual tables. If there is a chevron on the left side of a row, click the row to open it for more details.</p>
-
-<p><img src="assets/documentation/monitor_system/dm_table_progress.png" alt=" Data Movement Table Progress " title="Data Movement Progress" /></p>
-
-<p>You can also see performance metrics from the data movement’s time of execution.</p>
-
-<p><img src="assets/documentation/monitor_system/dm_charts.png" alt=" Data Movement Charts " title="Data Movement Charts" /></p>
-
-<h2 id="cancel_workload">Cancel Jobs</h2>
-
-<p class="list">To cancel any data movement job in progress:</p>
-
-<ol>
-  <li>Use the filter buttons at the top of the screen to select only <strong>Active</strong> workloads.</li>
-  <li>Click the <strong>Stop</strong> button, and then confirm the cancellation.</li>
-</ol>
-
-<p><img src="assets/documentation/monitor_system/cancel_task.png" alt=" Cancel Task " title="Cancel Task" /></p>
-
-<p>After the job has been stopped it will appear in the list with the stopped icon: <span class="icon-stopped"></span></p>
-
-<p class="note"><strong>Note</strong>: Workloads that do not have a task ID are background tasks. Although they can affect performance, they cannot be cancelled. You will only see the <strong>Stop</strong> button for tasks that you are allowed to cancel.</p>
-
-        </section>
-
-
         <section id="data_stores">
           
           <h1 id="data_stores">Data Stores</h1>
@@ -3249,7 +3213,6 @@ Complete
 	function hideTooltip() {
 		setTimeout(function() {
 			$('.clipboard-btn').tooltip('hide');
-			console.log('hiding')
 		}, 1000);
 	}
     var btns = document.querySelectorAll('.clipboard-btn');

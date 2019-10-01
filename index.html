@@ -28,11 +28,6 @@ title: Cazena Documentation
           {{ object_store | markdownify }}
         </section>
 
-        <section id="move_data">
-          {% capture move_data %}{% include_relative _sections/move_data.md %}{% endcapture %}
-          {{ move_data | markdownify }}
-        </section>
-
         <section id="cazena_gateway">
           {% capture cazena_gateway %}{% include_relative _sections/cazena_gateway.md %}{% endcapture %}
           {{ cazena_gateway | markdownify }}
@@ -48,6 +43,10 @@ title: Cazena Documentation
           {{ monitor_system | markdownify }}
         </section>
 
+        <section id="move_data">
+          {% capture move_data %}{% include_relative _sections/move_data.md %}{% endcapture %}
+          {{ move_data | markdownify }}
+        </section>
 
         <section id="data_stores">
           {% capture data_stores %}{% include_relative _sections/data_stores.md %}{% endcapture %}
