@@ -151,15 +151,15 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 <button class="btn clipboard-btn" data-clipboard-target="#kafka-consumer-string">Copy</button>
 </div>
 
-<ul>
+<ul class="indent">
   <li>Replace <strong>BootstrapBrokerString</strong> with the string copied from the Kafka Broker cloud socket page.</li>
   <li>Replace <strong>client.properties</strong> with the name of the file that you created in step 1.</li>
   <li>Replace <strong>yourtopic</strong> with your kafka topic.</li>
 </ul>
 
-<h5 class="indent indent" id="topic">Topic</h5>
+<h5 class="indent" id="topic">Topic</h5>
 
-<p><img src="assets/documentation/cloud_sockets/kafka_zookeeper.png" alt=" Kafka Broker String " title="Kafka Zookeeper String" /></p>
+<p class="indent"><img src="assets/documentation/cloud_sockets/kafka_zookeeper.png" alt=" Kafka Broker String " title="Kafka Zookeeper String" /></p>
 
 <div class="code-wrapper">
 <pre class="indent copy-area" id="kafka-topic-string">kafka-topics --create --zookeeper <span style="color:red">ZookeeperConnectString</span> --replication-factor 1 --partitions 1 --topic <span style="color:red">yourtopic</span> 
@@ -216,7 +216,7 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
   <li>Add <code class="highlighter-rouge">,SSL=1</code> to the connection string, before the final parentheses.</li>
 </ol>
 
-<p><img src="assets/documentation/cloud_sockets/hive_connection.png" alt=" Hive Connection " title="Hive Connection" /></p>
+<p class="indent"><img src="assets/documentation/cloud_sockets/hive_connection.png" alt=" Hive Connection " title="Hive Connection" /></p>
 
 <hr class="end-section" />
 
@@ -371,49 +371,6 @@ HIVE_HOME=/opt/cloudera/parcels/CDH/lib/hive
 
 <hr class="end-section" />
 
-<h2 id="sql_workbench">Use JDBC to connect to SQL Workbench</h2>
-
-<p>This example shows how to use SQL Workbench to query a database in a data mart.</p>
-
-<ul>
-  <li>You can download SQL Workbench <a href="http://www.sql-workbench.net/downloads.html" target="_blank">here</a>.</li>
-  <li>You will also need a postgreSQL JDBC driver, which you can download <a href="https://jdbc.postgresql.org/download.html" target="_blank">here</a>.</li>
-</ul>
-
-<p class="step">Step 1: Copy the IP Address and Port for MPP SQL</p>
-
-<ol>
-  <li>In the Cazena console: From the <strong>Cloud Sockets</strong> tab, select <strong>MPP SQL</strong> on the left side of the screen.</li>
-  <li>Under <strong>From inside the datacloud</strong>, copy the <strong>Internal IP:Port</strong> address and port.</li>
-</ol>
-
-<p class="indent"><img src="assets/documentation/cloud_sockets/mpp_sql.png" alt=" MPP SQL " title="MPP SQL" /></p>
-
-<p class="step">Step 1: Paste the IP Address and Port into SQL Workbench</p>
-
-<ol>
-  <li>Start SQL Workbench, then select <strong>File</strong> &gt; <strong>Connect Window</strong>.</li>
-  <li>Select a PostgreSQL JDBC driver (download here)</li>
-  <li>
-    <p>Enter the URL:</p>
-
-    <p><code class="highlighter-rouge">jdbc:postgres://IP ADDRESS:PORT/czdataset</code></p>
-
-    <p>where:</p>
-
-    <ul>
-      <li>IP ADDRESS:PORT comes from the Cloud Sockets tab.</li>
-      <li>If you moved data using the Cazena console, use <strong>czdataset</strong> as the name of the database.</li>
-    </ul>
-  </li>
-  <li>Ask your system administrator for the username and password.</li>
-</ol>
-
-<p class="image-no-outline"><img src="assets/documentation/cloud_sockets/SQL_workbench.png" alt=" SQL Workbench " title="SQL Workbench" /></p>
-
-<p class="note"><strong>Note:</strong> Data moved to a Cazena data mart goes into a database named <strong>czdataset</strong>. The schema name matches the name of the dataset used when moving data into the cloud.</p>
-
-<hr class="end-section" />
 
         </section>
 
@@ -1124,36 +1081,6 @@ Beginning Download Tests:
 Complete
 </code></pre></div></div>
 
-<p><br />
-<strong>Measure latency and throughput from an external Linux or Mac system:</strong></p>
-
-<p>You can use <code class="highlighter-rouge">nping</code> and <code class="highlighter-rouge">wget</code> to measure latency and throughput through the Cazena gateway.</p>
-
-<ol>
-  <li>
-    <p>On the <strong>Cloud Sockets</strong> tab, select <strong>Cazena Console</strong> on the left side of the screen.</p>
-
-    <p><img src="assets/documentation/cazena_gateway/cgw_ip_port.png" alt=" Cazena Gateway IP and port " title="Cazena Gateway IP and port" /></p>
-  </li>
-  <li>
-    <p>Use <strong>IP Address:Port</strong> to run these commands:</p>
-
-    <ul class="list-unstyled">
-      <li><code class="highlighter-rouge">nping &lt;IP address&gt; -p &lt;PORT&gt;</code></li>
-      <li><code class="highlighter-rouge">wget -O /dev/null http://&lt;IP address&gt;:&lt;PORT&gt; /CazenaGateway.ova</code>
- *</li>
-    </ul>
-
-    <p><br />
-<strong>Example:</strong></p>
-
-    <ul class="list-unstyled">
-      <li><code class="highlighter-rouge">nping 	192.131.12.2 -p 11092</code></li>
-      <li><code class="highlighter-rouge">wget -O /dev/null http://192.131.12.2:11092/CazenaGateway.ova</code></li>
-    </ul>
-  </li>
-</ol>
-
 <h2 id="cgw_delete">Stop and Delete a Cazena Gateway</h2>
 
 <p><strong>To stop a Cazena gateway:</strong></p>
@@ -1207,7 +1134,7 @@ Complete
 
 <h2 id="create_users">Create User Accounts</h2>
 
-<p class="step">Before You Start</p>
+<p class="step">For Port Forwarding Configurations</p>
 
 <p class="list">If your site is using a <a href="#port-forwarding-cgw">port forwarding</a> configuration, you must have a Cazena gateway running before you can create new user accounts. In addition, the Cazena console must be enabled on that gateway:</p>
 
@@ -1247,97 +1174,31 @@ Complete
   </thead>
   <tbody>
     <tr>
-      <td>Service Page</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-    </tr>
-    <tr>
-      <td>Transfers</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-    </tr>
-    <tr>
-      <td>Move Data</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>Modify Datasets</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>Add User</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>Delete User</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>Modify User</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>Dashboard Page</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-    </tr>
-    <tr>
-      <td>Workloads Page</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-    </tr>
-    <tr>
-      <td>System Page</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-    </tr>
-    <tr>
-      <td>Edit Cloud Sockets</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
       <td>View Cloud Sockets</td>
       <td style="text-align: center"><span class="icon-checkmark"></span></td>
       <td style="text-align: center"><span class="icon-checkmark"></span></td>
       <td style="text-align: center"><span class="icon-checkmark"></span></td>
     </tr>
     <tr>
-      <td>Create/Edit Data Store</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>Delete Data Store</td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"><span class="icon-checkmark"></span></td>
-      <td style="text-align: center"> </td>
-    </tr>
-    <tr>
-      <td>Access to Admin Tools Menu</td>
+      <td>Manage Cloud Sockets</td>
       <td style="text-align: center"><span class="icon-checkmark"></span></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>
     </tr>
     <tr>
-      <td>Access to Log Server Console</td>
+      <td>Manage Users and Groups</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"> </td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>View Cazena Gateways</td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+      <td style="text-align: center"><span class="icon-checkmark"></span></td>
+    </tr>
+    <tr>
+      <td>Manage Cazena Gateways</td>
       <td style="text-align: center"><span class="icon-checkmark"></span></td>
       <td style="text-align: center"> </td>
       <td style="text-align: center"> </td>

@@ -82,7 +82,6 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
   * Replace __BootstrapBrokerString__ with the string copied from the Kafka Broker cloud socket page.
   * Replace __client.properties__ with the name of the file that you created in step 1.
   * Replace __yourtopic__ with your kafka topic. 
-
   {:.indent}
 
 
@@ -90,6 +89,7 @@ sasl.jaas.config=com.sun.security.auth.module.Krb5LoginModule required \
 {:.indent}
 
 ![ Kafka Broker String ](assets/documentation/cloud_sockets/kafka_zookeeper.png "Kafka Zookeeper String")
+{:.indent}
 
 <div class="code-wrapper">
 <pre class="indent copy-area" id="kafka-topic-string">kafka-topics --create --zookeeper <span style="color:red">ZookeeperConnectString</span> --replication-factor 1 --partitions 1 --topic <span style="color:red">yourtopic</span> 
@@ -144,7 +144,7 @@ Step 2: Add the Hostname and Port to the Connection Pane
 
 
 ![ Hive Connection ](assets/documentation/cloud_sockets/hive_connection.png "Hive Connection")
-
+{:.indent}
 
 ---
 {:.end-section}
@@ -299,45 +299,3 @@ From the RStudio web client or a Hue notebook:
 ---
 {:.end-section}
 
-## Use JDBC to connect to SQL Workbench {#sql_workbench}
-
-This example shows how to use SQL Workbench to query a database in a data mart.
-
-* You can download SQL Workbench <a href="http://www.sql-workbench.net/downloads.html" target="_blank">here</a>.
-* You will also need a postgreSQL JDBC driver, which you can download <a href="https://jdbc.postgresql.org/download.html" target="_blank">here</a>.
-
-Step 1: Copy the IP Address and Port for MPP SQL
-{:.step}
-
-1. In the Cazena console: From the __Cloud Sockets__ tab, select __MPP SQL__ on the left side of the screen.
-1. Under __From inside the datacloud__, copy the __Internal IP:Port__ address and port.
-
-![ MPP SQL ](assets/documentation/cloud_sockets/mpp_sql.png "MPP SQL")
-{:.indent}
-
-
-Step 1: Paste the IP Address and Port into SQL Workbench
-{:.step}
-
-1. Start SQL Workbench, then select __File__ > __Connect Window__.
-1. Select a PostgreSQL JDBC driver (download here)
-1. Enter the URL:
-
-    `jdbc:postgres://IP ADDRESS:PORT/czdataset`
-    
-    where:
-
-    * IP ADDRESS:PORT comes from the Cloud Sockets tab.
-    * If you moved data using the Cazena console, use __czdataset__ as the name of the database. 
-    
-1. Ask your system administrator for the username and password.
-
-![ SQL Workbench ](assets/documentation/cloud_sockets/SQL_workbench.png "SQL Workbench")
-{:.image-no-outline}
-
-
-__Note:__ Data moved to a Cazena data mart goes into a database named __czdataset__. The schema name matches the name of the dataset used when moving data into the cloud.
-{:.note}
-
----
-{:.end-section}

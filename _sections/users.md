@@ -5,7 +5,7 @@ Cazena support will create a system administrator account. The administrator wil
 
 ## Create User Accounts {#create_users}
 
-Before You Start
+For Port Forwarding Configurations
 {:.step}
 
 If your site is using a [port forwarding](#port-forwarding-cgw) configuration, you must have a Cazena gateway running before you can create new user accounts. In addition, the Cazena console must be enabled on that gateway:
@@ -37,23 +37,11 @@ Privileges for the different Cazena user roles are as follows:
 
 | Feature             | System Admin                         | Application Support                  | Data Analyst                         |
 |----------------------------|:------------------------------------:|:------------------------------------:|:------------------------------------:|
-| Service Page               | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> |
-| Transfers                  | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> |
-| Move Data                  | <span class="icon-checkmark"></span> |    | |
-| Modify Datasets            | <span class="icon-checkmark"></span> |      |      |
-| Add User                   | <span class="icon-checkmark"></span> |      |      |
-| Delete User                | <span class="icon-checkmark"></span> |      |      |
-| Modify User                | <span class="icon-checkmark"></span> |      |      |
-| Dashboard Page             | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> |
-| Workloads Page             | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> |
-| System Page                | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> |
-| Edit Cloud Sockets         | <span class="icon-checkmark"></span> |      |      |
-| View Cloud Sockets         | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> |
-| Create/Edit Data Store     | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> |      |
-| Delete Data Store          | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> |      |
-| Access to Admin Tools Menu | <span class="icon-checkmark"></span> |      |      | 
-| Access to Log Server Console | <span class="icon-checkmark"></span> |      |      |
-
+| View Cloud Sockets               | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> |
+| Manage Cloud Sockets         | <span class="icon-checkmark"></span> |      |      |
+| Manage Users and Groups                   | <span class="icon-checkmark"></span> |      |      |
+| View Cazena Gateways        | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> | <span class="icon-checkmark"></span> |
+| Manage Cazena Gateways        | <span class="icon-checkmark"></span> |  |  |
 
 
 ## Create Groups

@@ -552,28 +552,6 @@ __Sample throughput test__
       CGW Software speed: 35.79 MBps, 286.33 Mbps; size: 107.37 MB
     Complete
 
-<br>
-__Measure latency and throughput from an external Linux or Mac system:__
-
-You can use `nping` and `wget` to measure latency and throughput through the Cazena gateway.
-
-1. On the __Cloud Sockets__ tab, select __Cazena Console__ on the left side of the screen.
-
-    ![ Cazena Gateway IP and port ](assets/documentation/cazena_gateway/cgw_ip_port.png "Cazena Gateway IP and port")
-
-2. Use __IP Address:Port__ to run these commands:
-
-    * `nping <IP address> -p <PORT>`
-    * `wget -O /dev/null http://<IP address>:<PORT> /CazenaGateway.ova`
-    *
-    {:.list-unstyled}
-
-    <br>
-   __Example:__
-
-   * `nping 	192.131.12.2 -p 11092`
-   *  `wget -O /dev/null http://192.131.12.2:11092/CazenaGateway.ova`
-   {:.list-unstyled}
 
 
 
