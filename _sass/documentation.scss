@@ -10,10 +10,6 @@ body {
 
 #documentation {
 
-  .logo {
-    padding: 10px 10px 10px;
-    width: 200px;
-  }
 
   h1 {
     font-size: 38px;
@@ -127,6 +123,26 @@ body {
 
   /* Table of contents */
 
+  .wrapper {
+    height: 100vh;
+  }
+  .logo {
+    position:fixed;
+    padding: 10px 8px 10px;
+    width: 220px;
+  }
+
+  #toc {
+    position: fixed;
+    top: 90px;
+    @media (max-width: 1200px) {
+      width: 220px;
+    }
+    @media (min-width: 1201px) {
+      width: 270px;
+    }
+  }
+
   /* Need to set width because .affix has fixed position, which follows viewport size */
   .affix {
     @media (max-width: 1200px) {
@@ -138,60 +154,30 @@ body {
   }
 
   #affix-nav {
+    /* must be relative for scrollspy to work */
     position: relative;
-
-    ul {
-      margin-left: 0;
-    }
-
-    li {
-      margin-top: .5em;
-
-      ul > li {
-        font-weight: normal;
-      }
-
-      &.active {
-      }
-    }
-  }
-
-
-  ul.affix-top {
-    position: static;
-  }
-
-  ul.affix-bottom {
-    position: absolute;
-  }
-
-  /* First level of nav */
-  .sidenav {
-    margin-bottom: 30px;
-    padding-bottom: 10px;
-    margin-left: 0;
-
-    ul li {
-      margin-top: .25em;
-    }
-
   }
 
   /* All levels of nav */
-  .sidebar .nav {
+  .sidebar ul {
+    list-style-type: none;
+    margin-left: 0;
+
+    li {
+      margin-top: 5px;
+    }
     > {
       li > a {
         display: block;
         color: #716b7a;
         padding: 3px 10px;
-        //font-size: 12px;
         line-height: 1.4em;
 
         &:hover, &:focus {
           text-decoration: none;
+          background-color: #eee;
         }
       }
-
       .active {
         > a, &:hover > a, &:focus > a {
           color: $orange;
@@ -200,24 +186,17 @@ body {
         }
       }
     }
-
-    .doc-title {
-      padding-left: 10px;
-    }
-
-    .nav {
+    /* Keep lists closed unless they are active */
+    li > ul {
       display: none;
-      margin-bottom: 8px;
-
+      padding-bottom: 10px;
+      padding-left: 20px;
       > li > a {
         padding-top: 3px;
         padding-bottom: 3px;
-        padding-left: 30px;
-        //font-size: 12px;
       }
     }
-
-    > li.active .nav {
+    li.active ul {
       display: block;
     }
   }
@@ -447,11 +426,9 @@ body {
     font-size: 22px;
     color: green;
   }
-
   p.header {
     margin-bottom: 0;
   }
-
   .code-wrapper {
     position: relative;
 
@@ -470,7 +447,6 @@ body {
         text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.11);
         color: #fff;
         background-color: #5379c4;
-
       }
 
       &:active,

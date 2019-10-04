@@ -3,16 +3,6 @@ layout: default
 title: Cazena Documentation
 ---
 
-<div id="documentation" >
-  <div class="content-wrap">
-    <div class="row">
-      <div class="columns col-xs-3">
-        <nav id="affix-nav" class="sidebar ">
-          <div id="toc"></div>
-        </nav>
-      </div>
-
-      <div class="columns col-xs-9 content">
         <section id="overview">
           {% capture overview %}{% include_relative _sections/overview.md %}{% endcapture %}
           {{ overview | markdownify }}
@@ -64,10 +54,3 @@ title: Cazena Documentation
           {% capture support %}{% include_relative _sections/support.md %}{% endcapture %}
           {{ support | markdownify }}
         </section>
-
-
-      </div>
-    </div>
-  </div>
-</div>
-

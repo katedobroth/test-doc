@@ -11,12 +11,6 @@
 
 	<script src="assets/javascripts/clipboard.min.js"></script>
 
-	<script type="text/javascript" src="assets/javascripts/toc.js"></script>
-	<script type="text/javascript">
-      $(document).ready(function() {
-          $('#toc').toc();
-      });
-	</script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="assets/css/styles.css">
 	<link rel="stylesheet"
@@ -25,17 +19,93 @@
 	<title>Cazena Documentation</title>
 </head>
 <body data-spy="scroll" data-target="#affix-nav">
-<div id="documentation" >
-  <div class="content-wrap">
-    <div class="row">
-      <div class="columns col-xs-3">
-        <nav id="affix-nav" class="sidebar ">
-          <div id="toc"></div>
-        </nav>
-      </div>
+<div id="documentation">
+	<div class="content-wrap">
+		<div class="row">
+			<div class="columns col-xs-3 ">
+				<nav id="affix-nav" class="sidebar ">
+					<a href="https://www.cazena.com/" target="_blank"> <img src="assets/images/logo.svg" class="logo"></a>'
+					<div id="toc" style="">
+						<ul class="nav">
+  <li><a href="#ovw_overview">Cazena Documentation</a>
+    <ul>
+      <li><a href="#cazenas-fully-managed-big-data-as-a-service">Cazena’s Fully-Managed Big Data as a Service</a></li>
+    </ul>
+  </li>
+  <li><a href="#cloud_sockets">Connect to Datacloud Services Via Cloud Sockets</a>
+    <ul>
+      <li><a href="#kafka_strings">Kafka and Zookeeper</a></li>
+      <li><a href="#oozie_email">Oozie</a></li>
+      <li><a href="#rstudio_connection_pane">Connect to Hive or Impala With the RStudio Connections Pane</a></li>
+      <li><a href="#rjdbc">Connect to Hive or Impala via RJDBC using RStudio</a></li>
+      <li><a href="#beeline">Connect to Hive using beeline</a></li>
+      <li><a href="#impala_shell">Connect to Impala using the Impala Shell</a></li>
+      <li><a href="#sparkr">SparkR in RStudio Server</a></li>
+    </ul>
+  </li>
+  <li><a href="#object_store">Object Store</a>
+    <ul>
+      <li><a href="#adls_object_store">ADLS</a></li>
+      <li><a href="#aws_object_store">AWS S3</a></li>
+    </ul>
+  </li>
+  <li><a href="#cgw_cazena_gateway">Cazena Gateways</a>
+    <ul>
+      <li><a href="#cgw-overview">Overview</a></li>
+      <li><a href="#install_new_gateway">Install a New Cazena Gateway</a></li>
+      <li><a href="#manage_cloud_sockets">Custom Cloud Sockets</a></li>
+      <li><a href="#update_ports">Activate and Update Ports</a></li>
+      <li><a href="#cgw_troubleshooting">Troubleshooting</a></li>
+      <li><a href="#cgw_delete">Stop and Delete a Cazena Gateway</a></li>
+    </ul>
+  </li>
+  <li><a href="#users_and_groups">Users and Groups</a>
+    <ul>
+      <li><a href="#create_users">Create User Accounts</a></li>
+      <li><a href="#create-groups">Create Groups</a></li>
+    </ul>
+  </li>
+  <li><a href="#monitor-workloads-and-system-performance">Monitor Workloads and System Performance</a>
+    <ul>
+      <li><a href="#cloud_sockets_tab">Cloud Sockets</a></li>
+      <li><a href="#dashboard">Dashboard</a></li>
+      <li><a href="#workloads_tab">Workload Status</a></li>
+      <li><a href="#data_movement_progress">Data Movement Progress</a></li>
+      <li><a href="#cancel_workload">Cancel Jobs</a></li>
+    </ul>
+  </li>
+  <li><a href="#move_data">Move Data</a>
+    <ul>
+      <li><a href="#sqoop">Move to HDFS Using Sqoop</a></li>
+      <li><a href="#hdfs">Move to HDFS Using WebHDFS</a></li>
+      <li><a href="#adls_webhdfs">Move to ADLS Using WebHDFS</a></li>
+      <li><a href="#move_cz_datamover">Move Using the Cazena Data Mover</a></li>
+    </ul>
+  </li>
+  <li><a href="#data_stores">Data Stores</a>
+    <ul>
+      <li><a href="#oracle_data_store">Oracle Data Store</a></li>
+      <li><a href="#netezza_data_store">Netezza Data Store</a></li>
+      <li><a href="#ent_ftp_data_store">Enterprise FTP/SFTP Data Store</a></li>
+      <li><a href="#int_ftp_data_store">Internet FTP/SFTP Data Store</a></li>
+      <li><a href="#custom_data_store">Custom Data Store</a></li>
+    </ul>
+  </li>
+  <li><a href="#data_movement_details">Details for Oracle, Netezza and DSV</a>
+    <ul>
+      <li><a href="#oracle_details">Oracle</a></li>
+      <li><a href="#dmg_dsv_files">Delimiter Separated Values (DSV) Files</a></li>
+    </ul>
+  </li>
+  <li><a href="#sup_support">Support</a></li>
+</ul>
 
-      <div class="columns col-xs-9 content">
-        <section id="overview">
+					</div>
+				</nav>
+			</div>
+
+			<div class="columns col-xs-9 content">
+				        <section id="overview">
           
           
 <h1 id="ovw_overview">Cazena Documentation</h1>
@@ -3052,13 +3122,9 @@ Successfully started job with id: 14
 
         </section>
 
-
-      </div>
-    </div>
-  </div>
-</div>
-
-
+			</div>
+		</div>
+	</div>
 </body>
 
 <script>

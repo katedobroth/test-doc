@@ -116,16 +116,12 @@ body {
 #documentation {
   /* Table of contents */
   /* Need to set width because .affix has fixed position, which follows viewport size */
-  /* First level of nav */
   /* All levels of nav */
   /* Use this on the line that precedes a ul or ol (e.g., "To do something...") */
   /* Use this on a descriptive line before a block quote */
   /* Make images 50% wide and centered */
   /* Make images 75% wide and centered */
   /* Specify column widths for tables */ }
-  #documentation .logo {
-    padding: 10px 10px 10px;
-    width: 200px; }
   #documentation h1 {
     font-size: 38px;
     font-weight: normal;
@@ -198,6 +194,21 @@ body {
     min-height: 500px; }
   #documentation table {
     margin-bottom: 2em; }
+  #documentation .wrapper {
+    height: 100vh; }
+  #documentation .logo {
+    position: fixed;
+    padding: 10px 8px 10px;
+    width: 220px; }
+  #documentation #toc {
+    position: fixed;
+    top: 90px; }
+    @media (max-width: 1200px) {
+      #documentation #toc {
+        width: 220px; } }
+    @media (min-width: 1201px) {
+      #documentation #toc {
+        width: 270px; } }
   @media (max-width: 1200px) {
     #documentation .affix {
       width: 220px; } }
@@ -205,45 +216,35 @@ body {
     #documentation .affix {
       width: 270px; } }
   #documentation #affix-nav {
+    /* must be relative for scrollspy to work */
     position: relative; }
-    #documentation #affix-nav ul {
-      margin-left: 0; }
-    #documentation #affix-nav li {
-      margin-top: .5em; }
-      #documentation #affix-nav li ul > li {
-        font-weight: normal; }
-  #documentation ul.affix-top {
-    position: static; }
-  #documentation ul.affix-bottom {
-    position: absolute; }
-  #documentation .sidenav {
-    margin-bottom: 30px;
-    padding-bottom: 10px;
-    margin-left: 0; }
-    #documentation .sidenav ul li {
-      margin-top: .25em; }
-  #documentation .sidebar .nav > li > a {
-    display: block;
-    color: #716b7a;
-    padding: 3px 10px;
-    line-height: 1.4em; }
-    #documentation .sidebar .nav > li > a:hover, #documentation .sidebar .nav > li > a:focus {
-      text-decoration: none; }
-  #documentation .sidebar .nav > .active > a, #documentation .sidebar .nav > .active:hover > a, #documentation .sidebar .nav > .active:focus > a {
-    color: #f4770f;
-    box-shadow: 3px 0 0 0 #f4770f inset;
-    background-color: transparent; }
-  #documentation .sidebar .nav .doc-title {
-    padding-left: 10px; }
-  #documentation .sidebar .nav .nav {
-    display: none;
-    margin-bottom: 8px; }
-    #documentation .sidebar .nav .nav > li > a {
-      padding-top: 3px;
-      padding-bottom: 3px;
-      padding-left: 30px; }
-  #documentation .sidebar .nav > li.active .nav {
-    display: block; }
+  #documentation .sidebar ul {
+    list-style-type: none;
+    margin-left: 0;
+    /* Keep lists closed unless they are active */ }
+    #documentation .sidebar ul li {
+      margin-top: 5px; }
+    #documentation .sidebar ul > li > a {
+      display: block;
+      color: #716b7a;
+      padding: 3px 10px;
+      line-height: 1.4em; }
+      #documentation .sidebar ul > li > a:hover, #documentation .sidebar ul > li > a:focus {
+        text-decoration: none;
+        background-color: #eee; }
+    #documentation .sidebar ul > .active > a, #documentation .sidebar ul > .active:hover > a, #documentation .sidebar ul > .active:focus > a {
+      color: #f4770f;
+      box-shadow: 3px 0 0 0 #f4770f inset;
+      background-color: transparent; }
+    #documentation .sidebar ul li > ul {
+      display: none;
+      padding-bottom: 10px;
+      padding-left: 20px; }
+      #documentation .sidebar ul li > ul > li > a {
+        padding-top: 3px;
+        padding-bottom: 3px; }
+    #documentation .sidebar ul li.active ul {
+      display: block; }
   #documentation table {
     border: 1px solid #DBDBDB; }
     #documentation table thead {
