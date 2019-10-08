@@ -12,7 +12,6 @@ In this section, we review examples of how to use cloud sockets to make the foll
 * [Connect to Hive using beeline](#beeline)
 * [Connect to Impala using the Impala shell](#impala_shell)
 * [SparkR in RStudio Server](#sparkr)
-* [SQL Workbench](#sql_workbench)
 
 For examples of using cloud sockets for moving data, see the [Move Data](#move_data) section.
 
@@ -123,7 +122,7 @@ In this section, we review how to connect to Hive or Impala using the RStudio Co
 
 1. Select the __Cloud Sockets__ tab.
 1. On the left side of the screen, click on __RStudio Server__. You may use the text filter at the top of the list to help you find the service.
-1. Click on the URL that appears on the right side of the screen. Depending on the configuration at your site, there may be more than one link; you can use any of them.
+1. Click on the __Cazena DNS__ link. 
 1. RStudio will open in a new tab. Sign in using your Cazena credentials.
 
     ![ R Connection Details ](assets/documentation/cloud_sockets/rstudio_cloud_socket.png "R Connection Details")
@@ -139,8 +138,7 @@ Step 2: Add the Hostname and Port to the Connection Pane
 {:.step}
 
 1. In the Cazena console, on the __Cloud Sockets__ tab, select __Hive__ (or Impala) on the left side of the screen. 
-1. Copy the DNS address and port from the top of of the screen, then paste them into the Connection Pane in RStudio.
-1. Add `,SSL=1` to the connection string, before the final parentheses.
+1. Copy the __Cazena DNS__ address and port from the top of of the screen, then paste them into the Connection Pane in RStudio.
 
 
 ![ Hive Connection ](assets/documentation/cloud_sockets/hive_connection.png "Hive Connection")
@@ -199,7 +197,7 @@ This example shows how you would set up RStudio to connect to Hive via RJDBC.
 {:.step}
         
 1. On the __Cloud Sockets__ tab, select __Hive__ on the left side of the screen.
-1. Copy the DNS address and port.
+1. Copy the __Cazena DNS__ address and port.
 
     ![ Hive IP:Port ](assets/documentation/cloud_sockets/hive_cloud_socket.png "Hive IP:Port ")
     {:.indent}
